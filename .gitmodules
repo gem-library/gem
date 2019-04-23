@@ -4,3 +4,6 @@
 [submodule "external/spectra"]
 	path = external/spectra
 	url = https://github.com/yixuan/spectra
+[submodule "external/MOxUnit"]
+	path = external/MOxUnit
+	url = https://github.com/MOxUnit/MOxUnit.git

@@ -80,11 +80,13 @@ classdef gem < handle
                     % If it is an object of type 'gem', we interpret
                     % this call to a constructor as a call for copying the object
                     % into a new one
-                    this.objectIdentifier = gem_mex('new', varargin{1}.objectIdentifier);
+                    tmp = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = gem_mex('new', tmp);
                 elseif isequal(class(varargin{1}), 'sgem')
                     % The we create a dense version of the provided sparse
                     % sgem object
-                    this.objectIdentifier = gem_mex('full', varargin{1}.objectIdentifier);
+                    tmp = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = gem_mex('full', tmp);
                 elseif isnumeric(varargin{1}) || islogical(varargin{1})
                     % Then we interpret this call as a call for the library to
                     % create an instance of this class from some numerical

@@ -51,8 +51,7 @@ before_script:
   # Prepare build command
   - BUILD_BINARIES="make;"
   # Prepare test command
-  - TEST_ARGS="'-recursive', '-verbose', '-junit_xml_file', 'testresults.xml'";
-    TEST_COMMAND="exit(~moxunit_runtests('tests', $TEST_ARGS));";
+  - TEST_COMMAND="gemRunTests;";
     echo "TEST_COMMAND| $TEST_COMMAND";
 
 ###############################################################################

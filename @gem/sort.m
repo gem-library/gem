@@ -12,7 +12,7 @@ function [result I] = sort(this, dim, mode)
     if nargin < 3
         mode = 'ascend';
     end
-    
+
     if nargin < 2
         if size(this,1) ~= 1
             dim = 1;
@@ -22,16 +22,16 @@ function [result I] = sort(this, dim, mode)
     elseif ~isequal(class(dim), 'double')
         dim = double(dim);
     end
-    
+
     if ischar(dim)
         mode = dim;
         dim = 1;
     end
-    
+
     if ~isequal(mode, 'ascend') && ~isequal(mode, 'descend')
         error('Sorting direction must be either ''ascend'' of ''descend''');
     end
-    
+
     if (numel(dim) ~= 1) || (dim < 1) || (round(dim) ~= dim)
         error('Dim must be a positive integer');
     end
@@ -48,13 +48,14 @@ function [result I] = sort(this, dim, mode)
         end
         return;
     end
-    
+
     % Now we call the appropriate sorting method
-    [newObjectIdentifier I] = gem_mex('sort', this.objectIdentifier, dim-1, double(isequal(mode, 'descend')));
+    objId = this.objectIdentifier;
+    [newObjectIdentifier I] = gem_mex('sort', objId, dim-1, double(isequal(mode, 'descend')));
 
     % Indices in matlab start from 1
     I = I+1;
-    
+
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);
 end

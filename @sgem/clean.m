@@ -9,7 +9,7 @@ function result = clean(this, tol)
         % The default tolerance
         tol = 10^(-gemWorkingPrecision);
     end
-    
+
     % We make sure tol is a single gem number
     if isequal(class(tol), 'sgem')
         tol = gem(tol);
@@ -29,7 +29,9 @@ function result = clean(this, tol)
 
     % We call the cleaning procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = sgem_mex('clean', this.objectIdentifier, tol.objectIdentifier);
+    objId1 = this.objectIdentifier;
+    objId2 = tol.objectIdentifier;
+    newObjectIdentifier = sgem_mex('clean', objId1, objId2);
 
     % ...  and create a new matlab object to keep this handle
     result = sgem('encapsulate', newObjectIdentifier);

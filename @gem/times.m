@@ -12,7 +12,7 @@ function result = times(this, varargin)
         result = times(varargin{1}, this);
         return;
     end
-    
+
     % We need to check that the operation is possible (the c++
     % library might give bad errors otherwise). So we request the
     % dimensions of each matrix
@@ -50,27 +50,34 @@ function result = times(this, varargin)
             varargin{1} = full(varargin{1});
         end
     end
-    
+
     % Now we call the appropriate multiplication procedure, and store the
     % result in the adequate object.
     if isequal(class(this), 'gem')
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = gem_mex('times', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('times', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = gem_mex('times_fs', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('times_fs', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         end
     else
         % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = sgem_mex('times_sf', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('times_sf', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = sgem_mex('times', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('times', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         end
     end
-    
-end
 
+end

@@ -57,12 +57,14 @@ if length(indices) == 1
         end
         % Then we need to increase the size of the vector
         if s(1) == 1
-            gem_mex('resize', this.objectIdentifier, 1, max(indices{1}));
+            objId = this.objectIdentifier;
+            gem_mex('resize', objId, 1, max(indices{1}));
         else
-            gem_mex('resize', this.objectIdentifier, max(indices{1}), 1);
+            objId = this.objectIdentifier;
+            gem_mex('resize', objId, max(indices{1}), 1);
         end
     end
-    
+
     if (length(indices{1}) ~= numel(values)) && (numel(values) ~= 1)
         error('Wrong number of elements in assignment');
     elseif numel(values) < length(indices{1})
@@ -76,9 +78,10 @@ else
     end
     if (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))
         % The matrix is too small so we increase its size
-        gem_mex('resize', this.objectIdentifier, max(s(1), max(indices{1})), max(s(2), max(indices{2})));
+        objId = this.objectIdentifier;
+        gem_mex('resize', objId, max(s(1), max(indices{1})), max(s(2), max(indices{2})));
     end
-    
+
     if ~isequal(length(indices{1})*length(indices{2}), numel(values))
         if numel(values) == 1
             % The value is a scalar, assigned to a matrix, as in a(1:2,2)=0
@@ -88,7 +91,7 @@ else
             error('Wrong size in element assignment');
         end
     end
-    
+
     if ~isequal([length(indices{1}) length(indices{2})], size(values))
         % The shape is not as expected...
         % If it's just a matter or transposition for a vector, we readjust
@@ -111,9 +114,13 @@ end
 %% Now we copy the object, and assign the requested numbers to the current object
 result = copy(this);
 if length(indices) == 1
-    gem_mex('subsasgn', result.objectIdentifier, values.objectIdentifier, indices{1}-1);
+    objId1 = result.objectIdentifier;
+    objId2 = values.objectIdentifier;
+    gem_mex('subsasgn', objId1, objId2, indices{1}-1);
 else
-    gem_mex('subsasgn', result.objectIdentifier, values.objectIdentifier, indices{1}-1, indices{2}-1);
+    objId1 = result.objectIdentifier;
+    objId2 = values.objectIdentifier;
+    gem_mex('subsasgn', objId1, objId2, indices{1}-1, indices{2}-1);
 end
 
 

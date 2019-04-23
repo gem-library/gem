@@ -5,7 +5,8 @@ function result = sqrt(this)
 
     % We call the sqrt procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = gem_mex('sqrt', this.objectIdentifier);
+    objId = this.objectIdentifier;
+    newObjectIdentifier = gem_mex('sqrt', objId);
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

@@ -76,18 +76,18 @@ classdef sgem < handle
                 % Then we check that the argument is of the same class
                 % before copying it
                 if isequal(class(varargin{1}), 'sgem')
-                    % If it is an object of type 'sgem', we interpret 
+                    % If it is an object of type 'sgem', we interpret
                     % this call to a constructor as a call for copying the object
                     % into a new one
-                    tmp = varargin{1}.objectIdentifier;
-                    this.objectIdentifier = sgem_mex('new', tmp);
+                    objId = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = sgem_mex('new', objId);
                 elseif isequal(class(varargin{1}), 'gem')
-                    % The we create a sparse version of the provided dense 
+                    % The we create a sparse version of the provided dense
                     % gem object with default threshold
                     threshold = min(size(varargin{1}))*10^gem(-this.getWorkingPrecision);
-                    tmp1 = varargin{1}.objectIdentifier;
-                    tmp2 = threshold.objectIdentifier;
-                    this.objectIdentifier = sgem_mex('sparse', tmp1, tmp2);
+                    objId1 = varargin{1}.objectIdentifier;
+                    objId2 = threshold.objectIdentifier;
+                    this.objectIdentifier = sgem_mex('sparse', objId1, objId2);
                 elseif isnumeric(varargin{1}) || islogical(varargin{1})
                     % Then we interpret this call as a call for the library to
                     % create an instance of this class from some numerical
@@ -96,7 +96,7 @@ classdef sgem < handle
                     % sparse object, we transfer the information in an
                     % optimized way
                     [i j s] = find(varargin{1});
-                    if size(i,1) < size(i,2) % for line vectors, matlab will return i,j,s with a different formatting... so we correct that 
+                    if size(i,1) < size(i,2) % for line vectors, matlab will return i,j,s with a different formatting... so we correct that
                         i = i.';
                         j = j.';
                         s = s.';
@@ -108,8 +108,8 @@ classdef sgem < handle
                     end
                     [m n] = size(varargin{1});
                     if isequal(class(s),'gem') % in principle this case should not occur
-                        tmp = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, tmp, m, n, this.getWorkingPrecision);
+                        objId = s.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
                         || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
                         % For integers, we set the values manually to make
@@ -159,28 +159,28 @@ classdef sgem < handle
                     if ~isequal(class(threshold), 'gem')
                         threshold = gem(threshold);
                     end
-                    tmp = varargin{1}.objectIdentifier;
-                    this.objectIdentifier = sgem_mex('sparsify', tmp, threshold);
+                    objId = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = sgem_mex('sparsify', objId, threshold);
                 elseif isnumeric(varargin{2}) && isequal(size(varargin{2}), [1 1])
                     % Then we interpret this call as a call for the library to
                     % create an instance of this class from some numerical
                     % matlab data (e.g. a numerical number), together with
                     % a specific precision. We thus set the precision
                     % accordingly and call the default constructor.
-                    
+
                     if (varargin{2} < 1)
                         error('At least one digit of precision is required');
                     end
-                    
+
                     % Save default precision
                     previousPrecision = this.getWorkingPrecision;
-                    
+
                     % Assigned desired precision
                     this.setWorkingPrecision(varargin{2});
 
                     % Create object
                     this = sgem(varargin{1});
-                    
+
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
                 else
@@ -225,8 +225,8 @@ classdef sgem < handle
                     m = max(i);
                     n = max(j);
                     if isequal(class(s),'gem') % in principle this case should not occur
-                        tmp = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, tmp, m, n, this.getWorkingPrecision);
+                        objId = s.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
                         || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
                         % For integers, we set the values manually to make
@@ -250,20 +250,20 @@ classdef sgem < handle
                     % matlab data with given row and column indices, together with
                     % a specific precision. We thus set the precision
                     % accordingly and call the default constructor.
-                    
+
                     if (varargin{4} < 1)
                         error('At least one digit of precision is required');
                     end
-                    
+
                     % Save default precision
                     previousPrecision = this.getWorkingPrecision;
-                    
+
                     % Assigned desired precision
                     this.setWorkingPrecision(varargin{4});
 
                     % Create object
                     this = sgem(varargin{1},varargin{2},varargin{3});
-                    
+
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
                 else
@@ -313,8 +313,8 @@ classdef sgem < handle
                         error('Incompatible sizes in construction of an sgem object.');
                     end
                     if isequal(class(s),'gem')
-                        tmp = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, tmp, m, n, this.getWorkingPrecision);
+                        objId = s.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     else
                         this.objectIdentifier = sgem_mex('newFromMatlab', i, j, double(s), m, n, this.getWorkingPrecision);
                     end
@@ -328,20 +328,20 @@ classdef sgem < handle
                     % matlab data with given row, column indices, and size, together with
                     % a specific precision. We thus set the precision
                     % accordingly and call the default constructor.
-                    
+
                     if (varargin{6} < 1)
                         error('At least one digit of precision is required');
                     end
-                    
+
                     % Save default precision
                     previousPrecision = this.getWorkingPrecision;
-                    
+
                     % Assigned desired precision
                     this.setWorkingPrecision(varargin{6});
 
                     % Create object
                     this = sgem(varargin{1},varargin{2},varargin{3},varargin{4},varargin{5});
-                    
+
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
                 else
@@ -359,17 +359,17 @@ classdef sgem < handle
             if ~isempty(this.objectIdentifier)
                 sgem_mex('delete', this.objectIdentifier);
             end
-        end    
+        end
     end
 
     methods(Access = protected)
-        % We offer an alternative to the default copy operation 'y=x;' to 
+        % We offer an alternative to the default copy operation 'y=x;' to
         % performs a deep copy rather than a shallow one
         function cp = copy(el)
             cp = sgem(el);
         end
     end
-    
+
     % Since the load function does not depend on a class instance (but creates one),
     % it needs to be a static method, and so we need to define it here...
     methods (Static)
@@ -450,4 +450,3 @@ classdef sgem < handle
         end
     end
 end
-

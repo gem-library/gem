@@ -16,7 +16,7 @@ function result = sum(this, dim, type)
             error('Unsupported argument in gem::sum');
         end
     end
-    
+
     if (nargin >= 2) && (iscell(dim) || (numel(dim) > 1) || (dim ~= 1 && dim ~= 2))
         error('Unexpected arguments in gem::sum');
     end
@@ -28,21 +28,23 @@ function result = sum(this, dim, type)
             dim = 2;
         end
     end
-    
+
     % Now we call the element-wise minimum procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
     switch dim
         case 1
-            newObjectIdentifier = gem_mex('colSum', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('colSum', objId);
         case 2
-            newObjectIdentifier = gem_mex('rowSum', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('rowSum', objId);
         otherwise
             error('Unexpected argument in gem::sum');
     end
-    
+
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);
-    
+
     % If the user requested double output, we transform the output
     % accordingly
     if isequal(type, 'double')

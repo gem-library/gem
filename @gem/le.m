@@ -1,5 +1,5 @@
 % le - lesser than or equal
-% 
+%
 % For complex numbers, this function compares only the real parts
 function result = le(this, varargin)
     % This is a function which involves a second instance of a similar object,
@@ -35,7 +35,7 @@ function result = le(this, varargin)
     end
 
     % If one object is sparse and the comparison involves a scalar, we
-    % check whether the comparison leaves zero elements in the matrix 
+    % check whether the comparison leaves zero elements in the matrix
     % invariant. If this is not the case, the output will be full, so we
     % convert the objects to full
     convertBackForMatlabStyle = 0;
@@ -45,14 +45,18 @@ function result = le(this, varargin)
         varargin{1} = full(varargin{1});
         convertBackForMatlabStyle = 1;
     end
-    
+
     % Now we can compute the comparison matrix
     if isequal(class(this), 'gem') && isequal(class(varargin{1}), 'gem')
-        result = logical(gem_mex('le', this.objectIdentifier, varargin{1}.objectIdentifier));
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        result = logical(gem_mex('le', objId1, objId2));
     else
-        result = logical(sgem_mex('le', this.objectIdentifier, varargin{1}.objectIdentifier));
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        result = logical(sgem_mex('le', objId1, objId2));
     end
-    
+
     % For matlab, le when one object is sparse produces a sparse result
     if (gemSparseLikeMatlab == 1) && (convertBackForMatlabStyle == 1)
         result = sparse(result);

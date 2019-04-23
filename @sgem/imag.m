@@ -2,7 +2,8 @@
 function result = imag(this)
     % We call the imag procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = sgem_mex('imag', this.objectIdentifier);
+    objId = this.objectIdentifier;
+    newObjectIdentifier = sgem_mex('imag', objId);
 
     % ...  and create a new matlab object to keep this handle
     result = sgem('encapsulate', newObjectIdentifier);

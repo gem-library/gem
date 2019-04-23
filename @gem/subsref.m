@@ -99,20 +99,21 @@ if length(indices) == 1
     % so we call the subsref procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
 
-    newObjectIdentifier = gem_mex('subsref', this.objectIdentifier, indices{1}-1);
-    
+    objId = this.objectIdentifier;
+    newObjectIdentifier = gem_mex('subsref', objId, indices{1}-1);
+
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);
-    
+
     % For the special case "a(:)", the output is always vertical
     special.type='()';
     special.subs={':'};
     if isequal(varargin,{special})
         return
     end
-    
+
     % If both this and the indices are 1-dimensional, then we keep the same
-    % shape for the output as this (by default otherwise it takes the shape 
+    % shape for the output as this (by default otherwise it takes the shape
     % of the indices)
     if ((size(this,2) == 1) && (size(indices{1},1) == 1)) || ((size(this,1) == 1) && (size(indices{1},2) == 1))
         result = result.';
@@ -129,7 +130,7 @@ else
         result = this;
         return;
     end
-    
+
     % It seems to be almost always faster to extract the elements by matrix
     % multiplication:
     if length(indices{1})*length(indices{2}) > 50000
@@ -148,10 +149,11 @@ else
             return;
         end
     end
-        
+
     % Otherwise, we call the subsref procedure. Since the function creates
     % a new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = gem_mex('subsref', this.objectIdentifier, indices{1}-1, indices{2}-1);
+    objId = this.objectIdentifier;
+    newObjectIdentifier = gem_mex('subsref', objId, indices{1}-1, indices{2}-1);
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

@@ -12,7 +12,7 @@ function result = plus(this, varargin)
         result = plus(varargin{1}, this);
         return;
     end
-    
+
     % We need to check that the operation is possible (the c++
     % library might give bad errors otherwise). So we request the
     % dimensions of each matrix
@@ -31,11 +31,13 @@ function result = plus(this, varargin)
     if ~isequal(class(varargin{1}), 'gem') && ~isequal(class(varargin{1}), 'sgem')
         varargin{1} = gemify(varargin{1});
     end
-    
+
     % Now we call the appropriate procedure, and store the
     % result in the adequate object.
     if isequal(class(this), 'sgem') && isequal(class(varargin{1}), 'sgem') && isequal(size1, size2)
-        newObjectIdentifier = sgem_mex('plus', this.objectIdentifier, varargin{1}.objectIdentifier);
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        newObjectIdentifier = sgem_mex('plus', objId1, objId2);
         result = sgem('encapsulate', newObjectIdentifier);
     else
         result = full(this)+full(varargin{1});

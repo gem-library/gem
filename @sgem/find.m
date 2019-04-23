@@ -18,7 +18,8 @@ function [I, J, V] = find(this, k, mode)
         error('Unknown parameter in sgem::find');
     end
 
-    [I, J, V] = sgem_mex('find', this.objectIdentifier);
+    objId = this.objectIdentifier;
+    [I, J, V] = sgem_mex('find', objId);
     % Indices in matlab start from 1
     I = I+1;
     J = J+1;

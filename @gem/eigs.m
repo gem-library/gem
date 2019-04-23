@@ -2,26 +2,26 @@
 %
 % supported formats :
 %   e = eigs(a, [k])          : k eigenvalues of with largest magnitude
-%   [v d] = eigs(a, [k])      : k eigenvectors and eigenvalues of a 
+%   [v d] = eigs(a, [k])      : k eigenvectors and eigenvalues of a
 %                               with largest magnitude (a*v = v*d)
 %   [v d] = eigs(a, k, sigma) : first k eigenvectors and eigenvalues of a
 %                               smallest in magnitude to sigma.
 %                               With sigma = 'lm', 'sm', eigenvalues
 %                               with largest or smallest magnitude.
-% 
+%
 % The default value of k is 6.
 %
 % Note:
 %  - The precision of the computation performed here is gemWorkingPrecision*2/3
 %  - It appears that sometimes the order of two eigenvalues can be
-%    inverted, so if this is crucial information, one should double check 
+%    inverted, so if this is crucial information, one should double check
 %    the last eigenvalues by computing a few more eigenvalues than needed.
 function [V D] = eigs(this, varargin)
     % This function can involve at most two parameters
     if length(varargin) > 2
         error('Wrong number of arguments in gem::eigs');
     end
-    
+
     if (length(varargin) > 0) && (~isnumeric(varargin{1}) || (numel(varargin{1}) ~= 1))
         error('The second argument of gem::eigs must be a single number');
     elseif (length(varargin) > 0) && ~isequal(class(varargin{1}), 'double')
@@ -29,19 +29,19 @@ function [V D] = eigs(this, varargin)
         % specified as a double
         varargin{1} = double(varargin{1});
     end
-    
+
     % Extract the requested number of eigenvalues
     if length(varargin) > 0
         nbEigenvalues = varargin{1};
     else
         nbEigenvalues = min(size(this,1), 6);
     end
-    
+
     % The number of eigenvalues computed must be larger than zero
     if nbEigenvalues < 1
         error('gem::eigs cannot compute less than 1 eigenvalue');
     end
-    
+
     % We check if there is a second parameter
     type = 1;
     sigma = 0;
@@ -74,7 +74,7 @@ function [V D] = eigs(this, varargin)
             sigma = varargin{2};
         end
     end
-    
+
     % There should be no more parameters
     if length(varargin) > 2
         error('Too many arguments in gem::eigs');
@@ -84,7 +84,7 @@ function [V D] = eigs(this, varargin)
         if nbEigenvalues > size(this,1)
             error('Too many eigenvalues asked for in gem::eigs');
         end
-                
+
         % We use eig to compute all eigenvalues
 %        warning('Too many eigenvalues for eigs, using eig instead.');
         if nargout == 2
@@ -128,14 +128,14 @@ function [V D] = eigs(this, varargin)
         end
         return;
     end
-    
+
     % We check how many outputs are
     if nargout <= 2
         % The matrix must be square
         if size(this, 1) ~= size(this,2)
             error('Matrix must be square in gem::eigs');
         end
-        
+
         % We make sure sigma is a gem object
         if ~isequal(class(sigma),'gem')
             sigma = gem(sigma);
@@ -145,7 +145,7 @@ function [V D] = eigs(this, varargin)
         % this variable tells how many times it needs to be added
         % mannually.
         additionalSigmaMultiplicity = 0;
-        
+
         % We make sure we won't try to find non-zero eigenvalues when there
         % are no more (this is numerically unstable)
         if isequal(type,1)
@@ -163,7 +163,7 @@ function [V D] = eigs(this, varargin)
                 nbEigenvalues = rankMatrix;
             end
         end
-        
+
         % We make sure we won't try to invert a singular matrix (this is
         % numerically unstable as well)
         if isequal(type,2)
@@ -182,24 +182,26 @@ function [V D] = eigs(this, varargin)
                 error('Sigma is an eigenvalue of the considered matrix. Consider perturbing it a little bit to allow the numerical method to run smoothly.')
             end
         end
-        
-        [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', this.objectIdentifier, nbEigenvalues, type, sigma.objectIdentifier);
+
+        objId1 = this.objectIdentifier;
+        objId2 = sigma.objectIdentifier;
+        [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', objId, nbEigenvalues, type, objId2);
 
         % ...  and create a new matlab object to keep this handle
         V = gem('encapsulate', newObjectIdentifierV);
         D = gem('encapsulate', newObjectIdentifierD);
-        
+
         % We normalize the eigenvectors (this should not be done if the
         % option 'nobalance' is passed (once this option is implemented)).
         V = V*diag(1./sqrt(diag(V'*V)));
-        
+
         if nargout <= 1
             V = diag(D);
             if additionalSigmaMultiplicity > 0
                 V = [V; sigma*ones(additionalSigmaMultiplicity,1)];
             end
         end
-        
+
     else
         error('Unsupported call to gem::eigs')
     end

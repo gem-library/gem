@@ -15,7 +15,7 @@ function result = kron(this, varargin)
         end
         return;
     end
-    
+
     % Now we also check the type of both objects
     % First we make sure that both object are either full of sparse gems
     if ~isequal(class(this), 'gem') && ~isequal(class(this), 'sgem')
@@ -30,19 +30,27 @@ function result = kron(this, varargin)
     % result in the adequate object.
     if isequal(class(this), 'gem')
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = gem_mex('kron', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('kron', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = gem_mex('kron_fs', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('kron_fs', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         end
     else
         % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = sgem_mex('kron_sf', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('kron_sf', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = sgem_mex('kron', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('kron', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         end
     end

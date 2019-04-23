@@ -15,8 +15,8 @@ function [Y I] = max(this, varargin)
     if (length(varargin) == 2) && (~isempty(varargin{1}) || (~isequal(varargin{2},1) && ~isequal(varargin{2},2)))
         error('Wrong arguments for sgem::max');
     end
-    
-    if (length(varargin) == 1) 
+
+    if (length(varargin) == 1)
         % We need to check that the operation is possible (the c++
         % library might give bad errors otherwise). So we request the
         % dimensions of each matrix
@@ -26,31 +26,33 @@ function [Y I] = max(this, varargin)
         if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1)
             error('Incompatible sizes for element-wise maximum');
         end
-        
+
         % We also check that no second argument is expected
         if nargout > 1
             error('Element-wise maximum returns only one outcome');
         end
     end
-    
-    
-    %% If we reach here, the arguments must be good    
+
+
+    %% If we reach here, the arguments must be good
     if length(varargin) ~= 1
         size1 = size(this);
         % Now we call the column or line-wise maximum procedure. Since the function creates a
         % new object with the result, we keep the corresponding handle...
         if (isempty(varargin) && (size1(1) > 1)) || ((length(varargin) == 2) && (varargin{2} == 1))
-            [newObjectIdentifier I] = sgem_mex('colMax', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            [newObjectIdentifier I] = sgem_mex('colMax', objId);
             I = I'+1;
         else
-            [newObjectIdentifier I] = sgem_mex('rowMax', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            [newObjectIdentifier I] = sgem_mex('rowMax', objId);
             I = I+1;
         end
         % ...  and create a new matlab object to keep this handle
         Y = sgem('encapsulate', newObjectIdentifier);
     else
         % Here we compute the maximum between two objects
-        
+
         % For later, we remember if one of the input is sparse
         oneInputSparse = max(1, issparse(this) + issparse(varargin{1}));
 
@@ -61,10 +63,10 @@ function [Y I] = max(this, varargin)
         if ~isequal(class(varargin{1}), 'gem') && ~isequal(class(varargin{1}), 'sgem')
             varargin{1} = gemify(varargin{1});
         end
-        
+
         size1 = size(this);
         size2 = size(varargin{1});
-        
+
         % We only implement maximum with a scalar when both the matrix and
         % the scalar are full, or when both are sparse. Maximum between two
         % matrices is sparse by default.
@@ -85,14 +87,14 @@ function [Y I] = max(this, varargin)
             end
         elseif ~isequal(class(this), class(varargin{1}))
             % Without further garantee, maximum between sparse and full
-            % matrices could be full, but it may not be, so we produce a 
+            % matrices could be full, but it may not be, so we produce a
             % sparse output
             this = sparse(this);
             varargin{1} = sparse(varargin{1});
         end
 
         % Maximum with a positive scalar, as well as complex maximum with a
-        % non-zero scalar, is always full, so we produce a full output in 
+        % non-zero scalar, is always full, so we produce a full output in
         % this case
         if (numel(this) == 1) && (numel(varargin{1}) ~= 1)
             if (~isreal(this) || ~isreal(varargin{1})) && (abs(this) == 0)
@@ -118,17 +120,21 @@ function [Y I] = max(this, varargin)
                 varargin{1} = full(varargin{1});
             end
         end
-        
+
         if ~issparse(this)
             % Now we call the element-wise minimum procedure. Since the function creates a
             % new object with the result, we keep the corresponding handle...
-            newObjectIdentifier = gem_mex('ewMax', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('ewMax', objId1, objId2);
             % ...  and create a new matlab object to keep this handle
             Y = gem('encapsulate', newObjectIdentifier);
         else
             % Now we call the element-wise minimum procedure. Since the function creates a
             % new object with the result, we keep the corresponding handle...
-            newObjectIdentifier = sgem_mex('ewMax', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('ewMax', objId1, objId2);
             % ...  and create a new matlab object to keep this handle
             Y = sgem('encapsulate', newObjectIdentifier);
         end
@@ -138,5 +144,5 @@ function [Y I] = max(this, varargin)
             Y = sparse(Y);
         end
     end
-    
+
 end

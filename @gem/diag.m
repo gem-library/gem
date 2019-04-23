@@ -20,7 +20,7 @@ function result = diag(this, k)
         result = this;
         return;
     end
-    
+
     % We check that the user is not trying to create a matrix
     s = size(this);
     if min(s) == 1
@@ -30,7 +30,8 @@ function result = diag(this, k)
         end
         % We call the angle procedure. Since the function creates a
         % new object with the result, we keep the corresponding handle...
-        newObjectIdentifier = gem_mex('diagCreate', this.objectIdentifier, k);
+        objId = this.objectIdentifier;
+        newObjectIdentifier = gem_mex('diagCreate', objId, k);
     else
         if (k+1 > s(2)) || (-k+1 > s(1))
             error('diagonal index is larger than the matrix');
@@ -38,9 +39,10 @@ function result = diag(this, k)
 
         % We call the angle procedure. Since the function creates a
         % new object with the result, we keep the corresponding handle...
-        newObjectIdentifier = gem_mex('diagExtract', this.objectIdentifier, k);
+        objId = this.objectIdentifier;
+        newObjectIdentifier = gem_mex('diagExtract', objId, k);
     end
-    
+
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

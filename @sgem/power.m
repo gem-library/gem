@@ -30,7 +30,9 @@ function result = power(this, varargin)
 
         % Now we call the power procedure. Since the function creates a
         % new object with the result, we keep the corresponding handle...
-        newObjectIdentifier = sgem_mex('power', this.objectIdentifier, varargin{1}.objectIdentifier);
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        newObjectIdentifier = sgem_mex('power', objId1, objId2);
 
         % ...  and create a new matlab object to keep this handle
         result = sgem('encapsulate', newObjectIdentifier);

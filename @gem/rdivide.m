@@ -12,7 +12,7 @@ function result = rdivide(this, varargin)
         result = ldivide(varargin{1}, this);
         return;
     end
-    
+
     % We need to check that the operation is possible (the c++
     % library might give bad errors otherwise). So we request the
     % dimensions of each matrix
@@ -33,7 +33,9 @@ function result = rdivide(this, varargin)
 
     % Now we call the rdivide procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = gem_mex('rdivide', this.objectIdentifier, varargin{1}.objectIdentifier);
+    objId1 = this.objectIdentifier;
+    objId2 = varargin{1}.objectIdentifier;
+    newObjectIdentifier = gem_mex('rdivide', objId1, objId2);
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

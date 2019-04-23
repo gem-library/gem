@@ -11,10 +11,11 @@ function result = inv(this)
         result = Inf*gem(ones(size(this)));
         return;
     end
-    
+
     % We call the inv procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = gem_mex('inv', this.objectIdentifier);
+    objId = this.objectIdentifier;
+    newObjectIdentifier = gem_mex('inv', objId);
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

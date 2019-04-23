@@ -27,10 +27,11 @@ function result = reshape(this, varargin)
     if prod(newDim) ~= numel(this)
         error('Reshape cannot change the number of elements');
     end
-    
+
     % We call the abs procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = sgem_mex('reshape', this.objectIdentifier, newDim(1), newDim(2));
+    objId = this.objectIdentifier;
+    newObjectIdentifier = sgem_mex('reshape', objId, newDim(1), newDim(2));
 
     % ...  and create a new matlab object to keep this handle
     result = sgem('encapsulate', newObjectIdentifier);

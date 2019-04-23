@@ -65,7 +65,7 @@ classdef gem < handle
         function this = gem(varargin)
 
             this.checkForBinaries;
-            
+
             % The following variable is used in some instances to tell the
             % constructor to use the precision requested by the user rather
             % than the one it thinks is better for the considered number
@@ -80,13 +80,13 @@ classdef gem < handle
                     % If it is an object of type 'gem', we interpret
                     % this call to a constructor as a call for copying the object
                     % into a new one
-                    tmp = varargin{1}.objectIdentifier;
-                    this.objectIdentifier = gem_mex('new', tmp);
+                    objId = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = gem_mex('new', objId);
                 elseif isequal(class(varargin{1}), 'sgem')
                     % The we create a dense version of the provided sparse
                     % sgem object
-                    tmp = varargin{1}.objectIdentifier;
-                    this.objectIdentifier = gem_mex('full', tmp);
+                    objId = varargin{1}.objectIdentifier;
+                    this.objectIdentifier = gem_mex('full', objId);
                 elseif isnumeric(varargin{1}) || islogical(varargin{1})
                     % Then we interpret this call as a call for the library to
                     % create an instance of this class from some numerical
@@ -115,7 +115,7 @@ classdef gem < handle
                 elseif ischar(varargin{1})
                     % We embed the string into a cell array so that the c++
                     % interface interprets it correctly.
-                    
+
                     % First, we check if the string denotes a mathematical
                     % constant
                     switch lower(varargin{1})
@@ -246,27 +246,27 @@ classdef gem < handle
                     % matlab data (e.g. a numerical number), together with
                     % a specific precision. We thus set the precision
                     % accordingly and call the default constructor.
-                    
+
                     if (varargin{2} < 1)
                         error('At least one digit of precision is required');
                     end
-                    
+
                     % Save default precision
                     previousPrecision = this.getWorkingPrecision;
-                    
+
                     % Assigned desired precision
                     this.setWorkingPrecision(varargin{2});
 
                     % We tell the library that the precision must be
                     % enforced
                     forceDefaultPrecision = 1;
-                    
+
                     % Create object
                     this = gem(varargin{1});
-                    
+
                     % We don't need precision enforcement anymore
                     forceDefaultPrecision = 0;
-                    
+
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
                 else
@@ -282,19 +282,20 @@ classdef gem < handle
             % Latest versions of matlab might try to delete object which
             % were not fully constructed yet...
             if ~isempty(this.objectIdentifier)
-                gem_mex('delete', this.objectIdentifier);
+                objId = this.objectIdentifier;
+                gem_mex('delete', objId);
             end
-        end    
+        end
     end
 
     methods(Access = protected)
-        % We offer an alternative to the default copy operation 'y=x;' to 
+        % We offer an alternative to the default copy operation 'y=x;' to
         % performs a deep copy rather than a shallow one
         function cp = copy(el)
             cp = gem(el);
         end
     end
-    
+
     % Since the load function does not depend on a class instance (but creates one),
     % it needs to be a static method, and so we need to define it here...
     methods (Static)
@@ -359,13 +360,13 @@ classdef gem < handle
             value = precision;
         end
     end
-    
-    
+
+
     %% The following methods are needed in the class, they are implemented as
-    % methods rather than functions, because octave doesn't support declaration 
+    % methods rather than functions, because octave doesn't support declaration
     % of functions into a class file
     methods (Static, Access = private)
-        
+
         % This function verifies that a string doesn't contain any imaginary part
         function bool = isRealString(str)
             bool = 1 - (sum(str == 'i') > 0);
@@ -526,7 +527,7 @@ classdef gem < handle
             persistent binariesOk;
             if isempty(binariesOk) %|| (binariesOk ~= 1)
                 % In the source file version of this library, we start by
-                % checking whether the c++ library was compiled. If not, we 
+                % checking whether the c++ library was compiled. If not, we
                 % suggest to download the binaries.
                 tmp = mfilename('fullpath');
                 if (exist([tmp(1:end-8), 'gem_mex.', mexext], 'file') ~= 3)
@@ -538,8 +539,7 @@ classdef gem < handle
             end
             value = binariesOk;
         end
-        
+
     end
 
 end
-

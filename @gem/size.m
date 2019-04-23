@@ -4,8 +4,9 @@ function [result1 result2] = size(this, dim)
         error('Wrong dimension in gem::size');
     end
 
-    result1 = gem_mex('size', this.objectIdentifier);
-    
+    objId = this.objectIdentifier;
+    result1 = gem_mex('size', objId);
+
     if nargin >= 2
         result1 = result1(dim);
     elseif nargout == 2

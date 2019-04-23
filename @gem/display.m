@@ -10,7 +10,7 @@
 function display(this, arg2, arg3)
     % The default display precision
     displayPrecision = this.getDisplayPrecision;
-    
+
     % Some versions of matlab provide the name as a second argument
     if (nargin >= 2) && ischar(arg2)
         name = arg2;
@@ -23,15 +23,17 @@ function display(this, arg2, arg3)
             displayPrecision = double(arg2);
         end
     end
-    
+
 
     if ~isempty(name)
         disp(' ');
         disp([name, ' = ']);
-%        disp([name, ' (id: ', num2str(this.objectIdentifier), ') = ']);
+%        objId = this.objectIdentifier;
+%        disp([name, ' (id: ', num2str(objId), ') = ']);
         disp(' ');
     end
-    
-    gem_mex('display', this.objectIdentifier, displayPrecision);
+
+    objId = this.objectIdentifier;
+    gem_mex('display', objId, displayPrecision);
     disp(' ');
 end

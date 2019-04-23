@@ -12,7 +12,7 @@ function result = minus(this, varargin)
         result = minus(varargin{1}, this);
         return;
     end
-    
+
     % We need to check that the operation is possible (the c++
     % library might give bad errors otherwise). So we request the
     % dimensions of each matrix
@@ -33,7 +33,9 @@ function result = minus(this, varargin)
 
     % Now we call the substraction procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
-    newObjectIdentifier = gem_mex('minus', this.objectIdentifier, varargin{1}.objectIdentifier);
+    objId1 = this.objectIdentifier;
+    objId2 = varargin{1}.objectIdentifier;
+    newObjectIdentifier = gem_mex('minus', objId1, objId2);
 
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);

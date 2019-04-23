@@ -51,10 +51,14 @@ function result = vertcat(this, varargin)
 
     %% Now we can concatenate the two objects
     if isequal(class(this), 'gem') && isequal(class(varargin{1}), 'gem')
-        newObjectIdentifier = gem_mex('vertcat', this.objectIdentifier, varargin{1}.objectIdentifier);
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        newObjectIdentifier = gem_mex('vertcat', objId1, objId2);
         result = gem('encapsulate', newObjectIdentifier);
     else
-        newObjectIdentifier = sgem_mex('vertcat', this.objectIdentifier, varargin{1}.objectIdentifier);
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        newObjectIdentifier = sgem_mex('vertcat', objId1, objId2);
         result = sgem('encapsulate', newObjectIdentifier);
     end
 end

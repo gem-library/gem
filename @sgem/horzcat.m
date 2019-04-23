@@ -60,13 +60,17 @@ function result = horzcat(this, varargin)
 
     result = this + varargin{1};
     return;
-    
+
 %     % Otherwise we just use a direct method
 %     if isequal(class(this), 'gem') && isequal(class(varargin{1}), 'gem')
-%         newObjectIdentifier = gem_mex('horzcat', this.objectIdentifier, varargin{1}.objectIdentifier);
+%         objId1 = this.objectIdentifier;
+%         objId2 = varargin{1}.objectIdentifier;
+%         newObjectIdentifier = gem_mex('horzcat', objId1, objId2);
 %         result = gem('encapsulate', newObjectIdentifier);
 %     else
-%         newObjectIdentifier = sgem_mex('horzcat', this.objectIdentifier, varargin{1}.objectIdentifier);
+%         objId1 = this.objectIdentifier;
+%         objId2 = varargin{1}.objectIdentifier;
+%         newObjectIdentifier = sgem_mex('horzcat', objId1, objId2);
 %         result = sgem('encapsulate', newObjectIdentifier);
 %     end
 end

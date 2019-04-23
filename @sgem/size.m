@@ -4,8 +4,9 @@ function [result1 result2] = size(this, dim)
         error('Wrong dimension in sgem::size');
     end
 
-    result1 = sgem_mex('size', this.objectIdentifier);
-    
+    objId = this.objectIdentifier;
+    result1 = sgem_mex('size', objId);
+
     if nargin >= 2
         result1 = result1(dim);
     elseif nargout == 2

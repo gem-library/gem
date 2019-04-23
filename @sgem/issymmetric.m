@@ -1,5 +1,6 @@
 % issymmetric - tells whether the matrix is symmetric, i.e. x == x.'
 function result = issymmetric(this)
     % We call the ishermitian procedure
-    result = logical(sgem_mex('issymmetric', this.objectIdentifier));
+    objId = this.objectIdentifier;
+    result = logical(sgem_mex('issymmetric', objId));
 end

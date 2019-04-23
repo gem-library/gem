@@ -12,7 +12,7 @@ function result = mtimes(this, varargin)
         result = mtimes(varargin{1}.', this.').';
         return;
     end
-    
+
     % We need to check that the operation is possible (the c++
     % library might give bad errors otherwise). So we request the
     % dimensions of each matrix
@@ -25,7 +25,7 @@ function result = mtimes(this, varargin)
         result = this.*varargin{1};
         return;
     end
-    
+
     % We check that the sizes are compatible
     if size1(2) ~= size2(1)
         error('Incompatible size for matrix multiplication');
@@ -39,26 +39,34 @@ function result = mtimes(this, varargin)
     if ~isequal(class(varargin{1}), 'gem') && ~isequal(class(varargin{1}), 'sgem')
         varargin{1} = gemify(varargin{1});
     end
-    
+
     % Now we call the appropriate multiplication procedure, and store the
     % result in the adequate object.
     if isequal(class(this), 'gem')
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = gem_mex('mtimes', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('mtimes', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = gem_mex('mtimes_fs', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = gem_mex('mtimes_fs', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         end
     else
         % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
-            newObjectIdentifier = sgem_mex('mtimes_sf', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('mtimes_sf', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
-            newObjectIdentifier = sgem_mex('mtimes', this.objectIdentifier, varargin{1}.objectIdentifier);
+            objId1 = this.objectIdentifier;
+            objId2 = varargin{1}.objectIdentifier;
+            newObjectIdentifier = sgem_mex('mtimes', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         end
     end
-    
+
 end

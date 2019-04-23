@@ -16,18 +16,20 @@ function result = prod(this, dim)
             dim = 2;
         end
     end
-    
+
     % Now we call the element-wise minimum procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
     switch dim
         case 1
-            newObjectIdentifier = gem_mex('colProd', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('colProd', objId);
         case 2
-            newObjectIdentifier = gem_mex('rowProd', this.objectIdentifier);
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('rowProd', objId);
         otherwise
             error('Unexpected argument in gem::prod');
     end
-    
+
     % ...  and create a new matlab object to keep this handle
     result = gem('encapsulate', newObjectIdentifier);
 end

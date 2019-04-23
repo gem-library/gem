@@ -12,7 +12,7 @@ function result = rdivide(this, varargin)
         result = ldivide(varargin{1}, this);
         return;
     end
-    
+
     % This function preserves the sparsity only if A is sparse and B is a scalar.
     if issparse(this) && (numel(varargin{1}) == 1)
         % We check that both objects are of type sgem,
@@ -25,7 +25,9 @@ function result = rdivide(this, varargin)
 
         % We call the rdivide procedure. Since the function creates a
         % new object with the result, we keep the corresponding handle...
-        newObjectIdentifier = sgem_mex('rdivide', this.objectIdentifier, varargin{1}.objectIdentifier);
+        objId1 = this.objectIdentifier;
+        objId2 = varargin{1}.objectIdentifier;
+        newObjectIdentifier = sgem_mex('rdivide', objId1, objId2);
 
         % ...  and create a new matlab object to keep this handle
         result = sgem('encapsulate', newObjectIdentifier);

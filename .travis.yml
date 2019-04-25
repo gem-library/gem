@@ -57,7 +57,7 @@ before_script:
 
 ###############################################################################
 script:
-  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES path, $TEST_COMMAND path, gem(1)";
+  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES path, $TEST_COMMAND path,";
 
 ###############################################################################
 after_script:

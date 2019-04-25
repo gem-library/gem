@@ -38,7 +38,7 @@ addpath([pathStr '/tests']);
 
 % Run the tests
 result = moxunit_runtests('tests', '-verbose', '-recursive', '-junit_xml_file', 'testresults.xml', ...
-                          '-with_coverage', '-cover', 'gem', '-cover_xml_file', 'coverage.xml', '-cover_html_dir', 'coverage_html');
+                          '-with_coverage', '-cover', 'gem', '-cover_json_file', 'coverage.json', '-cover_xml_file', 'coverage.xml', '-cover_html_dir', 'coverage_html');
 
 % Go back to the initial folder    
 cd(initialPath);

@@ -63,3 +63,7 @@ after_script:
   # Check where we ended up and what's going on where we are
   - pwd
   - ls -alh
+  - curl --verbose -F json_file=coveralls.json https://coveralls.io/api/v1/jobs
+
+
+

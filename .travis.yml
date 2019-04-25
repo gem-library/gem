@@ -4,6 +4,9 @@ env:
   global:
     secure: fcdh3xxiXvIQb0VCQ3eM6X5g7zcZr80Y6pMwWp3CkGDy/DHGSXIyVMMQtUBpkYE09VelKazvuyyrnrFEFTB8d+GbRg4++s27mTR/tQOUqY3jm0QXqoGz6Ki51IjRl9uzN04ATV1aalQzP+lIVBU8VesBeXMRJsiG348kqrpcR9MoJlsjUwIijvEddWDmQWYOcTNa9qfW1LF0wMILp2L4bnZnHYRbsxy2ylTMgJggTNhMLs3nzChdEcuLyAGSVpdvA7K4Zx0iHiFKZ1ezLe5P/U0ve1ov0YMaO3OgLCa31+xDZovR09QR3wA9e+6J3O8Cxzc/t+czWiZlLQ4eKoZqkvZpgfNGbjiDAWpUYcQ5GDt8P++IFy19M8VVAiEJFcGTzI+BmKfDTcD/rsJFHzgfpoziE2Q2850xnQ4wCHIDBZf1DbdWyCUOOc62MS4Ypbr/UrF3h3ICA/v9tBWGvgk3DNL2G/ln+NXU3+2DSrHYNrdSixJ4LPzBEp5JUFhJbExqA2Kd2+wGwqQhh7vZkm4OOiWTZZ1N8dSZ71h638TFrnYktm3vk6GvHYmUfd5K7UUGCeGxEOhOUxY2YPoXi/4alUk2WZoFOpdzZw+J5VKE5WcTMuXu+FS9mHagrArPjENJhlj8eiekgBsLdXwV8mUa0e6GurVfVeQWEFztrCoTACY=
 
+notifications:
+  webhooks: https://coveralls.io/webhook
+
 addons:
   apt:
     sources:

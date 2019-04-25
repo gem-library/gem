@@ -2,7 +2,7 @@ Gmp Eigen Matrix Library
 ========================
 
 
-[![Build Status](https://travis-ci.org/gem-library/gem.svg?branch=tests)](https://travis-ci.org/gem-library/gem) [![Coverage Status](https://coveralls.io/repos/github/gem-library/gem/badge.svg?branch=tests)](https://coveralls.io/github/gem-library/gem?branch=tests)
+[![Build Status](https://travis-ci.org/gem-library/gem.svg?branch=tests)](https://travis-ci.org/gem-library/gem) [![codecov](https://codecov.io/gh/gem-library/gem/branch/tests/graph/badge.svg)](https://codecov.io/gh/gem-library/gem)
 
 The [GEM library](https://github.com/jdbancal/gem/releases) is a variable precision library for [MATLAB](http://www.mathworks.com/products/matlab/) and [GNU Octave](https://www.gnu.org/software/octave/). It provides an open source solution for basic high precision computations in standard numerical computing environments.
 

@@ -36,11 +36,11 @@ before_script:
 - BUILD_BINARIES="make;"; echo "BUILD_BINARIES| $BUILD_BINARIES";
 - TEST_COMMAND="gemRunTests;"; echo "TEST_COMMAND| $TEST_COMMAND";
 script:
-- octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
+- octave -q --eval "exit; $ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
 after_script:
 - pwd
 - ls -alh
 - ls -alh gem
 - cat coverage.json
-- curl --verbose -F json_file=coverage.json https://coveralls.io/api/v1/jobs
+- bash <(curl -s https://codecov.io/bash)
 

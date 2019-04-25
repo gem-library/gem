@@ -31,4 +31,6 @@ function test_likeMatlab
     assert(abs(pi10-pi20) > 1e-10);
     
     gemWorkingPrecision(a);
+
+    assert(1==2);
 end

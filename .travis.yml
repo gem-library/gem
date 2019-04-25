@@ -57,13 +57,14 @@ before_script:
 
 ###############################################################################
 script:
-  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES path, $TEST_COMMAND";
+  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES path, $TEST_COMMAND path, gem(1)";
 
 ###############################################################################
 after_script:
   # Check where we ended up and what's going on where we are
   - pwd
   - ls -alh
+  - ls -alh gem
   - cat coverage.json
   - curl --verbose -F json_file=coverage.json https://coveralls.io/api/v1/jobs
 

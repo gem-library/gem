@@ -49,7 +49,7 @@ before_script:
   - rm -f testresults.xml;
   # ---------------------------------------------------------------------------
   # Prepare build command
-  - BUILD_BINARIES="make;"
+  - BUILD_BINARIES="make;";
     echo "BUILD_BINARIES| $BUILD_BINARIES";
   # Prepare test command
   - TEST_COMMAND="gemRunTests;";

@@ -28,6 +28,7 @@ function make(parallelization, useSharedGmpAndMpfr)
 % - Call this script from matlab with the option 'useSharedGmpAndMpfr' set
 %   to 0
 
+warning('ENTERING MAKE.M');
 
 %% Settings
 if nargin < 1

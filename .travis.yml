@@ -50,13 +50,14 @@ before_script:
   # ---------------------------------------------------------------------------
   # Prepare build command
   - BUILD_BINARIES="make;"
+    echo "BUILD_BINARIES| $BUILD_BINARIES";
   # Prepare test command
   - TEST_COMMAND="gemRunTests;";
     echo "TEST_COMMAND| $TEST_COMMAND";
 
 ###############################################################################
 script:
-  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES";
+  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
 
 ###############################################################################
 after_script:

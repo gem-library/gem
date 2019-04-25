@@ -1,72 +1,43 @@
-# We pretend to be Java because we need GNU Octave which is not 
-# available (as of January 2016)
 language: java
+
+env:
+  global:
+    secure: fcdh3xxiXvIQb0VCQ3eM6X5g7zcZr80Y6pMwWp3CkGDy/DHGSXIyVMMQtUBpkYE09VelKazvuyyrnrFEFTB8d+GbRg4++s27mTR/tQOUqY3jm0QXqoGz6Ki51IjRl9uzN04ATV1aalQzP+lIVBU8VesBeXMRJsiG348kqrpcR9MoJlsjUwIijvEddWDmQWYOcTNa9qfW1LF0wMILp2L4bnZnHYRbsxy2ylTMgJggTNhMLs3nzChdEcuLyAGSVpdvA7K4Zx0iHiFKZ1ezLe5P/U0ve1ov0YMaO3OgLCa31+xDZovR09QR3wA9e+6J3O8Cxzc/t+czWiZlLQ4eKoZqkvZpgfNGbjiDAWpUYcQ5GDt8P++IFy19M8VVAiEJFcGTzI+BmKfDTcD/rsJFHzgfpoziE2Q2850xnQ4wCHIDBZf1DbdWyCUOOc62MS4Ypbr/UrF3h3ICA/v9tBWGvgk3DNL2G/ln+NXU3+2DSrHYNrdSixJ4LPzBEp5JUFhJbExqA2Kd2+wGwqQhh7vZkm4OOiWTZZ1N8dSZ71h638TFrnYktm3vk6GvHYmUfd5K7UUGCeGxEOhOUxY2YPoXi/4alUk2WZoFOpdzZw+J5VKE5WcTMuXu+FS9mHagrArPjENJhlj8eiekgBsLdXwV8mUa0e6GurVfVeQWEFztrCoTACY=
 
 addons:
   apt:
     sources:
-      - sourceline: 'ppa:octave/stable'
-      - ubuntu-toolchain-r-test
+    - sourceline: ppa:octave/stable
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-7
-      - octave
-      - liboctave-dev
-      - libmpfrc++-dev
-      - libgmp-dev
-
-###############################################################################
+    - g++-7
+    - octave
+    - liboctave-dev
+    - libmpfrc++-dev
+    - libgmp-dev
 cache:
-  # Downloading octave takes a while, so let's cache apt
   apt: true
   directories:
-    # Cache octave packages
-    - $HOME/octave
-    # Cache other packages
-    - $HOME/external_cache
-
-###############################################################################
-# Command to install dependencies
+  - "$HOME/octave"
+  - "$HOME/external_cache"
 before_install:
-  - git submodule update --init
-
-###############################################################################
-install:
-  ADDPATH_COMMAND=""
-
-###############################################################################
+- git submodule update --init
+install: ADDPATH_COMMAND=""
 before_script:
-  # make sure gcc-7 is used instead of the default gcc-4
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  # Double-check we are still in the right directory
-  - pwd
-  # Check gcc version
-  - gcc --version
-  # Check what octave packages we have installed
-  - octave -q --eval "ver"
-  # ---------------------------------------------------------------------------
-  # Remove any cached results files from previous build, if present
-  - rm -f testresults.xml;
-  # ---------------------------------------------------------------------------
-  # Prepare build command
-  - BUILD_BINARIES="make;";
-    echo "BUILD_BINARIES| $BUILD_BINARIES";
-  # Prepare test command
-  - TEST_COMMAND="gemRunTests;";
-    echo "TEST_COMMAND| $TEST_COMMAND";
-
-###############################################################################
+- sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+- sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+- pwd
+- gcc --version
+- octave -q --eval "ver"
+- rm -f testresults.xml;
+- BUILD_BINARIES="make;"; echo "BUILD_BINARIES| $BUILD_BINARIES";
+- TEST_COMMAND="gemRunTests;"; echo "TEST_COMMAND| $TEST_COMMAND";
 script:
-  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND path,";
-
-###############################################################################
+- octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
 after_script:
-  # Check where we ended up and what's going on where we are
-  - pwd
-  - ls -alh
-  - ls -alh gem
-  - cat coverage.json
-  - curl --verbose -F json_file=coverage.json https://coveralls.io/api/v1/jobs
-
-
+- pwd
+- ls -alh
+- ls -alh gem
+- cat coverage.json
+- curl --verbose -F json_file=coverage.json https://coveralls.io/api/v1/jobs
 

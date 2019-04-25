@@ -9,6 +9,9 @@ initialPath = pwd;
 [pathStr, name, extension] = fileparts(which(mfilename));
 cd(pathStr)
 
+% We make sure gem is in the path
+addpath([pathStr '/gem']);
+
 % We make sure MOxUnit is in the path
 MOxUnitInPath = false;
 try
@@ -27,12 +30,15 @@ if ~MOxUnitInPath
     end
 end
 
+% We make sure MOcov is in the path
+addpath([pathStr '/external/MOcov/MOcov']);
+
 % We also add the test folder to the path
 addpath([pathStr '/tests']);
 
 % Run the tests
-result = moxunit_runtests('tests', '-verbose', '-recursive', '-junit_xml_file', 'testresults.xml');
-% With MOcov, add '-with_coverage', '-cover', '.', '-cover_xml_file', 'coverage.xml', '-cover_html_dir', 'coverage_html'
+result = moxunit_runtests('tests', '-verbose', '-recursive', '-junit_xml_file', 'testresults.xml', ...
+                          '-with_coverage', '-cover', 'gem', '-cover_xml_file', 'coverage.xml', '-cover_html_dir', 'coverage_html');
 
 % Go back to the initial folder    
 cd(initialPath);

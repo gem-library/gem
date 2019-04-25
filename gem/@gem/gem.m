@@ -529,8 +529,7 @@ classdef gem < handle
                 % In the source file version of this library, we start by
                 % checking whether the c++ library was compiled. If not, we
                 % suggest to download the binaries.
-                tmp = mfilename('fullpath');
-                if (exist([tmp(1:end-8), 'gem_mex.', mexext], 'file') ~= 3)
+                if (exist(['gem_mex.', mexext], 'file') ~= 3)
                     warning('The library binaries were not found. You may wish to download them online at https://www.github.com/jdbancal/gem/releases .');
                     binariesOk = 0;
                 else

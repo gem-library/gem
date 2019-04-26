@@ -41,7 +41,7 @@ Check out [getting started with the GEM library](doc/gettingStarted.md) for more
 Installation
 ------------
 
-The library comes pre-compiled for linux, macos and windows (64bits). It is therefore straightforward to use : after [downloading](https://github.com/jdbancal/gem/releases) the latest release, just add the gem folder into MATLAB/GNU Octave's path (this can be done by running the command `path(path,'/path_to_the_gem_folder')`), and it is ready to use.
+The library comes pre-compiled for linux, macos and windows (64bits). It is therefore straightforward to use : after [downloading](https://github.com/jdbancal/gem/releases) the latest release, just add the gem subfolder into MATLAB/GNU Octave's path (this can be done by running the command `addpath('/path_to_the_gem_folder/gem')`), and it is ready to use.
 
 If you experience trouble with the provided binaries, because for instance you are using a different platform (32 bits?), a significantly older version of the operating system than the one on which the provided binaries were compiled, a significantly older version of MATLAB or GNU Octave, you may use the provided script to compile it. For more details on this, please refer to the [compilation instructions](doc/compilationInstructions.md).
 

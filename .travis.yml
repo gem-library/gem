@@ -3,36 +3,36 @@ language: java
 addons:
   apt:
     sources:
-    - sourceline: ppa:octave/stable
-    - ubuntu-toolchain-r-test
+      - sourceline: ppa:octave/stable
+      - ubuntu-toolchain-r-test
     packages:
-    - g++-7
-    - octave
-    - liboctave-dev
-    - libmpfrc++-dev
-    - libgmp-dev
+      - g++-7
+      - octave
+      - liboctave-dev
+      - libmpfrc++-dev
+      - libgmp-dev
 cache:
   apt: true
   directories:
-  - "$HOME/octave"
-  - "$HOME/external_cache"
+    - "$HOME/octave"
+    - "$HOME/external_cache"
 before_install:
-- git submodule update --init
+  - git submodule update --init
 install: ADDPATH_COMMAND=""
 before_script:
-- sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-- sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-- pwd
-- gcc --version
-- octave -q --eval "ver"
-- rm -f testresults.xml;
-- BUILD_BINARIES="make;"; echo "BUILD_BINARIES| $BUILD_BINARIES";
-- TEST_COMMAND="exit(~gemRunTests);"; echo "TEST_COMMAND| $TEST_COMMAND";
+  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+  - pwd
+  - gcc --version
+  - octave -q --eval "ver"
+  - rm -f testresults.xml;
+  - BUILD_BINARIES="make;"; echo "BUILD_BINARIES| $BUILD_BINARIES";
+  - TEST_COMMAND="exit(~gemRunTests);"; echo "TEST_COMMAND| $TEST_COMMAND";
 script:
-- octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
+  - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
 after_script:
-- pwd
-- ls -alh
-- ls -alh gem
-- bash <(curl -s https://codecov.io/bash)
+  - pwd
+  - ls -alh
+  - ls -alh gem
+  - bash <(curl -s https://codecov.io/bash)
 

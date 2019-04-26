@@ -2,10 +2,10 @@ function make(parallelization, useSharedGmpAndMpfr)
 % make([parallelization], [useSharedGmpAndMpfr])
 %
 % Run this file from matlab to compile the C++ part of the GEM library. Use
-% parallelization = 0 to disable openmp, parallelization = 1 otherwise. Use
-% useSharedGmpAndMpfr = 1 if you want to use the GMP and MPFR libraries
-% installed on your system, use useSharedGmpAndMpfr = 0 if you want to use
-% the manually downloaded versions.
+% parallelization = 1 (default) to enable openmp, parallelization = 0
+% otherwise. Use useSharedGmpAndMpfr = 1 (default) if you want to use the
+% GMP and MPFR libraries installed on your system, use useSharedGmpAndMpfr
+% = 0 if you want to use the manually downloaded versions.
 %
 % Note : the code relies on the eigen, spectra, gmp, mpfr and mpfrc++ libraries.
 % - The Eigen and Spectra libraries are included as git submodules. They

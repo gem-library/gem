@@ -1310,12 +1310,12 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::diagCreate(const IndexType& k) const
 
     // We copy the real data (the current matrix is assumed to be of size nx1)
     for (SparseMatrix<mpreal>::InnerIterator it(matrixR,0); it; ++it)
-        result.matrixR.insert(max((IndexType)0,-k)+it.row(), max((IndexType)0,k)+it.row()) = it.value();
+        result.matrixR.insert(std::max((IndexType)0,-k)+it.row(), std::max((IndexType)0,k)+it.row()) = it.value();
 
     // We copy the imaginary data
     if (isComplex) {
         for (SparseMatrix<mpreal>::InnerIterator it(matrixI,0); it; ++it)
-            result.matrixI.insert(max((IndexType)0,-k)+it.row(), max((IndexType)0,k)+it.row()) = it.value();
+            result.matrixI.insert(std::max((IndexType)0,-k)+it.row(), std::max((IndexType)0,k)+it.row()) = it.value();
     }
 
     return result;
@@ -1336,12 +1336,12 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::diagCreate_new(const IndexType& k) c
 
     // We copy the real data (the current matrix is assumed to be of size nx1)
     for (SparseMatrix<mpreal>::InnerIterator it(matrixR,0); it; ++it)
-        result.matrixR.insert(max((IndexType)0,-k)+it.row(), max((IndexType)0,k)+it.row()) = it.value();
+        result.matrixR.insert(std::max((IndexType)0,-k)+it.row(), std::max((IndexType)0,k)+it.row()) = it.value();
 
     // We copy the imaginary data
     if (isComplex) {
         for (SparseMatrix<mpreal>::InnerIterator it(matrixI,0); it; ++it)
-            result.matrixI.insert(max((IndexType)0,-k)+it.row(), max((IndexType)0,k)+it.row()) = it.value();
+            result.matrixI.insert(std::max((IndexType)0,-k)+it.row(), std::max((IndexType)0,k)+it.row()) = it.value();
     }
 
     return result;
@@ -1353,10 +1353,10 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::diagExtract(const IndexType& k) const
     SparseGmpEigenMatrix result, tmp;
 
     // First, we select the right block
-    tmp.matrixR = matrixR.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k));
+    tmp.matrixR = matrixR.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k));
     // Now we extract the diagonal
-    result.matrixR.resize(min(tmp.matrixR.rows(), tmp.matrixR.cols()), 1);
-    result.matrixR.reserve(min(min(tmp.matrixR.rows(), tmp.matrixR.cols()), tmp.matrixR.nonZeros()));
+    result.matrixR.resize(std::min(tmp.matrixR.rows(), tmp.matrixR.cols()), 1);
+    result.matrixR.reserve(std::min(std::min(tmp.matrixR.rows(), tmp.matrixR.cols()), tmp.matrixR.nonZeros()));
     for (IndexType k0 = 0; k0 < tmp.matrixR.outerSize(); ++k0) {
         for (SparseMatrix<mpreal>::InnerIterator it(tmp.matrixR,k0); it; ++it) {
             if (it.row() > it.col())
@@ -1370,10 +1370,10 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::diagExtract(const IndexType& k) const
 
     if (isComplex) {
         // First, we select the right block
-        tmp.matrixI = matrixI.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k));
+        tmp.matrixI = matrixI.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k));
         // Now we extract the diagonal
-        result.matrixI.resize(min(tmp.matrixI.rows(), tmp.matrixI.cols()), 1);
-        result.matrixI.reserve(min(min(tmp.matrixI.rows(), tmp.matrixI.cols()), tmp.matrixI.nonZeros()));
+        result.matrixI.resize(std::min(tmp.matrixI.rows(), tmp.matrixI.cols()), 1);
+        result.matrixI.reserve(std::min(std::min(tmp.matrixI.rows(), tmp.matrixI.cols()), tmp.matrixI.nonZeros()));
         for (IndexType k0 = 0; k0 < tmp.matrixI.outerSize(); ++k0) {
             for (SparseMatrix<mpreal>::InnerIterator it(tmp.matrixI,k0); it; ++it) {
                 if (it.row() > it.col())
@@ -1396,10 +1396,10 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::diagExtract_new(const IndexType& k) 
     SparseGmpEigenMatrix tmp;
 
     // First, we select the right block
-    tmp.matrixR = matrixR.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k));
+    tmp.matrixR = matrixR.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k));
     // Now we extract the diagonal
-    result.matrixR.resize(min(tmp.matrixR.rows(), tmp.matrixR.cols()), 1);
-    result.matrixR.reserve(min(min(tmp.matrixR.rows(), tmp.matrixR.cols()), tmp.matrixR.nonZeros()));
+    result.matrixR.resize(std::min(tmp.matrixR.rows(), tmp.matrixR.cols()), 1);
+    result.matrixR.reserve(std::min(std::min(tmp.matrixR.rows(), tmp.matrixR.cols()), tmp.matrixR.nonZeros()));
     for (IndexType k0 = 0; k0 < tmp.matrixR.outerSize(); ++k0) {
         for (SparseMatrix<mpreal>::InnerIterator it(tmp.matrixR,k0); it; ++it) {
             if (it.row() > it.col())
@@ -1413,10 +1413,10 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::diagExtract_new(const IndexType& k) 
 
     if (isComplex) {
         // First, we select the right block
-        tmp.matrixI = matrixI.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k));
+        tmp.matrixI = matrixI.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k));
         // Now we extract the diagonal
-        result.matrixI.resize(min(tmp.matrixI.rows(), tmp.matrixI.cols()), 1);
-        result.matrixI.reserve(min(min(tmp.matrixI.rows(), tmp.matrixI.cols()), tmp.matrixI.nonZeros()));
+        result.matrixI.resize(std::min(tmp.matrixI.rows(), tmp.matrixI.cols()), 1);
+        result.matrixI.reserve(std::min(std::min(tmp.matrixI.rows(), tmp.matrixI.cols()), tmp.matrixI.nonZeros()));
         for (IndexType k0 = 0; k0 < tmp.matrixI.outerSize(); ++k0) {
             for (SparseMatrix<mpreal>::InnerIterator it(tmp.matrixI,k0); it; ++it) {
                 if (it.row() > it.col())
@@ -2083,13 +2083,13 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
                     while (((itR) || (itI)) && ((itRb) || (itIb))) {
                         IndexType row, rowb;
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
                             row = itI.row();
                         if ((itRb) && (itIb))
-                            rowb = min(itRb.row(), itIb.row());
+                            rowb = std::min(itRb.row(), itIb.row());
                         else if (itRb)
                             rowb = itRb.row();
                         else
@@ -2172,7 +2172,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
                     while ((itR) && ((itRb) || (itIb))) {
                         IndexType rowb;
                         if ((itRb) && (itIb))
-                            rowb = min(itRb.row(), itIb.row());
+                            rowb = std::min(itRb.row(), itIb.row());
                         else if (itRb)
                             rowb = itRb.row();
                         else
@@ -2216,7 +2216,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
                 while (((itR) || (itI)) && (itRb)) {
                     IndexType row;
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -2371,13 +2371,13 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
                     while (((itR) || (itI)) && ((itRb) || (itIb))) {
                         IndexType row, rowb;
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
                             row = itI.row();
                         if ((itRb) && (itIb))
-                            rowb = min(itRb.row(), itIb.row());
+                            rowb = std::min(itRb.row(), itIb.row());
                         else if (itRb)
                             rowb = itRb.row();
                         else
@@ -2460,7 +2460,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
                     while ((itR) && ((itRb) || (itIb))) {
                         IndexType rowb;
                         if ((itRb) && (itIb))
-                            rowb = min(itRb.row(), itIb.row());
+                            rowb = std::min(itRb.row(), itIb.row());
                         else if (itRb)
                             rowb = itRb.row();
                         else
@@ -2504,7 +2504,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
                 while (((itR) || (itI)) && (itRb)) {
                     IndexType row;
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -2871,7 +2871,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::abs() const
                 result.matrixR.insert(it.row(), it.col()) = mpfr::abs(it.value());
     } else {
         // For each column, we should merge the lists of lines with nonzero elements...
-        result.matrixR.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -2919,7 +2919,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::abs_new() const
                 result.matrixR.insert(it.row(), it.col()) = mpfr::abs(it.value());
     } else {
         // For each column, we should merge the lists of lines with nonzero elements...
-        result.matrixR.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -2969,7 +2969,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::angle() const
                     result.matrixR.insert(it.row(), it.col()) = atan2(mpreal(0), it.value());
     } else {
         // For each column, we should merge the lists of lines with nonzero elements...
-        result.matrixR.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -3020,7 +3020,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::angle_new() const
                     result.matrixR.insert(it.row(), it.col()) = atan2(mpreal(0), it.value());
     } else {
         // For each column, we should merge the lists of lines with nonzero elements...
-        result.matrixR.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -3080,7 +3080,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::exp() const
         // exp(0) is :
         result.matrixR = sparseConstantMatrix(matrixR.rows(), matrixR.cols(), 1);
         result.matrixI.resize(matrixR.rows(), matrixR.cols());
-        result.matrixI.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixI.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -3151,7 +3151,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::exp_new() const
         // exp(0) is :
         result.matrixR = sparseConstantMatrix(matrixR.rows(), matrixR.cols(), 1);
         result.matrixI.resize(matrixR.rows(), matrixR.cols());
-        result.matrixI.reserve(min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
+        result.matrixI.reserve(std::min(matrixR.rows()*matrixR.cols(), matrixR.nonZeros() + matrixI.nonZeros()));
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
@@ -4886,8 +4886,8 @@ GmpEigenMatrix SparseGmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEige
             }
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -4999,8 +4999,8 @@ GmpEigenMatrix SparseGmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEige
             result.checkComplexity();
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5108,8 +5108,8 @@ GmpEigenMatrix& SparseGmpEigenMatrix::eigs_new(const long int& nbEigenvalues, Gm
             }
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5221,8 +5221,8 @@ GmpEigenMatrix& SparseGmpEigenMatrix::eigs_new(const long int& nbEigenvalues, Gm
             result.checkComplexity();
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5660,7 +5660,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
         // We will first copy the data to triplets
         vector< Triplet<bool> > tripletList;
         tripletList.reserve(numel()); // It is hard to estimate the number of elements that will be created here : any two zeros will give a one...
-        //tripletList.reserve(matrixR.nonZeros() + b.matrixR.nonZeros() + max(0,numel()-matrixR.nonZeros()-b.matrixR.nonZeros())); // WARNING : This may be a bad estimate if most of both matrices are full of non-zeros... (in such a case, however, the user should prefer converting the matrices to full ones first...)
+        //tripletList.reserve(matrixR.nonZeros() + b.matrixR.nonZeros() + std::max(0,numel()-matrixR.nonZeros()-b.matrixR.nonZeros())); // WARNING : This may be a bad estimate if most of both matrices are full of non-zeros... (in such a case, however, the user should prefer converting the matrices to full ones first...)
 
         if (b.isComplex) {
             if (isComplex) {
@@ -5675,7 +5675,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -5683,7 +5683,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -5836,7 +5836,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -5918,7 +5918,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -6153,7 +6153,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -6161,7 +6161,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -6266,7 +6266,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -6323,7 +6323,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -6441,7 +6441,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::isnan() const
                         tripletList.push_back(Triplet<bool>(itI.row(), k, true));
                     ++itI;
                 }
-            }                
+            }
         }
     } else {
         tripletList.reserve(matrixR.nonZeros());
@@ -6500,7 +6500,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::isinf() const
                         tripletList.push_back(Triplet<bool>(itI.row(), k, true));
                     ++itI;
                 }
-            }                
+            }
         }
     } else {
         tripletList.reserve(matrixR.nonZeros());
@@ -6538,7 +6538,7 @@ bool SparseGmpEigenMatrix::identicalValues(const SparseGmpEigenMatrix& b) const
                 IndexType row, rowb;
                 if ((itR) || (itI)) {
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -6546,7 +6546,7 @@ bool SparseGmpEigenMatrix::identicalValues(const SparseGmpEigenMatrix& b) const
                 }
                 if ((itRb) || (itIb)) {
                     if ((itRb) && (itIb))
-                        rowb = min(itRb.row(), itIb.row());
+                        rowb = std::min(itRb.row(), itIb.row());
                     else if (itRb)
                         rowb = itRb.row();
                     else
@@ -6682,7 +6682,7 @@ bool SparseGmpEigenMatrix::identicalValuesNaNok(const SparseGmpEigenMatrix& b) c
                 IndexType row, rowb;
                 if ((itR) || (itI)) {
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -6690,7 +6690,7 @@ bool SparseGmpEigenMatrix::identicalValuesNaNok(const SparseGmpEigenMatrix& b) c
                 }
                 if ((itRb) || (itIb)) {
                     if ((itRb) && (itIb))
-                        rowb = min(itRb.row(), itIb.row());
+                        rowb = std::min(itRb.row(), itIb.row());
                     else if (itRb)
                         rowb = itRb.row();
                     else
@@ -6912,8 +6912,8 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMin(vector<IndexType>& indices) co
         result.isComplex = true;
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixI.nonZeros()));
 
         // We find the minimum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -7006,7 +7006,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMin(vector<IndexType>& indices) co
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We find the minimum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -7049,8 +7049,8 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMin_new(vector<IndexType>& indice
         result.isComplex = true;
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixI.nonZeros()));
 
         // We find the minimum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -7143,7 +7143,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMin_new(vector<IndexType>& indice
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We find the minimum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -7186,8 +7186,8 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMin(vector<IndexType>& indices) co
         result.isComplex = true;
         result.matrixR.resize(matrixR.rows(),1);
         result.matrixI.resize(matrixI.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.cols(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.cols(),matrixI.nonZeros()));
         vector < mpreal > minValue(matrixR.rows(),const_infinity(+1));
         vector < mpreal > minAngle(matrixR.rows(),const_infinity(+1));
 
@@ -7321,7 +7321,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMin(vector<IndexType>& indices) co
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(matrixR.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
         vector < mpreal > minValue(matrixR.rows(),const_infinity(+1));
 
         // We find the minimums
@@ -7388,8 +7388,8 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMin_new(vector<IndexType>& indice
         result.isComplex = true;
         result.matrixR.resize(matrixR.rows(),1);
         result.matrixI.resize(matrixI.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.cols(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.cols(),matrixI.nonZeros()));
         vector < mpreal > minValue(matrixR.rows(),const_infinity(+1));
         vector < mpreal > minAngle(matrixR.rows(),const_infinity(+1));
 
@@ -7523,7 +7523,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMin_new(vector<IndexType>& indice
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(matrixR.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
         vector < mpreal > minValue(matrixR.rows(),const_infinity(+1));
 
         // We find the minimums
@@ -7602,7 +7602,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                     while ((itR) || (itI)) {
                         IndexType row;
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -7660,7 +7660,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                 while ((itR) || (itI)) {
                     IndexType row;
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -7741,7 +7741,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -7749,7 +7749,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -7887,7 +7887,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -7953,7 +7953,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMin(const SparseGmpEigenMatrix& b) 
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -8076,7 +8076,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                     while ((itR) || (itI)) {
                         IndexType row;
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -8134,7 +8134,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                 while ((itR) || (itI)) {
                     IndexType row;
                     if ((itR) && (itI))
-                        row = min(itR.row(), itI.row());
+                        row = std::min(itR.row(), itI.row());
                     else if (itR)
                         row = itR.row();
                     else
@@ -8215,7 +8215,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -8223,7 +8223,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -8361,7 +8361,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -8427,7 +8427,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -8538,8 +8538,8 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMax(vector<IndexType>& indices) co
         result.isComplex = true;
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixI.nonZeros()));
 
         // We find the maximum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -8632,7 +8632,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMax(vector<IndexType>& indices) co
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We find the maximum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -8675,8 +8675,8 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMax_new(vector<IndexType>& indice
         result.isComplex = true;
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixI.nonZeros()));
 
         // We find the maximum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -8769,7 +8769,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMax_new(vector<IndexType>& indice
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We find the maximum
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -8812,12 +8812,12 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
         result.isComplex = true;
         result.matrixR.resize(matrixR.rows(),1);
         result.matrixI.resize(matrixI.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.cols(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.cols(),matrixI.nonZeros()));
         vector < mpreal > maxValue(matrixR.rows(),const_infinity(-1));
         vector < mpreal > maxAngle(matrixR.rows(),const_infinity(-1));
 
-        // We find the minimums
+        // We find the maximums
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             IndexType previousNonZero(-1);
 
@@ -8930,7 +8930,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
             }
         }
 
-        // We copy the minimums
+        // We copy the maximums
         for (IndexType i = 0; i < matrixR.rows(); ++i) {
             if (maxValue[i] != 0) {
                 if (matrixR.coeff(i,indices[i]) != 0)
@@ -8947,10 +8947,10 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(matrixR.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
         vector < mpreal > maxValue(matrixR.rows(),const_infinity(-1));
 
-        // We find the minimums
+        // We find the maximums
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             IndexType previousNonZero(-1);
             SparseMatrix<mpreal>::InnerIterator it(matrixR,k);
@@ -8988,7 +8988,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
             }
         }
 
-        // We copy the minimums
+        // We copy the maximums
         for (IndexType i = 0; i < matrixR.rows(); ++i) {
             if (maxValue[i] != 0) {
                 result.matrixR.insert(i,0) = maxValue[i];
@@ -9014,12 +9014,12 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
         result.isComplex = true;
         result.matrixR.resize(matrixR.rows(),1);
         result.matrixI.resize(matrixI.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
-        result.matrixI.reserve(min(matrixI.cols(),matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.cols(),matrixI.nonZeros()));
         vector < mpreal > maxValue(matrixR.rows(),const_infinity(-1));
         vector < mpreal > maxAngle(matrixR.rows(),const_infinity(-1));
 
-        // We find the minimums
+        // We find the maximums
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             IndexType previousNonZero(-1);
 
@@ -9132,7 +9132,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
             }
         }
 
-        // We copy the minimums
+        // We copy the maximums
         for (IndexType i = 0; i < matrixR.rows(); ++i) {
             if (maxValue[i] != 0) {
                 if (matrixR.coeff(i,indices[i]) != 0)
@@ -9149,10 +9149,10 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(matrixR.rows(),1);
-        result.matrixR.reserve(min(matrixR.cols(),matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.cols(),matrixR.nonZeros()));
         vector < mpreal > maxValue(matrixR.rows(),const_infinity(-1));
 
-        // We find the minimums
+        // We find the maximums
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             IndexType previousNonZero(-1);
             SparseMatrix<mpreal>::InnerIterator it(matrixR,k);
@@ -9190,7 +9190,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
             }
         }
 
-        // We copy the minimums
+        // We copy the maximums
         for (IndexType i = 0; i < matrixR.rows(); ++i) {
             if (maxValue[i] != 0) {
                 result.matrixR.insert(i,0) = maxValue[i];
@@ -9263,7 +9263,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMax(const SparseGmpEigenMatrix& b) 
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -9271,7 +9271,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMax(const SparseGmpEigenMatrix& b) 
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -9409,7 +9409,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMax(const SparseGmpEigenMatrix& b) 
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -9475,7 +9475,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::ewMax(const SparseGmpEigenMatrix& b) 
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -9633,7 +9633,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMax_new(const SparseGmpEigenMatrix
                         IndexType row, rowb;
                         if ((itR) || (itI)) {
                             if ((itR) && (itI))
-                                row = min(itR.row(), itI.row());
+                                row = std::min(itR.row(), itI.row());
                             else if (itR)
                                 row = itR.row();
                             else
@@ -9641,7 +9641,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMax_new(const SparseGmpEigenMatrix
                         }
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -9779,7 +9779,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMax_new(const SparseGmpEigenMatrix
                             row = itR.row();
                         if ((itRb) || (itIb)) {
                             if ((itRb) && (itIb))
-                                rowb = min(itRb.row(), itIb.row());
+                                rowb = std::min(itRb.row(), itIb.row());
                             else if (itRb)
                                 rowb = itRb.row();
                             else
@@ -9845,7 +9845,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMax_new(const SparseGmpEigenMatrix
                     IndexType row, rowb;
                     if ((itR) || (itI)) {
                         if ((itR) && (itI))
-                            row = min(itR.row(), itI.row());
+                            row = std::min(itR.row(), itI.row());
                         else if (itR)
                             row = itR.row();
                         else
@@ -9952,8 +9952,8 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colProd() const
         // We initialize the result matrix
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
 
         // We compute the products
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -10024,7 +10024,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colProd() const
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We compute the products
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -10059,8 +10059,8 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colProd_new() const
         // We initialize the result matrix
         result.matrixR.resize(1,matrixR.cols());
         result.matrixI.resize(1,matrixI.cols());
-        result.matrixR.reserve(min(matrixR.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
-        result.matrixI.reserve(min(matrixI.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
+        result.matrixI.reserve(std::min(matrixI.rows(),matrixR.nonZeros()+matrixI.nonZeros()));
 
         // We compute the products
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
@@ -10131,7 +10131,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colProd_new() const
         // We initialize the result matrix
         result.isComplex = false;
         result.matrixR.resize(1,matrixR.cols());
-        result.matrixR.reserve(min(matrixR.rows(), matrixR.nonZeros()));
+        result.matrixR.reserve(std::min(matrixR.rows(), matrixR.nonZeros()));
 
         // We compute the products
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {

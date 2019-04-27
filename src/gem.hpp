@@ -384,6 +384,20 @@ public:
         return rowMin_new(indices);
     }
 
+    // overall minimum b = min(a,[],'all')
+    inline GmpEigenMatrix min() const
+    {
+        std::vector<IndexType> indices;
+        GmpEigenMatrix tmp = colMin(indices);
+        return tmp.rowMin(indices);
+    }
+    inline GmpEigenMatrix& min_new() const
+    {
+        std::vector<IndexType> indices;
+        GmpEigenMatrix tmp = colMin(indices);
+        return tmp.rowMin_new(indices);
+    }
+
     // element-wise minimum c = min(a, b)
     GmpEigenMatrix ewMin(const GmpEigenMatrix& b) const;
     GmpEigenMatrix& ewMin_new(const GmpEigenMatrix& b) const;
@@ -414,6 +428,20 @@ public:
     {
         std::vector<IndexType> indices;
         return rowMax_new(indices);
+    }
+
+    // overall maximum b = max(a,[],'all')
+    inline GmpEigenMatrix max() const
+    {
+        std::vector<IndexType> indices;
+        GmpEigenMatrix tmp = colMax(indices);
+        return tmp.rowMax(indices);
+    }
+    inline GmpEigenMatrix& max_new() const
+    {
+        std::vector<IndexType> indices;
+        GmpEigenMatrix tmp = colMax(indices);
+        return tmp.rowMax_new(indices);
     }
 
     // element-wise maximum c = max(a, b)

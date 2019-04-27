@@ -362,6 +362,20 @@ public:
         return rowMin_new(indices);
     }
 
+    // overall maximum b = min(a,[],'all')
+    inline SparseGmpEigenMatrix min() const
+    {
+        std::vector<IndexType> indices;
+        SparseGmpEigenMatrix tmp = colMin(indices);
+        return tmp.rowMin(indices);
+    }
+    inline SparseGmpEigenMatrix& min_new() const
+    {
+        std::vector<IndexType> indices;
+        SparseGmpEigenMatrix tmp = colMin(indices);
+        return tmp.rowMin_new(indices);
+    }
+
     // element-wise minimum c = min(a, b)
     SparseGmpEigenMatrix ewMin(const SparseGmpEigenMatrix& b) const;
     SparseGmpEigenMatrix& ewMin_new(const SparseGmpEigenMatrix& b) const;
@@ -392,6 +406,20 @@ public:
     {
         std::vector<IndexType> indices;
         return rowMax_new(indices);
+    }
+
+    // overall maximum b = max(a,[],'all')
+    inline SparseGmpEigenMatrix max() const
+    {
+        std::vector<IndexType> indices;
+        SparseGmpEigenMatrix tmp = colMax(indices);
+        return tmp.rowMax(indices);
+    }
+    inline SparseGmpEigenMatrix& max_new() const
+    {
+        std::vector<IndexType> indices;
+        SparseGmpEigenMatrix tmp = colMax(indices);
+        return tmp.rowMax_new(indices);
     }
 
     // element-wise maximum c = max(a, b)

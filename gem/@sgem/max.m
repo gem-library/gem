@@ -4,6 +4,7 @@
 %   [Y I] = max(a) : column-wise maximum (or line-wise for a line vector)
 %   [Y I] = max(a,[],1) : column-wise maximum
 %   [Y I] = max(a,[],2) : line-wise maximum
+%   [Y I] = max(a,[],'all') : maximum over all elements
 %   Y = max(a,b) : element-wise maximum (either a or b can also be scalars)
 function [Y I] = max(this, varargin)
     % This function can involve up to three arguments
@@ -12,7 +13,7 @@ function [Y I] = max(this, varargin)
     end
 
     % We check in which way the function is called
-    if (length(varargin) == 2) && (~isempty(varargin{1}) || (~isequal(varargin{2},1) && ~isequal(varargin{2},2)))
+    if (length(varargin) == 2) && (~isempty(varargin{1}) || (~isequal(varargin{2},1) && ~isequal(varargin{2},2) && ~isequal(varargin{2},'all')))
         error('Wrong arguments for sgem::max');
     end
 
@@ -36,20 +37,30 @@ function [Y I] = max(this, varargin)
 
     %% If we reach here, the arguments must be good
     if length(varargin) ~= 1
-        size1 = size(this);
-        % Now we call the column or line-wise maximum procedure. Since the function creates a
-        % new object with the result, we keep the corresponding handle...
-        if (isempty(varargin) && (size1(1) > 1)) || ((length(varargin) == 2) && (varargin{2} == 1))
+        if (length(varargin) == 2) && isequal(varargin{2}, 'all')
+            % maximum over all element
+            % We call the procedure
             objId = this.objectIdentifier;
-            [newObjectIdentifier I] = sgem_mex('colMax', objId);
-            I = I'+1;
+            newObjectIdentifier = sgem_mex('max', objId);
+            % ...  and create a new matlab object to keep this handle
+            Y = sgem('encapsulate', newObjectIdentifier);
         else
-            objId = this.objectIdentifier;
-            [newObjectIdentifier I] = sgem_mex('rowMax', objId);
-            I = I+1;
+            % maximum over lines or columns
+            size1 = size(this);
+            % Now we call the column or line-wise maximum procedure. Since the function creates a
+            % new object with the result, we keep the corresponding handle...
+            if (isempty(varargin) && (size1(1) > 1)) || ((length(varargin) == 2) && (varargin{2} == 1))
+                objId = this.objectIdentifier;
+                [newObjectIdentifier I] = sgem_mex('colMax', objId);
+                I = I'+1;
+            else
+                objId = this.objectIdentifier;
+                [newObjectIdentifier I] = sgem_mex('rowMax', objId);
+                I = I+1;
+            end
+            % ...  and create a new matlab object to keep this handle
+            Y = sgem('encapsulate', newObjectIdentifier);
         end
-        % ...  and create a new matlab object to keep this handle
-        Y = sgem('encapsulate', newObjectIdentifier);
     else
         % Here we compute the maximum between two objects
 

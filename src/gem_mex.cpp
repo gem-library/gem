@@ -1137,6 +1137,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "min" */
+    if (!strcmp("min", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("min: Unexpected arguments.");
+
+        // Compute the global minimum
+        GmpEigenMatrix& result(GmpEigenMatrix_instance.min_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Call the class method "colMax" */
     if (!strcmp("colMax", cmd)) {
         // Check parameters
@@ -1172,6 +1188,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We return the reference to this object to matlab
         plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
         plhs[1] = vectorToMatlabDoubles(indices);
+
+        return;
+    }
+
+
+    /* Call the class method "max" */
+    if (!strcmp("max", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("max: Unexpected arguments.");
+
+        // Compute the global maximum
+        GmpEigenMatrix& result(GmpEigenMatrix_instance.max_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
 
         return;
     }

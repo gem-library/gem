@@ -8073,7 +8073,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                     SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
                     SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                    std::max(
+                    while ((itR) || (itI)) {
                         IndexType row;
                         if ((itR) && (itI))
                             row = std::min(itR.row(), itI.row());
@@ -8131,7 +8131,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                 SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
                 SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                std::max(
+                while ((itR) || (itI)) {
                     IndexType row;
                     if ((itR) && (itI))
                         row = std::min(itR.row(), itI.row());
@@ -8551,7 +8551,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMax(vector<IndexType>& indices) co
 
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
-            std::max(
+            while ((itR) || (itI)) {
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         if (firstZero == itR.row())
@@ -8688,7 +8688,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMax_new(vector<IndexType>& indice
 
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
-            std::max(
+            while ((itR) || (itI)) {
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         if (firstZero == itR.row())
@@ -8834,7 +8834,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
                 }
             }
 
-            std::max(
+            while ((itR) || (itI)) {
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         for (IndexType i(previousNonZero+1); i < itR.row(); ++i) {
@@ -9036,7 +9036,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
                 }
             }
 
-            std::max(
+            while ((itR) || (itI)) {
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         for (IndexType i(previousNonZero+1); i < itR.row(); ++i) {

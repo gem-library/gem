@@ -1,10 +1,12 @@
 ##
 - Support for GNU Octave
+- Set up test framework with first batch of tests
 - Set up continuous integration framework
 - Included Eigen and Spectra as submodules
 - Updated to latest Eigen and Spectra libraries
 - Added gemRandn function
-- Minor fixes
+- Additional options supported for min and max functions
+- Bug fixes
 
 ## [1.0.1] - 2018-01-08
 - Updated the usage of class precedence to the latest matlab standard

@@ -5,7 +5,7 @@ function result = acot(this)
     % both implementations:
 
     % The cosine is a full matrix
-    result = acot(full(this));
+    result = atan(1./this);
 
     % for matlab, cos of a sparse matrix is a sparse matrix
     if gemSparseLikeMatlab == 1

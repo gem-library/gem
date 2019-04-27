@@ -15,13 +15,15 @@ function Ms = generateMatrices(n, maxDim, type)
 %        S: symmetric/hermitian only (implies square)
 %        Q: square only
 %        F: full only
-%        P: sparse only
+%        P: sparse only, with 90% of zero terms
+%        A: sparse only, with typically all nonzero terms
 % 
 % Example: generateMatrices(2, [2 2], {'RS', 'I'}) puts together a set of 4
 % matrices of size at most 2x2. Two of them are real and symmetric, two
 % other are guaranteed to be purely imaginary matrices. These four matrices
 % can be either sparse of full.
 
+% TODO : add support for NaN and Inf values
 
 %% Input management
 if nargin < 1
@@ -77,6 +79,9 @@ for i = 1:length(type)
 
         % Full only, sparse only or both?
         if ~isempty(strfind(type{i}, 'F'))
+        elseif ~isempty(strfind(type{i}, 'A'))
+            % sparse object full of nonzero numbers
+            M = sparse(M);
         elseif ~isempty(strfind(type{i}, 'P')) || (rand > 1/2)
             % We remove 90% of the terms
             sparsity = 1-(1^2./min(dim)).^(1/2);

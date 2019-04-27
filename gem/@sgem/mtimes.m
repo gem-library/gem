@@ -46,7 +46,7 @@ function result = mtimes(this, varargin)
         if isequal(class(varargin{1}), 'gem')
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
-            newObjectIdentifier = gem_mex('mtimes', objId1, objId2));
+            newObjectIdentifier = gem_mex('mtimes', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
             objId1 = this.objectIdentifier;

@@ -185,7 +185,7 @@ function [V D] = eigs(this, varargin)
 
         objId1 = this.objectIdentifier;
         objId2 = sigma.objectIdentifier;
-        [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', objId, nbEigenvalues, type, objId2);
+        [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', objId1, nbEigenvalues, type, objId2);
 
         % ...  and create a new matlab object to keep this handle
         V = gem('encapsulate', newObjectIdentifierV);

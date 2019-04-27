@@ -357,7 +357,8 @@ classdef sgem < handle
             % Latest versions of matlab might try to delete object which
             % were not fully constructed yet...
             if ~isempty(this.objectIdentifier)
-                sgem_mex('delete', this.objectIdentifier);
+                objId = this.objectIdentifier;
+                sgem_mex('delete', objId);
             end
         end
     end

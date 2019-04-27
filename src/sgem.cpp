@@ -3972,14 +3972,14 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::sin() const
                        ++itR;
                        ++itI;
                    } else {
-                       tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sinh(itR.value())));
+                       tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::sinh(itI.value())));
                        ++itI;
                    }
                } else if (itR) {
                    tripletListR.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sin(itR.value())));
                    ++itR;
                } else {
-                   tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sinh(itR.value())));
+                   tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::sinh(itI.value())));
                    ++itI;
                }
            }
@@ -4036,14 +4036,14 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::sin_new() const
                        ++itR;
                        ++itI;
                    } else {
-                       tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sinh(itR.value())));
+                       tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::sinh(itI.value())));
                        ++itI;
                    }
                } else if (itR) {
                    tripletListR.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sin(itR.value())));
                    ++itR;
                } else {
-                   tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::sinh(itR.value())));
+                   tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::sinh(itI.value())));
                    ++itI;
                }
            }
@@ -4102,14 +4102,14 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::cos_nz() const
                        ++itR;
                        ++itI;
                    } else {
-                       tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::cosh(itR.value())));
+                       tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::cosh(itI.value())));
                        ++itI;
                    }
                } else if (itR) {
                    tripletListR.push_back(Triplet<mpreal>(itR.row(), k, mpfr::cos(itR.value())));
                    ++itR;
                } else {
-                   tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::cosh(itR.value())));
+                   tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::cosh(itI.value())));
                    ++itI;
                }
            }
@@ -4167,14 +4167,14 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::tan() const
                        ++itR;
                        ++itI;
                    } else {
-                       tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tanh(itR.value())));
+                       tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::tanh(itI.value())));
                        ++itI;
                    }
                } else if (itR) {
                    tripletListR.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tan(itR.value())));
                    ++itR;
                } else {
-                   tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tanh(itR.value())));
+                   tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::tanh(itI.value())));
                    ++itI;
                }
            }
@@ -4232,14 +4232,14 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::tan_new() const
                        ++itR;
                        ++itI;
                    } else {
-                       tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tanh(itR.value())));
+                       tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::tanh(itI.value())));
                        ++itI;
                    }
                } else if (itR) {
                    tripletListR.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tan(itR.value())));
                    ++itR;
                } else {
-                   tripletListI.push_back(Triplet<mpreal>(itR.row(), k, mpfr::tanh(itR.value())));
+                   tripletListI.push_back(Triplet<mpreal>(itI.row(), k, mpfr::tanh(itI.value())));
                    ++itI;
                }
            }
@@ -8073,7 +8073,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                     SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
                     SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                    while ((itR) || (itI)) {
+                    std::max(
                         IndexType row;
                         if ((itR) && (itI))
                             row = std::min(itR.row(), itI.row());
@@ -8131,7 +8131,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::ewMin_new(const SparseGmpEigenMatrix
                 SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
                 SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                while ((itR) || (itI)) {
+                std::max(
                     IndexType row;
                     if ((itR) && (itI))
                         row = std::min(itR.row(), itI.row());
@@ -8551,7 +8551,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colMax(vector<IndexType>& indices) co
 
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
-            while ((itR) || (itI)) {
+            std::max(
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         if (firstZero == itR.row())
@@ -8688,7 +8688,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colMax_new(vector<IndexType>& indice
 
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
-            while ((itR) || (itI)) {
+            std::max(
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         if (firstZero == itR.row())
@@ -8834,7 +8834,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::rowMax(vector<IndexType>& indices) co
                 }
             }
 
-            while ((itR) || (itI)) {
+            std::max(
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         for (IndexType i(previousNonZero+1); i < itR.row(); ++i) {
@@ -9036,7 +9036,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::rowMax_new(vector<IndexType>& indice
                 }
             }
 
-            while ((itR) || (itI)) {
+            std::max(
                 if ((itR) && (itI)) {
                     if (itR.row() < itI.row()) {
                         for (IndexType i(previousNonZero+1); i < itR.row(); ++i) {

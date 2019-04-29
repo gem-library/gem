@@ -9,7 +9,7 @@ if (nargin < 2) && (min(size(this)) > 1)
     % For matrices, we act by default on the columns
     dim = 1;
 elseif nargin < 2
-    result = (sum(this~=0) == size(this,2));
+    result = (sum(this~=0) == length(this));
     return;
 end
 

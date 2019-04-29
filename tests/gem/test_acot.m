@@ -9,9 +9,9 @@ end
 function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
 
-    % Matlab has a definition of atan for some purely imaginary numbers
-    % like 2.9i, which is different than standard math, we check the result
-    % only up to a real constant of pi/2
+    % Matlab's implementation of atan is not consistent with doc (c.f.
+    % test_atan.m), and this has consequences for acos. So we check the
+    % result only up to a real constant of pi/2.
     for i = 1:length(x)
         xi = x{i};
         yi = acot(xi);

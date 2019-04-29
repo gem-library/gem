@@ -9,9 +9,15 @@ end
 function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
 
-    % Matlab has a definition of atan for some purely imaginary numbers
-    % like 2.9i, which is different than standard math, we check the result
-    % only up to a real constant of pi/2
+    % Matlab's atan does not always correspond to the definition given in
+    % the documentation. For instance, for 
+    %   y = gem('0 - 4.73831774784872769851661197176195485070522742666383i')
+    %   z = double(y)
+    % matlab's function says that 
+    %   atan(z) = 1.5708 - 0.2143i
+    % but the definition given in the doc gives
+    %   1i/2*log((1i+z)/(1i-z)) = -1.5708 - 0.2143i
+    % So we check the result only up to a real constant of pi/2
     for i = 1:length(x)
         xi = x{i};
         yi = atan(xi);

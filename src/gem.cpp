@@ -3300,7 +3300,7 @@ GmpEigenMatrix GmpEigenMatrix::atan() const
     result.isComplex = isComplex;
     if (isComplex) {
         // We compute the analytic extension (valid for all complex numbers)
-        result = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*(*this)).log() - (GmpEigenMatrix(1)+constI()*(*this)).log());
+        result = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+(*this)).rdivide(constI()-(*this)).log();
 
         result.checkComplexity();
     } else {
@@ -3321,7 +3321,7 @@ GmpEigenMatrix& GmpEigenMatrix::atan_new() const
     result.isComplex = isComplex;
     if (isComplex) {
         // We compute the analytic extension (valid for all complex numbers)
-        result = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*(*this)).log() - (GmpEigenMatrix(1)+constI()*(*this)).log());
+        result = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+(*this)).rdivide(constI()-(*this)).log();
 
         result.checkComplexity();
     } else {

@@ -4502,7 +4502,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::atan() const
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::atan(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
-                    image = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*value).log() - (GmpEigenMatrix(1)+constI()*value).log());
+                    image = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+value).rdivide(constI()-value).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
                     if (image.matrixI(0,0) != 0)
@@ -4596,7 +4596,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::atan_new() const
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::atan(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
-                    image = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*value).log() - (GmpEigenMatrix(1)+constI()*value).log());
+                    image = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+value).rdivide(constI()-value).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
                     if (image.matrixI(0,0) != 0)

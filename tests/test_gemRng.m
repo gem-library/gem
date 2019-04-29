@@ -28,3 +28,12 @@ function test_seed
     x5 = gemRand(1,10);
     assert(~isequal(x3, x5));
 end
+
+function test_inputs
+    try
+        gemRng([2 3]);
+        assert(false);
+    catch
+    end
+end
+

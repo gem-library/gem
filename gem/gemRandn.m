@@ -37,16 +37,16 @@ function result = gemRandn(varargin)
     % We first get uniformly random numbers
     sel = [];
     while (length(sel)*2 < nbElements)
-        if (~isempty(sel))
-            disp('trying again');
-        end
+%        if (~isempty(sel))
+%            disp('trying again');
+%        end
         w1 = 2*gemRand(1, ceil(nbElements*0.7)) - 1;
         w2 = 2*gemRand(1, ceil(nbElements*0.7)) - 1;
         r = w1.^2 + w2.^2;
         sel = find(r < 1);
     end
     
-    % We only use the number minimum number of elements
+    % We only use the minimum number of elements
     sel = sel(1:ceil(nbElements/2));
     w1 = w1(sel);
     w2 = w2(sel);

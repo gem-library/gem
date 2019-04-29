@@ -64,7 +64,7 @@ classdef gem < handle
         %    constants above
         function this = gem(varargin)
 
-            this.checkForBinaries;
+            gem.checkForBinaries;
 
             % The following variable is used in some instances to tell the
             % constructor to use the precision requested by the user rather
@@ -143,9 +143,9 @@ classdef gem < handle
                     % If we are here, the string is not a mathematical
                     % constant, so we check that the string only contains a
                     % real part
-                    if ~this.isRealString(varargin{1})
-                        [rPart iPart] = this.separateRIString(varargin{1});
-                        if ~this.isRealString(rPart) || ~this.isRealString(iPart) % To prevent an infinite loop
+                    if ~gem.isRealString(varargin{1})
+                        [rPart iPart] = gem.separateRIString(varargin{1});
+                        if ~gem.isRealString(rPart) || ~gem.isRealString(iPart) % To prevent an infinite loop
                             error('The complex string was not correctly separated.');
                         end
 
@@ -160,13 +160,13 @@ classdef gem < handle
                     end
 
                     % We check that the string is of an acceptable form
-                    if ~this.isValidString(varargin{1})
+                    if ~gem.isValidString(varargin{1})
                         error('The format of this string is not supported');
                     end
 
                     % Now we set the precision and construct the c++ object
                     if isempty(forceDefaultPrecision) || (forceDefaultPrecision ~= 1)
-                        precision = max(this.getWorkingPrecision, this.nbDigitsFromString(varargin{1}));
+                        precision = max(this.getWorkingPrecision, gem.nbDigitsFromString(varargin{1}));
                     else
                         % We force the precision to be the one requested by
                         % the user
@@ -176,9 +176,9 @@ classdef gem < handle
                 elseif iscell(varargin{1})
                     % First, we check that the cell only contains a real
                     % part
-                    if ~this.isRealCell(varargin{1})
-                        [rPart iPart] = this.separateRICell(varargin{1});
-                        if ~this.isRealCell(rPart) || ~this.isRealCell(iPart) % To prevent an infinite loop
+                    if ~gem.isRealCell(varargin{1})
+                        [rPart iPart] = gem.separateRICell(varargin{1});
+                        if ~gem.isRealCell(rPart) || ~gem.isRealCell(iPart) % To prevent an infinite loop
                             error('The complex string was not correctly separated.');
                         end
 
@@ -194,7 +194,7 @@ classdef gem < handle
 
                     % We check that the cell contains numbers in an
                     % acceptable form
-                    if ~this.isValidCell(varargin{1})
+                    if ~gem.isValidCell(varargin{1})
                         error('The format of this cell is not supported');
                     end
 
@@ -205,7 +205,7 @@ classdef gem < handle
                         if isnumeric(varargin{1}{i})
                             precision = max(precision, 15);
                         elseif ischar(varargin{1}{i})
-                            precision = max(precision, this.nbDigitsFromString(varargin{1}{i}));
+                            precision = max(precision, gem.nbDigitsFromString(varargin{1}{i}));
                         else
                             error('Only doubles and strings are supported in a cell array.');
                         end
@@ -398,7 +398,7 @@ classdef gem < handle
         % This function separates the real and imaginary parts in a string
         % Here, we expect the imaginary part to appear after the real part.
         function [rPart iPart] = separateRIString(str)
-            if this.isRealString(str)
+            if gem.isRealString(str)
                 rPart = str;
                 iPart = '';
             else
@@ -435,7 +435,7 @@ classdef gem < handle
             iPart = cell(size(x));
             for i = 1:numel(x)
                 if ischar(x{i})
-                    [rPart{i} iPart{i}] = this.separateRIString(x{i});
+                    [rPart{i} iPart{i}] = gem.separateRIString(x{i});
                 elseif isnumeric(x{i}) && (numel(x{i}) == 1)
                     rPart{i} = real(x{i});
                     iPart{i} = imag(x{i});
@@ -487,7 +487,7 @@ classdef gem < handle
         function bool = isValidCell(x)
             for i = 1:numel(x)
                 if ischar(x{i})
-                    if ~this.isValidString(x{i})
+                    if ~gem.isValidString(x{i})
                         bool = 0;
                         return;
                     end

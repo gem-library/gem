@@ -1,4 +1,4 @@
-% cbrt - element-wise cubic root (for positive real numbers)
+% cbrt - element-wise cubic root
 function result = cbrt(this)
     % First we check that the matrix only contains positive real numbers
     if (~isreal(this)) || (min(min(this)) < 0)

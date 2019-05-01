@@ -1,7 +1,7 @@
 % cbrt - element-wise cubic root (for positive real numbers)
 function result = cbrt(this)
     % First we check that the matrix only contains positive real numbers
-    if (~isreal(this)) || (min(min(full(this))) < 0) % REMOVE THE FULL HERE ONCE THE MIN FUNCTION IS IMPLEMENTED FOR SGEM OBJECTS
+    if (~isreal(this)) || (min(min(this)) < 0)
         % Then we cannot use the quick computation. We use a generic one instead
         result = this.^(1/gem(3));
         return;

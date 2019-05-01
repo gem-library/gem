@@ -1,4 +1,4 @@
-function test_suite = test_con()
+function test_suite = test_conj()
     try
         test_functions = localfunctions();
     catch

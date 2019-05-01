@@ -25,17 +25,17 @@ end
 
 if numel(data1) == 1
     % To check the value of each test individually, use:
-    %   cellfun(@(y) full(max(abs(func(data1{1},y)-func(double(data1{1},y))), [], 'all')), data2)
-    assert(all(cellfun(@(y) full(max(abs(func(data1{1},y)-func(double(data1{1},y))), [], 'all') <= epsilon), data2)));
+    %   cellfun(@(y) full(max(max(abs(func(data1{1},y)-func(double(data1{1},y)))))), data2)
+    assert(all(cellfun(@(y) full(max(max(abs(func(data1{1},y)-func(double(data1{1},y))))) <= epsilon), data2)));
 elseif numel(data2) == 1
     % To check the value of each test individually, use:
-    %   cellfun(@(x) full(max(abs(func(x,data2{1})-func(double(x,data2{1}))), [], 'all')), data1)
-    assert(all(cellfun(@(x) full(max(abs(func(x,data2{1})-func(double(x,data2{1}))), [], 'all') <= epsilon), data1)));
+    %   cellfun(@(x) full(max(max(abs(func(x,data2{1})-func(double(x,data2{1})))))), data1)
+    assert(all(cellfun(@(x) full(max(max(abs(func(x,data2{1})-func(double(x,data2{1}))))) <= epsilon), data1)));
 else
     for i = 1:numel(data1)
         % To check the value of each test individually, use:
-        %   max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i}))), [], 'all')
-        assert(max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i}))), [], 'all') <= epsilon);
+        %   max(max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i})))))
+        assert(max(max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i}))))) <= epsilon);
     end
 end
 

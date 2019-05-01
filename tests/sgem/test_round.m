@@ -1,4 +1,4 @@
-function test_suite = test_size()
+function test_suite = test_round()
     try
         test_functions = localfunctions();
     catch

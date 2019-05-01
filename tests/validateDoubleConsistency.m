@@ -18,7 +18,7 @@ if ~isa(data, 'cell')
 end
 
 % To check the value of each test individually, use:
-%   cellfun(@(x) full(max(abs(func(x)-func(double(x))), [], 'all')), data)
-assert(all(cellfun(@(x) full(max(abs(func(x)-func(double(x))), [], 'all') <= epsilon), data)));
+%   cellfun(@(x) full(max(max(abs(func(x)-func(double(x)))))), data)
+assert(all(cellfun(@(x) full(max(max(abs(func(x)-func(double(x))))) <= epsilon), data)));
 
 end

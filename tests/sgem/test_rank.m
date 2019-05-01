@@ -11,6 +11,6 @@ function test_consistency
     
     % Matlab doesn't support rank for sparse matrices
     for i = 1:numel(x)
-        assert(max(abs(rank(x{i})-rank(full(double(x{i})))), [], 'all') <= 1e-9);
+        assert(max(max(abs(rank(x{i})-rank(full(double(x{i})))))) <= 1e-9);
     end
 end

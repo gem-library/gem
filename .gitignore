@@ -11,4 +11,5 @@ external/staticLibraries/
 coverage.*
 coverage_html
 testresults.xml
+octave-workspace
 

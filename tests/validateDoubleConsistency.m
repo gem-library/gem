@@ -5,8 +5,16 @@ function validateDoubleConsistency(func, data, epsilon)
 % consistent with the function with same name applied to the data casted as
 % double.
 
+if nargin < 2
+    error('not enough arguments');
+end
+
 if nargin < 3
     epsilon = 1e-14;
+end
+
+if ~isa(data, 'cell')
+    error('data should be provided in a cell array');
 end
 
 % To check the value of each test individually, use:

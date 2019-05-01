@@ -407,12 +407,12 @@ classdef gem < handle
 
                 % Now, let us identify the imaginary part...
                 % maybe it is written in scientific notation...
-                imagStart = regexp(str,'(+|-|)[0-9]+(\.|)[0-9]*e(+|-|)[0-9]+i');
+                imagStart = regexp(str,'(\+|\-|)[0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+i');
 
                 if isempty(imagStart)
                     % If not, we check if the imaginary part is written as a simple
                     % number
-                    imagStart = regexp(str,'(+|-|)[0-9]+(\.|)[0-9]*i');
+                    imagStart = regexp(str,'(\+|\-|)[0-9]+(\.|)[0-9]*i');
                 end
 
                 if isempty(imagStart)
@@ -452,7 +452,7 @@ classdef gem < handle
         %        If mpfr doesn't like some spaces, we could also remove them here.
         function bool = isValidString(str)
             % We only support the following characters : 0-9,+,-,e,E,.
-            if ~isempty(regexp(str,'[^ 0-9eE+-\.]'))
+            if ~isempty(regexp(str,'[^\ 0-9eE\+\-\.]'))
                 bool = 0;
                 return;
             end
@@ -462,7 +462,7 @@ classdef gem < handle
             str = str(find(str~=' '));
 
             % Now we check if the string contains a number in scientific notation
-            str2 = regexprep(str,'(+|-|)[0-9]+(\.|)[0-9]*e(+|-|)[0-9]+','');
+            str2 = regexprep(str,'(\+|\-|)[0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+','');
             if length(str2) ~= length(str)
                 if length(str2) == 0
                     % The string denotes a number in scientific notation
@@ -477,7 +477,7 @@ classdef gem < handle
             end
 
             % nothing was found, so we check if there is just a standard number
-            str3 = regexprep(str,'(+|-|)[0-9]+(\.|)[0-9]*','');
+            str3 = regexprep(str,'(\+|\-|)[0-9]+(\.|)[0-9]*','');
             bool = (length(str3) == 0);
         end
 

@@ -6815,6 +6815,9 @@ bool SparseGmpEigenMatrix::identicalValuesNaNok(const SparseGmpEigenMatrix& b) c
 // symmetry tests
 bool SparseGmpEigenMatrix::issymmetric() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
@@ -6854,6 +6857,9 @@ bool SparseGmpEigenMatrix::issymmetric() const
 
 bool SparseGmpEigenMatrix::ishermitian() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);

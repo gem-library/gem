@@ -4721,6 +4721,9 @@ bool GmpEigenMatrix::identicalValuesNaNok(const GmpEigenMatrix& b) const
 // symmetry tests
 bool GmpEigenMatrix::issymmetric() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType i(0); i < matrixR.rows(); ++i)
             for (IndexType j(i+1); j < matrixR.cols(); ++j)
@@ -4738,6 +4741,9 @@ bool GmpEigenMatrix::issymmetric() const
 
 bool GmpEigenMatrix::ishermitian() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType i(0); i < matrixR.rows(); ++i) {
             for (IndexType j(i); j < matrixR.cols(); ++j)

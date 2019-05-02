@@ -4314,14 +4314,14 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::asin() const
                     ++itI;
                }
 
-               if ((value.matrixI(0,0) == 0) && (value.matrixR(0,0) >= -1) && (value.matrixR(0,0) <= 1)) {
+               if ((!value.isComplex) && (value.matrixR(0,0) >= -1) && (value.matrixR(0,0) <= 1)) {
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::asin(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
                     image = -constI()*(constI()*value + (GmpEigenMatrix(1) - value.power(GmpEigenMatrix(2))).sqrt()).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(row, k, image.matrixI(0,0)));
                }
             }
@@ -4340,7 +4340,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::asin() const
                     image = -constI()*(constI()*itR.value() + (GmpEigenMatrix(1) - pow(itR.value(),2)).sqrt()).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(itR.row(), k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(itR.row(), k, image.matrixI(0,0)));
                 }
                 ++itR;
@@ -4406,14 +4406,14 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::asin_new() const
                     ++itI;
                }
 
-               if ((value.matrixI(0,0) == 0) && (value.matrixR(0,0) >= -1) && (value.matrixR(0,0) <= 1)) {
+               if ((!value.isComplex) && (value.matrixR(0,0) >= -1) && (value.matrixR(0,0) <= 1)) {
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::asin(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
                     image = -constI()*(constI()*value + (GmpEigenMatrix(1) - value.power(GmpEigenMatrix(2))).sqrt()).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(row, k, image.matrixI(0,0)));
                }
             }
@@ -4432,7 +4432,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::asin_new() const
                     image = -constI()*(constI()*itR.value() + (GmpEigenMatrix(1) - pow(itR.value(),2)).sqrt()).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(itR.row(), k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(itR.row(), k, image.matrixI(0,0)));
                 }
                 ++itR;
@@ -4498,14 +4498,14 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::atan() const
                     ++itI;
                }
 
-               if (value.matrixI(0,0) == 0) {
+               if (!value.isComplex) {
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::atan(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
                     image = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+value).rdivide(constI()-value).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(row, k, image.matrixI(0,0)));
                }
             }
@@ -4592,14 +4592,14 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::atan_new() const
                     ++itI;
                }
 
-               if (value.matrixI(0,0) == 0) {
+               if (!value.isComplex) {
                     tripletListR.push_back(Triplet<mpreal>(row, k, mpfr::atan(value.matrixR(0,0))));
                } else {
                     GmpEigenMatrix image;
                     image = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+value).rdivide(constI()-value).log();
                     if (image.matrixR(0,0) != 0)
                         tripletListR.push_back(Triplet<mpreal>(row, k, image.matrixR(0,0)));
-                    if (image.matrixI(0,0) != 0)
+                    if (image.isComplex)
                         tripletListI.push_back(Triplet<mpreal>(row, k, image.matrixI(0,0)));
                }
             }
@@ -10019,7 +10019,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::colProd() const
                 product *= GmpEigenMatrix(mpreal(0));
             if (product.matrixR(0,0) != 0)
                 result.matrixR.insert(0,k) = product.matrixR(0,0);
-            if (product.matrixI(0,0) != 0)
+            if (product.isComplex)
                 result.matrixI.insert(0,k) = product.matrixI(0,0);
         }
         result.matrixR.makeCompressed();
@@ -10126,7 +10126,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::colProd_new() const
                 product *= GmpEigenMatrix(mpreal(0));
             if (product.matrixR(0,0) != 0)
                 result.matrixR.insert(0,k) = product.matrixR(0,0);
-            if (product.matrixI(0,0) != 0)
+            if (product.isComplex)
                 result.matrixI.insert(0,k) = product.matrixI(0,0);
         }
         result.matrixR.makeCompressed();

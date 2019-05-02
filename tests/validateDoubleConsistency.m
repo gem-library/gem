@@ -10,7 +10,7 @@ if nargin < 2
 end
 
 if nargin < 3
-    epsilon = 1e-14;
+    epsilon = 1e-13;
 end
 
 if ~isa(data, 'cell')

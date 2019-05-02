@@ -7,6 +7,8 @@
 %       the following:
 %        - double : the output will be recast in double type
 %        - native or default : the output is of sgem type
+%   sum(a, 'all') : sum all elements
+%   sum(a, 'all', 'type') : sum all elements with type as above
 function result = sum(this, dim, type)
     % This function can involve up to three arguments
     if (nargin < 3)
@@ -17,10 +19,6 @@ function result = sum(this, dim, type)
         end
     end
     
-    if (nargin >= 2) && (iscell(dim) || (numel(dim) > 1) || (dim ~= 1 && dim ~= 2))
-        error('Unexpected arguments in sgem::sum');
-    end
-
     if nargin < 2
         if size(this,1) ~= 1
             dim = 1;
@@ -31,6 +29,8 @@ function result = sum(this, dim, type)
     
     % Now we compute the sum by multiplying with a unit vector.
     switch dim
+        case 'all'
+            result = sum(sum(this, 1, type), 2, type);
         case 1
             result = sparse(ones(1,size(this,1)))*this;
         case 2

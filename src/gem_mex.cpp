@@ -1241,6 +1241,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "sum" */
+    if (!strcmp("sum", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("sum: Unexpected arguments.");
+
+        // Compute the global maximum
+        GmpEigenMatrix& result(GmpEigenMatrix_instance.sum_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Call the class method "colProd" */
     if (!strcmp("colProd", cmd)) {
         // Check parameters
@@ -1265,6 +1281,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
         // Compute the row product
         GmpEigenMatrix& result(GmpEigenMatrix_instance.rowProd_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
+
+        return;
+    }
+
+
+    /* Call the class method "prod" */
+    if (!strcmp("prod", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("prod: Unexpected arguments.");
+
+        // Compute the global maximum
+        GmpEigenMatrix& result(GmpEigenMatrix_instance.prod_new());
 
         // We return the reference to this object to matlab
         plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);

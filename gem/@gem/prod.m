@@ -3,12 +3,8 @@
 % supported formats :
 %   prod(a) : column-wise product
 %   prod(a, dim) : product along the dimension dim
+%   prod(a, 'all') : product of all elements
 function result = prod(this, dim)
-    % This function can involve up to two arguments
-    if (nargin >= 2) && (iscell(dim) || (numel(dim) > 1) || (dim ~= 1 && dim ~= 2))
-        error('Unexpected arguments in gem::prod');
-    end
-
     if nargin < 2
         if size(this,1) ~= 1
             dim = 1;
@@ -20,6 +16,9 @@ function result = prod(this, dim)
     % Now we call the element-wise minimum procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
     switch dim
+        case 'all'
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('prod', objId);
         case 1
             objId = this.objectIdentifier;
             newObjectIdentifier = gem_mex('colProd', objId);

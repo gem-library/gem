@@ -10,4 +10,3 @@ function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
     validateDoubleConsistency(@(x) round(x), x);
 end
-

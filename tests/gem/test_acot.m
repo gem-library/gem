@@ -21,4 +21,3 @@ function test_consistency
         end
     end
 end
-

@@ -437,6 +437,18 @@ public:
     SparseGmpEigenMatrix rowProd() const;
     SparseGmpEigenMatrix& rowProd_new() const;
 
+    // overall products b = prod(a,'all')
+    inline SparseGmpEigenMatrix prod() const
+    {
+        SparseGmpEigenMatrix tmp = colProd();
+        return tmp.rowProd();
+    }
+    inline SparseGmpEigenMatrix& prod_new() const
+    {
+        SparseGmpEigenMatrix tmp = colProd();
+        return tmp.rowProd_new();
+    }
+
     // sorting functions
     SparseGmpEigenMatrix sort(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index, std::vector < IndexType >& nbNegatives) const;
     SparseGmpEigenMatrix& sort_new(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index, std::vector < IndexType >& nbNegatives) const;

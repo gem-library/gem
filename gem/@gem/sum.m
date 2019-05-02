@@ -7,6 +7,8 @@
 %       the following:
 %        - double : the output will be recast in double type
 %        - native or default : the output is of gem type
+%   sum(a, 'all') : sum all elements
+%   sum(a, 'all', 'type') : sum all elements with type as above
 function result = sum(this, dim, type)
     % This function can involve up to three arguments
     if (nargin < 3)
@@ -17,10 +19,6 @@ function result = sum(this, dim, type)
         end
     end
 
-    if (nargin >= 2) && (iscell(dim) || (numel(dim) > 1) || (dim ~= 1 && dim ~= 2))
-        error('Unexpected arguments in gem::sum');
-    end
-
     if nargin < 2
         if size(this,1) ~= 1
             dim = 1;
@@ -29,9 +27,12 @@ function result = sum(this, dim, type)
         end
     end
 
-    % Now we call the element-wise minimum procedure. Since the function creates a
+    % Now we call the relevant sum procedure. Since the function creates a
     % new object with the result, we keep the corresponding handle...
     switch dim
+        case 'all'
+            objId = this.objectIdentifier;
+            newObjectIdentifier = gem_mex('sum', objId);
         case 1
             objId = this.objectIdentifier;
             newObjectIdentifier = gem_mex('colSum', objId);

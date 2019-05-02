@@ -459,6 +459,30 @@ public:
     GmpEigenMatrix rowProd() const;
     GmpEigenMatrix& rowProd_new() const;
 
+    // overall sums b = sum(a,'all')
+    inline GmpEigenMatrix sum() const
+    {
+        GmpEigenMatrix tmp = colSum();
+        return tmp.rowSum();
+    }
+    inline GmpEigenMatrix& sum_new() const
+    {
+        GmpEigenMatrix tmp = colSum();
+        return tmp.rowSum_new();
+    }
+
+    // overall products b = prod(a,'all')
+    inline GmpEigenMatrix prod() const
+    {
+        GmpEigenMatrix tmp = colProd();
+        return tmp.rowProd();
+    }
+    inline GmpEigenMatrix& prod_new() const
+    {
+        GmpEigenMatrix tmp = colProd();
+        return tmp.rowProd_new();
+    }
+
     // sorting functions
     GmpEigenMatrix sort(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index) const;
     GmpEigenMatrix& sort_new(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index) const;

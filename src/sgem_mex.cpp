@@ -1141,6 +1141,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "prod" */
+    if (!strcmp("prod", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("prod: Unexpected arguments.");
+
+        // Compute the global maximum
+        SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.prod_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Sorts out the elements of a matrix */
     if (!strcmp("sort", cmd)) {
         // Check parameters

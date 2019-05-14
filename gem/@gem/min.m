@@ -18,7 +18,7 @@ function [Y I] = min(this, varargin)
     end
 
     if (length(varargin) == 1)
-        if ~isempty(varargin{1}) || ~isnumeric(varargin{1})
+        if isempty(varargin{1}) || ~isnumeric(varargin{1})
             error('Wrong arguments for gem::min');
         end
         

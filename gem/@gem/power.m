@@ -12,7 +12,7 @@ function result = power(this, varargin)
     size1 = size(this);
     size2 = size(varargin{1});
 
-    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1)
+    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1) && (prod(size1)+prod(size2) > 0)
         error('Incompatible size for element-wise matrix power');
     end
 

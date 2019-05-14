@@ -7,20 +7,10 @@ function test_suite = and_test()
 end
 
 function test_consistency
-    x = generateMatrices(2, 5, {'FR'});
+    x = generateMatrices(2, 5, {'PR'});
     validateDoubleConsistency(@(x) and(x, x), x);
     
     % We generate another set of matrices with identical dimensions
-    found = zeros(1,length(x));
-    while ~all(found)
-        y = generateMatrices(2, 5, {'FR'});
-        for i = 1:length(y)
-            if ~found(i) && isequal(size(x{i}),size(y{i}))
-                z{i} = y{i};
-                found(i) = 1;
-            end
-        end
-    end
-    
-    validateDoubleConsistency2(@(x,y) and(x,y), x, z);
+    y = generateDoubleMatrices(2, 5, {'PR'});
+    validateDoubleConsistency2(@(x,y) and(x,y), y(1,:), y(2,:));
 end

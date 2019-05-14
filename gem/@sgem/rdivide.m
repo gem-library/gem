@@ -13,6 +13,16 @@ function result = rdivide(this, varargin)
         return;
     end
 
+    % We need to check that the operation is possible (the c++
+    % library might give bad errors otherwise). So we request the
+    % dimensions of each matrix
+    size1 = size(this);
+    size2 = size(varargin{1});
+
+    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1) && (prod(size1)+prod(size2) > 0)
+        error('Incompatible size for element-wise division');
+    end
+    
     % This function preserves the sparsity only if A is sparse and B is a scalar.
     if issparse(this) && (numel(varargin{1}) == 1)
         % We check that both objects are of type sgem,

@@ -18,7 +18,7 @@ function [Y I] = min(this, varargin)
     end
 
     if (length(varargin) == 1)
-        if isempty(varargin{1}) || ~isnumeric(varargin{1})
+        if ~isnumeric(varargin{1})
             error('Wrong arguments for sgem::min');
         end
         
@@ -39,6 +39,13 @@ function [Y I] = min(this, varargin)
     end
 
 
+    % empty case
+    if isempty(this)
+        Y = gem([]);
+        I = [];
+        return
+    end
+    
     %% If we reach here, the arguments must be good
     if length(varargin) ~= 1
         if (length(varargin) == 2) && isequal(varargin{2}, 'all')

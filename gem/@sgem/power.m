@@ -12,13 +12,13 @@ function result = power(this, varargin)
     size1 = size(this);
     size2 = size(varargin{1});
 
-    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1)
+    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1) && (prod(size1)+prod(size2) > 0)
         error('Incompatible size for element-wise matrix power');
     end
 
     % The result of a sparse power is sparse if the exponent is > 0
     % (note that matlab uses a slightly different convention)
-    if numel(this) >= numel(varargin{1}) && isreal(varargin{1}) && (min(min(full(varargin{1}))) > 0) % REMOVE THE FULL ONCE MIN AND > ARE IMPLEMENTED FOR SPARSE MATRICES
+    if numel(this) >= numel(varargin{1}) && isreal(varargin{1}) && (min(min(varargin{1})) > 0)
         % To get a sparse result, the current matrix must be sparse
         if ~isequal(class(varargin{1}), 'sgem')
             varargin{1} = sgem(varargin{1});

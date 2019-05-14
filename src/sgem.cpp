@@ -2953,6 +2953,155 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::abs_new() const
 }
 
 
+/* The sign (or normalized complex value) b = sign(a) */
+SparseGmpEigenMatrix SparseGmpEigenMatrix::sign() const
+{
+    SparseGmpEigenMatrix result;
+
+    result.matrixR.resize(matrixR.rows(), matrixR.cols());
+    result.matrixR.reserve(matrixR.nonZeros());
+    if (!isComplex) {
+        result.isComplex = false;
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k)
+            for (SparseMatrix<mpreal>::InnerIterator it(matrixR,k); it; ++it) {
+                if (it.value() < 0)
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("-1");
+                else if (it.value() > 0)
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("1");
+                else
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("0");
+            }
+    } else {
+        result.matrixI.resize(matrixI.rows(), matrixI.cols());
+        result.matrixI.reserve(matrixI.nonZeros());
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+            SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+
+            while ((itR) || (itI)) {
+                if ((itR) && (itI)) {
+                    if (itR.row() < itI.row()) {
+                        if (itR.value() < 0)
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("-1");
+                        else if (itR.value() > 0)
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("1");
+                        else
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("0");
+                        ++itR;
+                    } else if (itR.row() == itI.row()) {
+                        result.matrixR.insert(itR.row(), itR.col()) = itR.value()/mpfr::sqrt((pow(itR.value(), 2) + pow(itI.value(), 2)));
+                        result.matrixI.insert(itR.row(), itR.col()) = itI.value()/mpfr::sqrt((pow(itR.value(), 2) + pow(itI.value(), 2)));
+                        ++itR;
+                        ++itI;
+                    } else {
+                        if (itI.value() < 0)
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("-1");
+                        else if (itI.value() > 0)
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("1");
+                        else
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("0");
+                        ++itI;
+                    }
+                } else if (itR) {
+                    if (itR.value() < 0)
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("-1");
+                    else if (itR.value() > 0)
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("1");
+                    else
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("0");
+                    ++itR;
+                } else {
+                    if (itI.value() < 0)
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("-1");
+                    else if (itI.value() > 0)
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("1");
+                    else
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("0");
+                    ++itI;
+                }
+            }
+        }
+        result.checkComplexity();
+    }
+
+    return result;
+}
+
+/* The sign (or normalized complex value) b = sign(a) */
+SparseGmpEigenMatrix& SparseGmpEigenMatrix::sign_new() const
+{
+    SparseGmpEigenMatrix& result(*(new SparseGmpEigenMatrix));
+
+    result.matrixR.resize(matrixR.rows(), matrixR.cols());
+    result.matrixR.reserve(matrixR.nonZeros());
+    if (!isComplex) {
+        result.isComplex = false;
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k)
+            for (SparseMatrix<mpreal>::InnerIterator it(matrixR,k); it; ++it) {
+                if (it.value() < 0)
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("-1");
+                else if (it.value() > 0)
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("1");
+                else
+                    result.matrixR.insert(it.row(), it.col()) = mpfr::mpreal("0");
+            }
+    } else {
+        result.matrixI.resize(matrixI.rows(), matrixI.cols());
+        result.matrixI.reserve(matrixI.nonZeros());
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+            SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+
+            while ((itR) || (itI)) {
+                if ((itR) && (itI)) {
+                    if (itR.row() < itI.row()) {
+                        if (itR.value() < 0)
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("-1");
+                        else if (itR.value() > 0)
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("1");
+                        else
+                            result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("0");
+                        ++itR;
+                    } else if (itR.row() == itI.row()) {
+                        result.matrixR.insert(itR.row(), itR.col()) = itR.value()/mpfr::sqrt((pow(itR.value(), 2) + pow(itI.value(), 2)));
+                        result.matrixI.insert(itR.row(), itR.col()) = itI.value()/mpfr::sqrt((pow(itR.value(), 2) + pow(itI.value(), 2)));
+                        ++itR;
+                        ++itI;
+                    } else {
+                        if (itI.value() < 0)
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("-1");
+                        else if (itI.value() > 0)
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("1");
+                        else
+                            result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("0");
+                        ++itI;
+                    }
+                } else if (itR) {
+                    if (itR.value() < 0)
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("-1");
+                    else if (itR.value() > 0)
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("1");
+                    else
+                        result.matrixR.insert(itR.row(), itR.col()) = mpfr::mpreal("0");
+                    ++itR;
+                } else {
+                    if (itI.value() < 0)
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("-1");
+                    else if (itI.value() > 0)
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("1");
+                    else
+                        result.matrixI.insert(itI.row(), itI.col()) = mpfr::mpreal("0");
+                    ++itI;
+                }
+            }
+        }
+        result.checkComplexity();
+    }
+
+    return result;
+}
+
+
 /* The phase angle (i.e. complex argument) b = angle(a) */
 SparseGmpEigenMatrix SparseGmpEigenMatrix::angle() const
 {

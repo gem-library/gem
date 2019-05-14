@@ -667,6 +667,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "sign" */
+    if (!strcmp("sign", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("sign: Unexpected arguments.");
+
+        // Compute the absolute value (or complex magnitude)
+        GmpEigenMatrix& result(GmpEigenMatrix_instance.sign_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Call the class method "angle" */
     if (!strcmp("angle", cmd)) {
         // Check parameters

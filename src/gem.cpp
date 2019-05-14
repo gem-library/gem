@@ -2297,6 +2297,51 @@ GmpEigenMatrix& GmpEigenMatrix::abs_new() const
 }
 
 
+/* The sign (or normalized complex value) b = sign(a) */
+GmpEigenMatrix GmpEigenMatrix::sign() const
+{
+    GmpEigenMatrix result;
+
+    if (isComplex) {
+        result = this->rdivide(this->abs());
+        for (IndexType j = 0; j < matrixR.cols(); ++j)
+            for (IndexType i = 0; i < matrixR.rows(); ++i)
+                if ((matrixR(i,j) == 0) && (matrixI(i,j) == 0)) {
+                    result.matrixR(i,j) = 0;
+                    result.matrixI(i,j) = 0;
+                }
+        result.checkComplexity();
+    } else {
+        result.isComplex = false;
+        result.matrixR = matrixR.unaryExpr([](mpfr::mpreal x) { if (x < 0) return mpfr::mpreal("-1"); else if (x > 0) return mpfr::mpreal("1"); else return mpfr::mpreal("0");});
+    }
+
+    return result;
+}
+
+/* The sign (or normalized complex value) b = sign(a) */
+GmpEigenMatrix& GmpEigenMatrix::sign_new() const
+{
+    GmpEigenMatrix& result(*(new GmpEigenMatrix));
+
+    if (isComplex) {
+        result = this->rdivide(this->abs());
+        for (IndexType j = 0; j < matrixR.cols(); ++j)
+            for (IndexType i = 0; i < matrixR.rows(); ++i)
+                if ((matrixR(i,j) == 0) && (matrixI(i,j) == 0)) {
+                    result.matrixR(i,j) = 0;
+                    result.matrixI(i,j) = 0;
+                }
+        result.checkComplexity();
+    } else {
+        result.isComplex = false;
+        result.matrixR = matrixR.unaryExpr([](mpfr::mpreal x) { if (x < 0) return mpreal("-1"); else if (x > 0) return mpreal("1"); else return mpreal("0");});
+    }
+
+    return result;
+}
+
+
 /* The phase angle (i.e. complex argument) b = angle(a) */
 GmpEigenMatrix GmpEigenMatrix::angle() const
 {

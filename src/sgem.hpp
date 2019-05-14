@@ -215,6 +215,10 @@ public:
     SparseGmpEigenMatrix abs() const;
     SparseGmpEigenMatrix& abs_new() const;
 
+    // Sign (or normalized complex value) c = sign(a)
+    SparseGmpEigenMatrix sign() const;
+    SparseGmpEigenMatrix& sign_new() const;
+
     // Complex norm b = angle(a)
     SparseGmpEigenMatrix angle() const;
     SparseGmpEigenMatrix& angle_new() const;

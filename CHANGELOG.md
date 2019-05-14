@@ -4,7 +4,7 @@
 - Set up continuous integration framework
 - Included Eigen and Spectra as submodules
 - Updated to latest Eigen and Spectra libraries
-- Added gemRandn function
+- Added gemRandn and sign functions
 - Additional options supported for min and max functions
 - Bug fixes
 

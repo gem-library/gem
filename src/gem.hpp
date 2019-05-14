@@ -236,6 +236,10 @@ public:
     GmpEigenMatrix abs() const;
     GmpEigenMatrix& abs_new() const;
 
+    // Sign (or normalized complex value) c = sign(a)
+    GmpEigenMatrix sign() const;
+    GmpEigenMatrix& sign_new() const;
+
     // Complex norm b = angle(a)
     GmpEigenMatrix angle() const;
     GmpEigenMatrix& angle_new() const;

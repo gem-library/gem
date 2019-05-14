@@ -46,7 +46,7 @@ function result = colon(varargin)
         sub.type='()';
         sub.subs={[1]};
         result = subsasgn(result, sub, a);
-        for i = 1:double(fix(b-a));
+        for i = 1:double(fix(b-a))
             sub.subs={[1+i]};
             result = subsasgn(result, sub, a+i);
         end
@@ -86,7 +86,7 @@ function result = colon(varargin)
             b = gem(b);
         end
 
-        if (a > b) || (step == 0)
+        if ((a > b) && (step > 0)) || ((a < b) && (step < 0)) || (step == 0)
             % In this case the output is empty
             result = gem([]);
             return;
@@ -99,7 +99,7 @@ function result = colon(varargin)
         sub.type='()';
         sub.subs={[1]};
         result = subsasgn(result, sub, a);
-        for i = 1:double(fix((b-a)/step));
+        for i = 1:double(fix((b-a)/step))
             sub.subs={[1+i]};
             result = subsasgn(result, sub, a+i*step);
         end

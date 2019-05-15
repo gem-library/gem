@@ -23,19 +23,20 @@ if (numel(data1) > 1) && (numel(data2) > 1) && ~isequal(size(data1), size(data2)
     error('incompatible data dimensions');
 end
 
+checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(x-y))) <= epsilon));
 if numel(data1) == 1
     % To check the value of each test individually, use:
-    %   cellfun(@(y) full(max(max(abs(func(data1{1},y)-func(double(data1{1}),double(y)))))), data2)
-    assert(all(cellfun(@(y) full(max(max(abs(func(data1{1},y)-func(double(data1{1}),double(y))))) <= epsilon), data2)));
+    %   cellfun(@(y) full(checkOk(func(data1{1},y), func(double(data1{1}),double(y)))), data2)
+    assert(all(cellfun(@(y) full(checkOk(func(data1{1},y), func(double(data1{1}),double(y)))), data2)));
 elseif numel(data2) == 1
     % To check the value of each test individually, use:
-    %   cellfun(@(x) full(max(max(abs(func(x,data2{1})-func(double(x),double(data2{1})))))), data1)
-    assert(all(cellfun(@(x) full(max(max(abs(func(x,data2{1})-func(double(x),double(data2{1}))))) <= epsilon), data1)));
+    %   cellfun(@(x) full(checkOk(func(x,data2{1}), func(double(x),double(data2{1})))), data1)
+    assert(all(cellfun(@(x) full(checkOk(func(x,data2{1}), func(double(x),double(data2{1})))), data1)));
 else
     for i = 1:numel(data1)
         % To check the value of each test individually, use:
-        %   max(max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i})))))
-        assert(max(max(abs(func(data1{i},data2{i})-func(double(data1{i}),double(data2{i}))))) <= epsilon);
+        %   checkOk(func(data1{i},data2{i}), func(double(data1{i}),double(data2{i})))
+        assert(checkOk(func(data1{i},data2{i}), func(double(data1{i}),double(data2{i}))));
     end
 end
 

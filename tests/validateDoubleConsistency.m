@@ -17,8 +17,10 @@ if ~isa(data, 'cell')
     error('data should be provided in a cell array');
 end
 
+checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(x-y))) <= epsilon));
 % To check the value of each test individually, use:
 %   cellfun(@(x) full(max(max(abs(func(x)-func(double(x)))))), data)
-assert(all(cellfun(@(x) full(max(max(abs(func(x)-func(double(x))))) <= epsilon), data)));
+%   cellfun(@(x) full(checkOk(func(x), func(double(x)))), data)
+assert(all(cellfun(@(x) full(checkOk(func(x), func(double(x)))), data)));
 
 end

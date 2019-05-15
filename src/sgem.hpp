@@ -215,10 +215,6 @@ public:
     SparseGmpEigenMatrix abs() const;
     SparseGmpEigenMatrix& abs_new() const;
 
-    // Sign (or normalized complex value) c = sign(a)
-    SparseGmpEigenMatrix sign() const;
-    SparseGmpEigenMatrix& sign_new() const;
-
     // Complex norm b = angle(a)
     SparseGmpEigenMatrix angle() const;
     SparseGmpEigenMatrix& angle_new() const;
@@ -366,20 +362,6 @@ public:
         return rowMin_new(indices);
     }
 
-    // overall maximum b = min(a,[],'all')
-    inline SparseGmpEigenMatrix min() const
-    {
-        std::vector<IndexType> indices;
-        SparseGmpEigenMatrix tmp = colMin(indices);
-        return tmp.rowMin(indices);
-    }
-    inline SparseGmpEigenMatrix& min_new() const
-    {
-        std::vector<IndexType> indices;
-        SparseGmpEigenMatrix tmp = colMin(indices);
-        return tmp.rowMin_new(indices);
-    }
-
     // element-wise minimum c = min(a, b)
     SparseGmpEigenMatrix ewMin(const SparseGmpEigenMatrix& b) const;
     SparseGmpEigenMatrix& ewMin_new(const SparseGmpEigenMatrix& b) const;
@@ -412,20 +394,6 @@ public:
         return rowMax_new(indices);
     }
 
-    // overall maximum b = max(a,[],'all')
-    inline SparseGmpEigenMatrix max() const
-    {
-        std::vector<IndexType> indices;
-        SparseGmpEigenMatrix tmp = colMax(indices);
-        return tmp.rowMax(indices);
-    }
-    inline SparseGmpEigenMatrix& max_new() const
-    {
-        std::vector<IndexType> indices;
-        SparseGmpEigenMatrix tmp = colMax(indices);
-        return tmp.rowMax_new(indices);
-    }
-
     // element-wise maximum c = max(a, b)
     SparseGmpEigenMatrix ewMax(const SparseGmpEigenMatrix& b) const;
     SparseGmpEigenMatrix& ewMax_new(const SparseGmpEigenMatrix& b) const;
@@ -440,18 +408,6 @@ public:
     SparseGmpEigenMatrix& colProd_new() const;
     SparseGmpEigenMatrix rowProd() const;
     SparseGmpEigenMatrix& rowProd_new() const;
-
-    // overall products b = prod(a,'all')
-    inline SparseGmpEigenMatrix prod() const
-    {
-        SparseGmpEigenMatrix tmp = colProd();
-        return tmp.rowProd();
-    }
-    inline SparseGmpEigenMatrix& prod_new() const
-    {
-        SparseGmpEigenMatrix tmp = colProd();
-        return tmp.rowProd_new();
-    }
 
     // sorting functions
     SparseGmpEigenMatrix sort(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index, std::vector < IndexType >& nbNegatives) const;

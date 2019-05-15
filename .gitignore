@@ -8,8 +8,3 @@ external/*mpfr-*
 external/*mpfrc++*
 external/*boost_*
 external/staticLibraries/
-coverage.*
-coverage_html
-testresults.xml
-octave-workspace
-

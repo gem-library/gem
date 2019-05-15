@@ -1,12 +1,6 @@
-[submodule "eigen"]
+[submodule "external/eigen"]
 	path = external/eigen
 	url = https://github.com/eigenteam/eigen-git-mirror
-[submodule "spectra"]
+[submodule "external/spectra"]
 	path = external/spectra
 	url = https://github.com/yixuan/spectra
-[submodule "MOxUnit"]
-	path = external/MOxUnit
-	url = https://github.com/MOxUnit/MOxUnit
-[submodule "MOcov"]
-	path = external/MOcov
-	url = https://github.com/MOcov/MOcov

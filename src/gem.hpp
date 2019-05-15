@@ -236,10 +236,6 @@ public:
     GmpEigenMatrix abs() const;
     GmpEigenMatrix& abs_new() const;
 
-    // Sign (or normalized complex value) c = sign(a)
-    GmpEigenMatrix sign() const;
-    GmpEigenMatrix& sign_new() const;
-
     // Complex norm b = angle(a)
     GmpEigenMatrix angle() const;
     GmpEigenMatrix& angle_new() const;
@@ -388,20 +384,6 @@ public:
         return rowMin_new(indices);
     }
 
-    // overall minimum b = min(a,[],'all')
-    inline GmpEigenMatrix min() const
-    {
-        std::vector<IndexType> indices;
-        GmpEigenMatrix tmp = colMin(indices);
-        return tmp.rowMin(indices);
-    }
-    inline GmpEigenMatrix& min_new() const
-    {
-        std::vector<IndexType> indices;
-        GmpEigenMatrix tmp = colMin(indices);
-        return tmp.rowMin_new(indices);
-    }
-
     // element-wise minimum c = min(a, b)
     GmpEigenMatrix ewMin(const GmpEigenMatrix& b) const;
     GmpEigenMatrix& ewMin_new(const GmpEigenMatrix& b) const;
@@ -434,20 +416,6 @@ public:
         return rowMax_new(indices);
     }
 
-    // overall maximum b = max(a,[],'all')
-    inline GmpEigenMatrix max() const
-    {
-        std::vector<IndexType> indices;
-        GmpEigenMatrix tmp = colMax(indices);
-        return tmp.rowMax(indices);
-    }
-    inline GmpEigenMatrix& max_new() const
-    {
-        std::vector<IndexType> indices;
-        GmpEigenMatrix tmp = colMax(indices);
-        return tmp.rowMax_new(indices);
-    }
-
     // element-wise maximum c = max(a, b)
     GmpEigenMatrix ewMax(const GmpEigenMatrix& b) const;
     GmpEigenMatrix& ewMax_new(const GmpEigenMatrix& b) const;
@@ -462,30 +430,6 @@ public:
     GmpEigenMatrix& colProd_new() const;
     GmpEigenMatrix rowProd() const;
     GmpEigenMatrix& rowProd_new() const;
-
-    // overall sums b = sum(a,'all')
-    inline GmpEigenMatrix sum() const
-    {
-        GmpEigenMatrix tmp = colSum();
-        return tmp.rowSum();
-    }
-    inline GmpEigenMatrix& sum_new() const
-    {
-        GmpEigenMatrix tmp = colSum();
-        return tmp.rowSum_new();
-    }
-
-    // overall products b = prod(a,'all')
-    inline GmpEigenMatrix prod() const
-    {
-        GmpEigenMatrix tmp = colProd();
-        return tmp.rowProd();
-    }
-    inline GmpEigenMatrix& prod_new() const
-    {
-        GmpEigenMatrix tmp = colProd();
-        return tmp.rowProd_new();
-    }
 
     // sorting functions
     GmpEigenMatrix sort(const int& dim, const int& type, std::vector < std::vector < IndexType > >& index) const;

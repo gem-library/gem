@@ -29,3 +29,11 @@ function test_consistency
         end
     end
 end
+
+function test_inputs
+    try
+        cat(3, gem(1), gem(2));
+        assert(false);
+    catch
+    end
+end

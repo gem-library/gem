@@ -3,8 +3,8 @@
 % Creates a complex matrix from real and imaginary components a and b
 function result = complex(a, b)
     % If no second argument is given, the output is the real part
-    if length(varargin) ~= 1
-	result = a;
+    if nargin == 1
+        result = a;
         return;
     end
 

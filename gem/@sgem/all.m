@@ -7,7 +7,7 @@
 function result = all(this, dim)
     if (nargin == 2)
         if isequal(dim, 'all')
-            result = (sum(this~=0, 'all') == numel(this));
+            result = (sum(sum(this~=0)) == numel(this)); % octave doesn't support sum(x, 'all')
             return;
         elseif ~isnumeric(dim)
             error('Bad input in sgem::all');

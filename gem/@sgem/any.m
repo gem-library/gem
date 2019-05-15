@@ -7,7 +7,7 @@
 function result = any(this, dim)
     if (nargin == 2)
         if isequal(dim, 'all')
-            result = logical(sum((this ~= 0) - isnan(this), 'all'));
+            result = logical(sum(sum((this ~= 0) - isnan(this)))); % octave doesn't support sum(x, 'all')
             return;
         elseif ~isnumeric(dim)
             error('Bad input in sgem::any');

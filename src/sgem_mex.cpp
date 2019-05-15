@@ -627,6 +627,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "sign" */
+    if (!strcmp("sign", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("sign: Unexpected arguments.");
+
+        // Compute the absolute value (or complex magnitude)
+        SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.sign_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Call the class method "angle" */
     if (!strcmp("angle", cmd)) {
         // Check parameters
@@ -1003,6 +1019,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Call the class method "min" */
+    if (!strcmp("min", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("min: Unexpected arguments.");
+
+        // Compute the global minimum
+        SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.min_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
+
+        return;
+    }
+
+
     /* Call the class method "colMax" */
     if (!strcmp("colMax", cmd)) {
         // Check parameters
@@ -1038,6 +1070,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We return the reference to this object to matlab
         plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
         plhs[1] = vectorToMatlabDoubles(indices);
+
+        return;
+    }
+
+
+    /* Call the class method "max" */
+    if (!strcmp("max", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("max: Unexpected arguments.");
+
+        // Compute the global maximum
+        SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.max_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
 
         return;
     }
@@ -1101,6 +1149,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
         // Compute the row product
         SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.rowProd_new());
+
+        // We return the reference to this object to matlab
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);
+
+        return;
+    }
+
+
+    /* Call the class method "prod" */
+    if (!strcmp("prod", cmd)) {
+        // Check parameters
+        if ((nlhs != 1) || (nrhs != 2))
+            mexErrMsgTxt("prod: Unexpected arguments.");
+
+        // Compute the global maximum
+        SparseGmpEigenMatrix& result(SparseGmpEigenMatrix_instance.prod_new());
 
         // We return the reference to this object to matlab
         plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(result);

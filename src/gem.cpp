@@ -323,9 +323,9 @@ void GmpEigenMatrix::display(const int& precision) const
     int largestExponent((int)((iszero(matrixR(0,0)) || mpfr::isnan(matrixR(0,0)) || mpfr::isinf(matrixR(0,0))) ? INT_MIN : mpfr::floor(mpfr::log10(mpfr::abs((matrixR(0,0)/(mpreal("1.0") - mpreal("5.0")*mpfr::pow(10,-1-precision)))))).toLong()));
     for (mwIndex i = 0; i < matrixR.rows(); ++i) {
         for (mwIndex j = 0; j < matrixR.cols(); ++j) {
-            largestExponent = max(largestExponent, (int)((iszero(matrixR(i,j)) || mpfr::isnan(matrixR(i,j)) || mpfr::isinf(matrixR(i,j))) ? INT_MIN : mpfr::floor(mpfr::log10(mpfr::abs((matrixR(i,j)/(mpreal("1.0") - mpreal("5.0")*mpfr::pow(10,-1-precision)))))).toLong()));
+            largestExponent = std::max(largestExponent, (int)((iszero(matrixR(i,j)) || mpfr::isnan(matrixR(i,j)) || mpfr::isinf(matrixR(i,j))) ? INT_MIN : mpfr::floor(mpfr::log10(mpfr::abs((matrixR(i,j)/(mpreal("1.0") - mpreal("5.0")*mpfr::pow(10,-1-precision)))))).toLong()));
             if (isComplex)
-                largestExponent = max(largestExponent, (int)((iszero(matrixI(i,j)) || mpfr::isnan(matrixI(i,j)) || mpfr::isinf(matrixI(i,j))) ? INT_MIN : mpfr::floor(mpfr::log10(mpfr::abs((matrixI(i,j)/(mpreal("1.0") - mpreal("5.0")*mpfr::pow(10,-1-precision)))))).toLong()));
+                largestExponent = std::max(largestExponent, (int)((iszero(matrixI(i,j)) || mpfr::isnan(matrixI(i,j)) || mpfr::isinf(matrixI(i,j))) ? INT_MIN : mpfr::floor(mpfr::log10(mpfr::abs((matrixI(i,j)/(mpreal("1.0") - mpreal("5.0")*mpfr::pow(10,-1-precision)))))).toLong()));
         }
     }
     // In case the matrix only contains zeros, NaNs and Infs, the global exponent is 0
@@ -384,7 +384,7 @@ void GmpEigenMatrix::display(const int& precision) const
 
     // We never use less than 3 digits, because we need to be able to print at least
     // NaN or Inf
-    width = max(3, width);
+    width = std::max(3, width);
 
     // Now, we decide where to put the dot, knowing that :
     // We will use the scientific notation iff exponentShift is not zero,
@@ -493,25 +493,25 @@ void GmpEigenMatrix::displayIndividual(int width) const
             for (mwIndex j = 0; j < matrixR.cols(); ++j) {
                 if (iszero(matrixR(i,j))) {}
                 else if (mpfr::isnan(matrixR(i,j)))
-                    width = max(width, 3);
+                    width = std::max(width, 3);
                 else if (mpfr::isinf(matrixR(i,j))) {
                     if (sgn(matrixR(i,j)) < 0)
-                        width = max(width, 4);
+                        width = std::max(width, 4);
                     else
-                        width = max(width, 3);
+                        width = std::max(width, 3);
                 } else
-                    width = max(width, (int) matrixR(i,j).toString().length());
+                    width = std::max(width, (int) matrixR(i,j).toString().length());
                 if (isComplex) {
                     if (iszero(matrixI(i,j))) {}
                     else if (mpfr::isnan(matrixI(i,j)))
-                        width = max(width, 3);
+                        width = std::max(width, 3);
                     else if (mpfr::isinf(matrixI(i,j))) {
                         if (sgn(matrixI(i,j)) < 0)
-                            width = max(width, 3);
+                            width = std::max(width, 3);
                         else
-                            width = max(width, 3);
+                            width = std::max(width, 3);
                     } else {
-                        width = max(width, (int) matrixI(i,j).toString().length());
+                        width = std::max(width, (int) matrixI(i,j).toString().length());
                     }
                 }
             }
@@ -1095,9 +1095,9 @@ GmpEigenMatrix GmpEigenMatrix::diagCreate(const IndexType& k) const
         result.matrixI.resize(matrixR.rows()+std::abs(k), matrixR.rows()+std::abs(k));
 
     for (IndexType i(0); i < matrixR.rows(); ++i) {
-        result.matrixR(max((IndexType)0,-k)+i, max((IndexType)0,k)+i) = matrixR(i, 0);
+        result.matrixR(std::max((IndexType)0,-k)+i, std::max((IndexType)0,k)+i) = matrixR(i, 0);
         if (isComplex)
-            result.matrixI(max((IndexType)0,-k)+i, max((IndexType)0,k)+i) = matrixI(i, 0);
+            result.matrixI(std::max((IndexType)0,-k)+i, std::max((IndexType)0,k)+i) = matrixI(i, 0);
     }
 
     return result;
@@ -1114,9 +1114,9 @@ GmpEigenMatrix& GmpEigenMatrix::diagCreate_new(const IndexType& k) const
         result.matrixI.resize(matrixR.rows()+std::abs(k), matrixR.rows()+std::abs(k));
 
     for (IndexType i(0); i < matrixR.rows(); ++i) {
-        result.matrixR(max((IndexType)0,-k)+i, max((IndexType)0,k)+i) = matrixR(i, 0);
+        result.matrixR(std::max((IndexType)0,-k)+i, std::max((IndexType)0,k)+i) = matrixR(i, 0);
         if (isComplex)
-            result.matrixI(max((IndexType)0,-k)+i, max((IndexType)0,k)+i) = matrixI(i, 0);
+            result.matrixI(std::max((IndexType)0,-k)+i, std::max((IndexType)0,k)+i) = matrixI(i, 0);
     }
 
     return result;
@@ -1127,9 +1127,9 @@ GmpEigenMatrix GmpEigenMatrix::diagExtract(const IndexType& k) const
 {
     GmpEigenMatrix result;
 
-    result.matrixR = matrixR.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k)).diagonal();
+    result.matrixR = matrixR.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k)).diagonal();
     if (isComplex)
-        result.matrixI = matrixI.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k)).diagonal();
+        result.matrixI = matrixI.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k)).diagonal();
     result.checkComplexity();
 
     return result;
@@ -1140,9 +1140,9 @@ GmpEigenMatrix& GmpEigenMatrix::diagExtract_new(const IndexType& k) const
 {
     GmpEigenMatrix& result(*(new GmpEigenMatrix));
 
-    result.matrixR = matrixR.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k)).diagonal();
+    result.matrixR = matrixR.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k)).diagonal();
     if (isComplex)
-        result.matrixI = matrixI.block(max((IndexType)0,-k), max((IndexType)0,k), matrixR.rows()-max((IndexType)0,-k), matrixR.cols()-max((IndexType)0,k)).diagonal();
+        result.matrixI = matrixI.block(std::max((IndexType)0,-k), std::max((IndexType)0,k), matrixR.rows()-std::max((IndexType)0,-k), matrixR.cols()-std::max((IndexType)0,k)).diagonal();
     result.checkComplexity();
 
     return result;
@@ -2297,6 +2297,51 @@ GmpEigenMatrix& GmpEigenMatrix::abs_new() const
 }
 
 
+/* The sign (or normalized complex value) b = sign(a) */
+GmpEigenMatrix GmpEigenMatrix::sign() const
+{
+    GmpEigenMatrix result;
+
+    if (isComplex) {
+        result = this->rdivide(this->abs());
+        for (IndexType j = 0; j < matrixR.cols(); ++j)
+            for (IndexType i = 0; i < matrixR.rows(); ++i)
+                if ((matrixR(i,j) == 0) && (matrixI(i,j) == 0)) {
+                    result.matrixR(i,j) = 0;
+                    result.matrixI(i,j) = 0;
+                }
+        result.checkComplexity();
+    } else {
+        result.isComplex = false;
+        result.matrixR = matrixR.unaryExpr([](mpfr::mpreal x) { if (x < 0) return mpfr::mpreal("-1"); else if (x > 0) return mpfr::mpreal("1"); else return mpfr::mpreal("0");});
+    }
+
+    return result;
+}
+
+/* The sign (or normalized complex value) b = sign(a) */
+GmpEigenMatrix& GmpEigenMatrix::sign_new() const
+{
+    GmpEigenMatrix& result(*(new GmpEigenMatrix));
+
+    if (isComplex) {
+        result = this->rdivide(this->abs());
+        for (IndexType j = 0; j < matrixR.cols(); ++j)
+            for (IndexType i = 0; i < matrixR.rows(); ++i)
+                if ((matrixR(i,j) == 0) && (matrixI(i,j) == 0)) {
+                    result.matrixR(i,j) = 0;
+                    result.matrixI(i,j) = 0;
+                }
+        result.checkComplexity();
+    } else {
+        result.isComplex = false;
+        result.matrixR = matrixR.unaryExpr([](mpfr::mpreal x) { if (x < 0) return mpreal("-1"); else if (x > 0) return mpreal("1"); else return mpreal("0");});
+    }
+
+    return result;
+}
+
+
 /* The phase angle (i.e. complex argument) b = angle(a) */
 GmpEigenMatrix GmpEigenMatrix::angle() const
 {
@@ -3300,7 +3345,7 @@ GmpEigenMatrix GmpEigenMatrix::atan() const
     result.isComplex = isComplex;
     if (isComplex) {
         // We compute the analytic extension (valid for all complex numbers)
-        result = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*(*this)).log() - (GmpEigenMatrix(1)+constI()*(*this)).log());
+        result = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+(*this)).rdivide(constI()-(*this)).log();
 
         result.checkComplexity();
     } else {
@@ -3321,7 +3366,7 @@ GmpEigenMatrix& GmpEigenMatrix::atan_new() const
     result.isComplex = isComplex;
     if (isComplex) {
         // We compute the analytic extension (valid for all complex numbers)
-        result = GmpEigenMatrix(0,mpreal("0.5"))*((GmpEigenMatrix(1)-constI()*(*this)).log() - (GmpEigenMatrix(1)+constI()*(*this)).log());
+        result = GmpEigenMatrix(0,mpreal("0.5"))*(constI()+(*this)).rdivide(constI()-(*this)).log();
 
         result.checkComplexity();
     } else {
@@ -3930,8 +3975,8 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
             // Construct matrix operation object using the wrapper class
             Spectra::DenseSymMatProd<mpreal> op(matrixR);
 
-            //long int ncv(min(max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct eigen solver object, requesting desired eigenvalues
@@ -4040,8 +4085,8 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
             result.checkComplexity();
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));  // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));  // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -4156,8 +4201,8 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
             // Construct matrix operation object using the wrapper class
             Spectra::DenseSymMatProd<mpreal> op(matrixR);
 
-            //long int ncv(min(max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct eigen solver object, requesting desired eigenvalues
@@ -4266,8 +4311,8 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
             result.checkComplexity();
             V.checkComplexity();
         } else {
-            //long int ncv(min(max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));  // the tightest bounds... don't always converge
-            long int ncv(min(3+max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));  // the tightest bounds... don't always converge
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -4721,6 +4766,9 @@ bool GmpEigenMatrix::identicalValuesNaNok(const GmpEigenMatrix& b) const
 // symmetry tests
 bool GmpEigenMatrix::issymmetric() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType i(0); i < matrixR.rows(); ++i)
             for (IndexType j(i+1); j < matrixR.cols(); ++j)
@@ -4738,6 +4786,9 @@ bool GmpEigenMatrix::issymmetric() const
 
 bool GmpEigenMatrix::ishermitian() const
 {
+    if (matrixR.rows() != matrixR.cols())
+        return false;
+
     if (isComplex) {
         for (IndexType i(0); i < matrixR.rows(); ++i) {
             for (IndexType j(i); j < matrixR.cols(); ++j)
@@ -5283,7 +5334,7 @@ GmpEigenMatrix GmpEigenMatrix::colMax(vector<IndexType>& indices) const
         result.matrixI.resize(1,matrixI.cols());
         result.isComplex = true;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType j(0); j < matrixR.cols(); ++j)
         {
             mpreal maxValue;
@@ -5309,7 +5360,7 @@ GmpEigenMatrix GmpEigenMatrix::colMax(vector<IndexType>& indices) const
         result.matrixR.resize(1,matrixR.cols());
         result.isComplex = false;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType j(0); j < matrixR.cols(); ++j)
         {
             mpreal maxValue;
@@ -5342,7 +5393,7 @@ GmpEigenMatrix& GmpEigenMatrix::colMax_new(vector<IndexType>& indices) const
         result.matrixI.resize(1,matrixI.cols());
         result.isComplex = true;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType j(0); j < matrixR.cols(); ++j)
         {
             mpreal maxValue;
@@ -5368,7 +5419,7 @@ GmpEigenMatrix& GmpEigenMatrix::colMax_new(vector<IndexType>& indices) const
         result.matrixR.resize(1,matrixR.cols());
         result.isComplex = false;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType j(0); j < matrixR.cols(); ++j)
         {
             mpreal maxValue;
@@ -5401,7 +5452,7 @@ GmpEigenMatrix GmpEigenMatrix::rowMax(vector<IndexType>& indices) const
         result.matrixI.resize(matrixI.rows(),1);
         result.isComplex = true;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType i(0); i < matrixR.rows(); ++i)
         {
             mpreal maxValue;
@@ -5427,7 +5478,7 @@ GmpEigenMatrix GmpEigenMatrix::rowMax(vector<IndexType>& indices) const
         result.matrixR.resize(matrixR.rows(),1);
         result.isComplex = false;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType i(0); i < matrixR.rows(); ++i)
         {
             mpreal maxValue;
@@ -5460,7 +5511,7 @@ GmpEigenMatrix& GmpEigenMatrix::rowMax_new(vector<IndexType>& indices) const
         result.matrixI.resize(matrixI.rows(),1);
         result.isComplex = true;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType i(0); i < matrixR.rows(); ++i)
         {
             mpreal maxValue;
@@ -5486,7 +5537,7 @@ GmpEigenMatrix& GmpEigenMatrix::rowMax_new(vector<IndexType>& indices) const
         result.matrixR.resize(matrixR.rows(),1);
         result.isComplex = false;
 
-        // We find the minimum
+        // We find the maximum
         for (IndexType i(0); i < matrixR.rows(); ++i)
         {
             mpreal maxValue;
@@ -5513,7 +5564,7 @@ GmpEigenMatrix GmpEigenMatrix::ewMax(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(matrixR.rows(),matrixR.cols());
             result.matrixI.resize(matrixR.rows(),matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < matrixR.rows(); ++i) {
                 for (IndexType j(0); j < matrixR.cols(); ++j) {
@@ -5555,7 +5606,7 @@ GmpEigenMatrix GmpEigenMatrix::ewMax(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(b.matrixR.rows(),b.matrixR.cols());
             result.matrixI.resize(b.matrixR.rows(),b.matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < b.matrixR.rows(); ++i) {
                 for (IndexType j(0); j < b.matrixR.cols(); ++j) {
@@ -5597,7 +5648,7 @@ GmpEigenMatrix GmpEigenMatrix::ewMax(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(matrixR.rows(),matrixR.cols());
             result.matrixI.resize(matrixR.rows(),matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < matrixR.rows(); ++i) {
                 for (IndexType j(0); j < matrixR.cols(); ++j) {
@@ -5649,7 +5700,7 @@ GmpEigenMatrix& GmpEigenMatrix::ewMax_new(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(matrixR.rows(),matrixR.cols());
             result.matrixI.resize(matrixR.rows(),matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < matrixR.rows(); ++i) {
                 for (IndexType j(0); j < matrixR.cols(); ++j) {
@@ -5691,7 +5742,7 @@ GmpEigenMatrix& GmpEigenMatrix::ewMax_new(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(b.matrixR.rows(),b.matrixR.cols());
             result.matrixI.resize(b.matrixR.rows(),b.matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < b.matrixR.rows(); ++i) {
                 for (IndexType j(0); j < b.matrixR.cols(); ++j) {
@@ -5733,7 +5784,7 @@ GmpEigenMatrix& GmpEigenMatrix::ewMax_new(const GmpEigenMatrix& b) const
         if ((b.isComplex) || (isComplex)) {
             result.matrixR.resize(matrixR.rows(),matrixR.cols());
             result.matrixI.resize(matrixR.rows(),matrixR.cols());
-            // We find the minimums
+            // We find the maximums
             GmpEigenMatrix aAbs(abs()), aAngle(angle()), bAbs(b.abs()), bAngle(b.angle());
             for (IndexType i(0); i < matrixR.rows(); ++i) {
                 for (IndexType j(0); j < matrixR.cols(); ++j) {

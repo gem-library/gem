@@ -1,7 +1,7 @@
 Getting started with the GEM Library
 ====================================
 
-Here is a short introduction to the usage of GEM library in MATLAB and GNU Octave. This introduction assumes that the gem folder is in MATLAB/GNU Octave's path and that it is working (this can be checked by typing e.g. `gem('pi')` into MATLAB/GNU Octave; if this command yields an error, check that the GEM library is compiled for your system and that its folder is in MATLAB/GNU Octave's path).
+Here is a short introduction to the usage of GEM library in MATLAB and GNU Octave. This introduction assumes that the gem folder is in MATLAB/GNU Octave's path and that it is working (this can be checked by typing e.g. `gem('pi')` into MATLAB/GNU Octave; if this command yields an error, check that the GEM library is compiled for your system and that its internal 'gem' folder is in MATLAB/GNU Octave's path).
 
 ## Creating High Precision Matrices
 

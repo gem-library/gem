@@ -34,7 +34,8 @@ function result = diag(this, k)
         newObjectIdentifier = sgem_mex('diagCreate', objId, k);
     else
         if (k+1 > s(2)) || (-k+1 > s(1))
-            error('diagonal index is larger than the matrix');
+            result = sgem([]);
+            return;
         end
 
         % We call the angle procedure. Since the function creates a

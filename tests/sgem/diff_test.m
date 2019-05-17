@@ -15,7 +15,7 @@ function test_consistency
 
     validateDoubleConsistency(@(x) diff(x), x);
     validateDoubleConsistency(@(x) diff(x,1), x);
-    if ~isoctave
+    if ~isOctave
         validateDoubleConsistency(@(x) diff(x,2), x);
         validateDoubleConsistency(@(x) diff(x,5), x);
         validateDoubleConsistency(@(x) diff(x,10), x);

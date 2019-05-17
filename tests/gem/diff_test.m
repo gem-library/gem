@@ -7,13 +7,19 @@ function test_suite = diff_test()
 end
 
 function test_consistency
+    % Check if we are running octave: octave has some bugs which don't
+    % allow us to perform all checks
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
     
     validateDoubleConsistency(@(x) diff(x), x);
     validateDoubleConsistency(@(x) diff(x,1), x);
-    validateDoubleConsistency(@(x) diff(x,2), x);
-    validateDoubleConsistency(@(x) diff(x,5), x);
-    validateDoubleConsistency(@(x) diff(x,10), x);
+    if ~isOctave
+        validateDoubleConsistency(@(x) diff(x,2), x);
+        validateDoubleConsistency(@(x) diff(x,5), x);
+        validateDoubleConsistency(@(x) diff(x,10), x);
+    end
 
     validateDoubleConsistency(@(x) diff(x,1,1), x);
     validateDoubleConsistency(@(x) diff(x,2,1), x);

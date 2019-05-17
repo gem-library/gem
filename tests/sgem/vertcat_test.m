@@ -9,6 +9,11 @@ end
 function test_consistency
     y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
     
+    % We also want to have at least one 'large' matrix
+    y2 = generateMatrices(1, 20, {'A'});
+    y2 = y2(find(cellfun(@(x) (size(x,1)>10)&&(size(x,2)>10), y2), 1, 'first'));
+    y = cat(2, y, y2, y2);
+    
     % cat with nothing
     validateDoubleConsistency(@(x,y) vertcat(x, []), y);
     validateDoubleConsistency(@(x,y) vertcat([], x), y);
@@ -25,6 +30,8 @@ function test_consistency
                 validateDoubleConsistency2(@(x,y) vertcat(x, y), y(i), {double(y{j})});
                 validateDoubleConsistency2(@(x,y) vertcat(x, y), {full(y{i})}, y(j));
                 validateDoubleConsistency2(@(x,y) vertcat(x, y), y(i), {full(y{j})});
+                validateDoubleConsistency2(@(x,y) vertcat(x, y), {full(double(y{i}))}, y(j));
+                validateDoubleConsistency2(@(x,y) vertcat(x, y), y(i), {full(double(y{j}))});
             end
             
             % Also test more than two inputs

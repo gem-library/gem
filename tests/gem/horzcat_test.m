@@ -25,6 +25,8 @@ function test_consistency
                 validateDoubleConsistency2(@(x,y) horzcat(x, y), y(i), {double(y{j})});
                 validateDoubleConsistency2(@(x,y) horzcat(x, y), {sparse(y{i})}, y(j));
                 validateDoubleConsistency2(@(x,y) horzcat(x, y), y(i), {sparse(y{j})});
+                validateDoubleConsistency2(@(x,y) horzcat(x, y), {sparse(double(y{i}))}, y(j));
+                validateDoubleConsistency2(@(x,y) horzcat(x, y), y(i), {sparse(double(y{j}))});
             end
             
             % Also test more than two inputs

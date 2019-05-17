@@ -1,19 +1,5 @@
 % vertcat - Vertical concatenation
 function result = vertcat(this, varargin)
-    % If one of the elements to be concatenated is sparse, the result will be
-    % given in a sparse format (for this we'll call the sgem version of this
-    % function)
-    needSparse = 0;
-    for i = 1:length(varargin)
-        if issparse(varargin{i})
-            needSparse = 1;
-        end
-    end
-    if needSparse == 1
-        result = vertcat(sparse(this), varargin{1});
-        return;
-    end
-
     % If the concatenation involves more than 2 objects, we deal with each pair
     % independently
     if length(varargin) > 1
@@ -47,6 +33,14 @@ function result = vertcat(this, varargin)
     end
     if ~isequal(class(varargin{1}), 'gem') && ~isequal(class(varargin{1}), 'sgem')
         varargin{1} = gemify(varargin{1});
+    end
+
+    % Concatenation of a full matrix with a sparse one gives a sparse result
+    if issparse(this) && (~issparse(varargin{1}))
+        varargin{1} = sparse(varargin{1});
+    end
+    if ~issparse(this) && (issparse(varargin{1}))
+        this = sparse(this);
     end
 
     %% Now we can concatenate the two objects

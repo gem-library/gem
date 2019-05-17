@@ -7,7 +7,7 @@ function test_suite = disp_test()
 end
 
 function test_consistency
-    x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
+    x = generateMatrices(1, 5, {'F', 'FR', 'FI'});
     
     for i = 1:numel(x)
         disp(x{i});

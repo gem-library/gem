@@ -52,7 +52,12 @@ function test_consistency
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
     vect = gemRand(4,1)*10-5 + (gemRand(4,1)*10-5)*1i;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
+    vect = gemRand(14,1)*10-5;
+    x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
+
     validateDoubleConsistency(@(x) eigs(sparse(x), [], 1), x);
+    validateDoubleConsistency(@(x) eigs(sparse(x), [], 3), x);
+    validateDoubleConsistency(@(x) eigs(sparse(x), [], 1, 'sm'), x);
 end
 
 function test_precision
@@ -121,7 +126,7 @@ end
 function test_inputs
     x = sparse(gemRand(2));
     
-    % maximum 3 input supported
+    % maximum 4 input supported
     try
         eigs(x, [], 1, 2, 2);
         assert(false);
@@ -180,11 +185,22 @@ function test_inputs
         assert(false);
     catch
     end
+    try
+        eigs(sparse(gemRand(20,30)));
+        assert(false);
+    catch
+    end
     
     % no eigenvectors computed for zero eigenvalues
     try
         vect = gemRand(4,1);
         [V D] = eigs(sparse(vect*vect'), [], 2);
+        assert(false);
+    catch
+    end
+    try
+        vect = gemRand(4,1);
+        [V D] = eigs(sparse(vect*vect'), [], 1, 'sm');
         assert(false);
     catch
     end

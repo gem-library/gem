@@ -3667,15 +3667,20 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
             IndexType i(0), nbEigsWritten(0);
             mpreal eps(10*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether an eigenvector is complex or not
             while (i < Vreal.matrixR.cols()) {
+                // We define two vectors which will allow us to distinguish the case we are in
+                Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
+                bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
+                bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
+
                 if ((i == Vreal.matrixR.cols()-1) || (Dreal.matrixR(i,i+1) == 0)
-                || ((Dreal.matrixR(i,i+1) < eps) && (((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) || ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps)))) {
+                || ((Dreal.matrixR(i,i+1) < eps) && ((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) && ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps))) {
                     // The next eigenvalue is real
                     realEigenvaluesAndColumns.push_back(make_pair(Dreal.matrixR(i,i), i));
                     ++i;
                 } else {
                     // The next eigenvalue is complex
                     // We directly take care of this case
-                    if ( (Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1)).array().abs().maxCoeff() >= (Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1)).array().abs().maxCoeff() ) {
+                    if ( bigIfCase1.array().abs().maxCoeff() >= bigIfCase2.array().abs().maxCoeff() ) {
                         // We are in the [r i; -i r] case
                         eigenvalues.matrixR(nbEigsWritten,0) = Dreal.matrixR(i,i);
                         eigenvalues.matrixI(nbEigsWritten,0) = Dreal.matrixR(i,i+1);
@@ -3848,15 +3853,20 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
             IndexType i(0), nbEigsWritten(0);
             mpreal eps(10*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether an eigenvector is complex or not
             while (i < Vreal.matrixR.cols()) {
+                // We define two vectors which will allow us to distinguish the case we are in
+                Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
+                bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
+                bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
+
                 if ((i == Vreal.matrixR.cols()-1) || (Dreal.matrixR(i,i+1) == 0)
-                || ((Dreal.matrixR(i,i+1) < eps) && (((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) || ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps)))) {
+                || ((Dreal.matrixR(i,i+1) < eps) && ((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) && ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps))) {
                     // The next eigenvalue is real
                     realEigenvaluesAndColumns.push_back(make_pair(Dreal.matrixR(i,i), i));
                     ++i;
                 } else {
                     // The next eigenvalue is complex
                     // We directly take care of this case
-                    if ( (Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1)).array().abs().maxCoeff() >= (Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1)).array().abs().maxCoeff() ) {
+                    if ( bigIfCase1.array().abs().maxCoeff() >= bigIfCase2.array().abs().maxCoeff() ) {
                         // We are in the [r i; -i r] case
                         eigenvalues.matrixR(nbEigsWritten,0) = Dreal.matrixR(i,i);
                         eigenvalues.matrixI(nbEigsWritten,0) = Dreal.matrixR(i,i+1);

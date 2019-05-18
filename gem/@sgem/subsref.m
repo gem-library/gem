@@ -158,8 +158,4 @@ else
     result = sgem('encapsulate', newObjectIdentifier);
 end
 
-
-
-
-%result = prod(size(this));
 end

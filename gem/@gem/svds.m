@@ -32,8 +32,13 @@ function [U S V] = svds(this, varargin)
     end
     
     % The number of singular values computed must be larger than zero
-    if nbSingularvalues < 1
-        error('gem::svds cannot compute less than 1 singular value');
+    if (nbSingularvalues == 0) || isempty(this)
+        U = gem([]);
+        S = gem([]);
+        V = gem([]);
+        return;
+    elseif nbSingularvalues < 0
+        error('gem::svds cannot compute a negative number of eigenvalues');
     end
     
     % We check if there is a second parameter
@@ -63,13 +68,13 @@ function [U S V] = svds(this, varargin)
 
         % We cannot extract more than this number of singular values
         if nbSingularvalues > size(this,1)
-            nbSingularvalues = size(this,1);
+            error('Too many singular values asked for in gem::svds');
         end
         
         % We use svd to compute all singular values
 %        warning('Too many singular values for svds, using svd instead.');
         if nargout >= 2
-            [U S D] = svd(this,'econ');
+            [U S V] = svd(this,'econ');
             if isequal(type, 'sm')
                 subU.type='()';
                 subU.subs={[1:size(U,1)] [size(U,2)-nbSingularvalues+1:size(U,2)]};
@@ -109,7 +114,7 @@ function [U S V] = svds(this, varargin)
     % We perform the computation
     if nargout <= 1
         % We only compute the eigenvalues of a*a'
-        vals = eigs(this*this', nbSingularvalues, type);
+        vals = eigs(this*this', [], nbSingularvalues, type);
         vals = max(vals,0); % We round up eventual slightly negative values
         U = sqrt(vals);
         
@@ -121,7 +126,7 @@ function [U S V] = svds(this, varargin)
         end
     elseif nargout <= 2
         % We compute the eigenvalues and eigenvectors of a*a'
-        [U valsU] = eigs(this*this', nbSingularvalues, type);
+        [U valsU] = eigs(this*this', [], nbSingularvalues, type);
         valsU = max(valsU,0); % We round up eventual slightly negative values
         S = sqrt(valsU);
 
@@ -136,8 +141,8 @@ function [U S V] = svds(this, varargin)
         end
     elseif nargout <= 3
         % We compute the eigenvalues on both sides
-        [U valsU] = eigs(this*this', nbSingularvalues, type);
-        [V valsV] = eigs(this'*this, nbSingularvalues, type);
+        [U valsU] = eigs(this*this', [], nbSingularvalues, type);
+        [V valsV] = eigs(this'*this, [], nbSingularvalues, type);
         valsU = max(valsU,0); % We round up eventual slightly negative values
         valsV = max(valsV,0); % We round up eventual slightly negative values
         S = sqrt(valsU);

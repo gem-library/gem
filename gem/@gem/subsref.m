@@ -51,7 +51,6 @@ switch varargin{1}(1).type
                 return;
             case 'objectIdentifier'
                 % The sgem class is allowed to access this private function
-                % The sgem class is allowed to access this private
                 [ST I] = dbstack('-completenames');
                 if (length(ST) < 2) || (isempty(strfind(ST(2).file,'/@gem/')) && isempty(strfind(ST(2).file,'\@gem\')) && ...
                         isempty(strfind(ST(2).file,'/@sgem/')) && isempty(strfind(ST(2).file,'\@sgem\')))

@@ -107,10 +107,7 @@ classdef sgem < handle
                         s = [];
                     end
                     [m n] = size(varargin{1});
-                    if isequal(class(s),'gem') % in principle this case should not occur
-                        objId = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
-                    elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
+                    if isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
                         || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
                         % For integers, we first convert the values
                         % manually to make sure we don't loose any
@@ -132,7 +129,7 @@ classdef sgem < handle
                     error('Wrong instruction upon creation of a new sgem object.');
                 end
             elseif nargin == 2
-                if isequal(lower(varargin{1}),'encapsulate') && isequal(class(varargin{2}), 'uint64')
+                if ischar(varargin{1}) && isequal(lower(varargin{1}),'encapsulate') && isequal(class(varargin{2}), 'uint64')
                     % If the second argument is of type 'uint64', then we interpret
                     % it as pointing to an existing instance of a C++ class, so we
                     % encapsulate it into the current sgem instance.
@@ -156,14 +153,15 @@ classdef sgem < handle
                         error('Invalid reference given upon construction of a new sgem object.');
                     end
                 elseif isequal(class(varargin{1}), 'gem')
-                    % The we are asked to create a sparse version of
+                    % Then we are asked to create a sparse version of
                     % a dense gem object, with custom zero threshold
                     threshold = varargin{2};
                     if ~isequal(class(threshold), 'gem')
                         threshold = gem(threshold);
                     end
-                    objId = varargin{1}.objectIdentifier;
-                    this.objectIdentifier = sgem_mex('sparsify', objId, threshold);
+                    objId1 = varargin{1}.objectIdentifier;
+                    objId2 = threshold.objectIdentifier;
+                    this.objectIdentifier = sgem_mex('sparse', objId1, objId2);
                 elseif isnumeric(varargin{2}) && isequal(size(varargin{2}), [1 1])
                     % Then we interpret this call as a call for the library to
                     % create an instance of this class from some numerical
@@ -182,7 +180,14 @@ classdef sgem < handle
                     this.setWorkingPrecision(varargin{2});
 
                     % Create object
-                    this = sgem(varargin{1});
+                    try
+                        this = sgem(varargin{1});
+                    catch me
+                        % If there was an error we restore the default
+                        % precision
+                        this.setWorkingPrecision(previousPrecision);
+                        throw(me);
+                    end
 
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
@@ -201,6 +206,8 @@ classdef sgem < handle
                     i = double(varargin{1}); % We make sure i and j are double arrays
                     j = double(varargin{2});
                     s = full(varargin{3}); % We make sure s is not sparse
+                    m = max(i);
+                    n = max(j);
                     if numel(i) ~= numel(s)
                         s = ones(1,numel(i))*s;
                     end
@@ -225,18 +232,17 @@ classdef sgem < handle
                         j = [];
                         s = [];
                     end
-                    m = max(i);
-                    n = max(j);
-                    if isequal(class(s),'gem') % in principle this case should not occur
+                    if isequal(class(s),'gem')
                         objId = s.objectIdentifier;
                         this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
                         || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
-                        % For integers, we set the values manually to make
-                        % sure we don't loose any precision
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, zeros(size(s)), m, n, this.getWorkingPrecision);
+                        % For integers, we first convert the values
+                        % manually to make sure we don't loose any
+                        % precision
                         s_values = gem(s);
-                        this(:) = s_values;
+                        objId = s_values.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     else
                         if ~isa(s, 'double')
                             s = double(s);
@@ -265,7 +271,14 @@ classdef sgem < handle
                     this.setWorkingPrecision(varargin{4});
 
                     % Create object
-                    this = sgem(varargin{1},varargin{2},varargin{3});
+                    try
+                        this = sgem(varargin{1},varargin{2},varargin{3});
+                    catch me
+                        % If there was an error we restore the default
+                        % precision
+                        this.setWorkingPrecision(previousPrecision);
+                        throw(me);
+                    end
 
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);
@@ -286,6 +299,8 @@ classdef sgem < handle
                     i = double(varargin{1}); % We make sure i and j are double arrays
                     j = double(varargin{2});
                     s = full(varargin{3}); % We make sure s is not sparse
+                    m = double(varargin{4}); % We make sure m and n are doubles
+                    n = double(varargin{5});
                     if numel(i) ~= numel(s)
                         s = ones(1,numel(i))*s;
                     end
@@ -310,8 +325,6 @@ classdef sgem < handle
                         j = [];
                         s = [];
                     end
-                    m = double(varargin{4}); % We make sure m and n are doubles
-                    n = double(varargin{5});
                     if (numel(s) > 0) && ((min(i) < 1) || (max(i) > m) || (min(j) < 1) || (max(j) > n))
                         error('Incompatible sizes in construction of an sgem object.');
                     end
@@ -343,7 +356,14 @@ classdef sgem < handle
                     this.setWorkingPrecision(varargin{6});
 
                     % Create object
-                    this = sgem(varargin{1},varargin{2},varargin{3},varargin{4},varargin{5});
+                    try
+                        this = sgem(varargin{1},varargin{2},varargin{3},varargin{4},varargin{5});
+                    catch me
+                        % If there was an error we restore the default
+                        % precision
+                        this.setWorkingPrecision(previousPrecision);
+                        throw(me);
+                    end
 
                     % We restore the default precision
                     this.setWorkingPrecision(previousPrecision);

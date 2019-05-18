@@ -50,11 +50,11 @@ function result = gt(this, varargin)
     if isequal(class(this), 'gem') && isequal(class(varargin{1}), 'gem')
         objId1 = this.objectIdentifier;
         objId2 = varargin{1}.objectIdentifier;
-        result = logical(gem_mex('gt', objId1));
+        result = logical(gem_mex('gt', objId1, objId2));
     else
         objId1 = this.objectIdentifier;
         objId2 = varargin{1}.objectIdentifier;
-        result = logical(sgem_mex('gt', objId2));
+        result = logical(sgem_mex('gt', objId1, objId2));
     end
 
     % For matlab, gt when one object is sparse produces a sparse result

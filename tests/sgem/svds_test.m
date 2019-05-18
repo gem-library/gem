@@ -23,10 +23,12 @@ function test_consistency
         assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
 
         % For coverage monitoring purpose (this is tested by matlab)
-        svds(x{1}, 14);
-        svds(x{1}, 15, 'smallest');
-        [U S V] = svds(x{1}, 14);
-        [U S V] = svds(x{1}, 15, 'smallest');
+        svds(x{1}, 14, 'smallest');
+        [U S] = svds(x{1}, 5, 'smallest');
+        [U S V] = svds(x{1}, 14, 'smallest');
+        x = {gem(diag(ones(1,5),1) + diag(ones(1,4),-2))};
+        svds(x{1}, 4);
+        [U S V] = svds(x{1}, 4);
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;
@@ -147,4 +149,7 @@ function test_inputs
     % no computation over an existing eigenvalue
     vect = gemRand(4,1);
     shouldProduceAnError(@() svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest'));
+
+    % don't ask for all values if the matrix is too large
+    shouldProduceAnError(@() svds(sparse(gemRand(30)), 29));
 end

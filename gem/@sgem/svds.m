@@ -171,8 +171,6 @@ function [U S V] = svds(this, varargin)
             subV.subs={[1:size(V,1)] [size(V,2):-1:1]};
             V = subsref(V, subV);
         end
-    else
-        error('Unsupported call to sgem::svds')
     end
 
 end

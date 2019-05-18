@@ -143,98 +143,92 @@ function [V D] = eigs(this, varargin)
         return;
     end
 
-    % We check how many outputs are
-    if nargout <= 2
-        % The matrix must be square
-        if size(this, 1) ~= size(this,2)
-            error('Matrix must be square in gem::eigs');
-        end
+    % The matrix must be square
+    if size(this, 1) ~= size(this,2)
+        error('Matrix must be square in gem::eigs');
+    end
 
-        % We make sure sigma is a gem object
-        if ~isequal(class(sigma),'gem')
-            sigma = gem(sigma);
-        end
+    % We make sure sigma is a gem object
+    if ~isequal(class(sigma),'gem')
+        sigma = gem(sigma);
+    end
 
-        % The algorithm we use doesn't handle eigenvalues equal to sigma. So
-        % this variable tells how many times it needs to be added
-        % mannually.
-        additionalSigmaMultiplicity = 0;
+    % The algorithm we use doesn't handle eigenvalues equal to sigma. So
+    % this variable tells how many times it needs to be added
+    % mannually.
+    additionalSigmaMultiplicity = 0;
 
-        % We make sure we won't try to find non-zero eigenvalues when there
-        % are no more (this is numerically unstable)
-        if isequal(type,1)
-            rankMatrix = rank(this);
-            if rankMatrix < nbEigenvalues
-                if nargout >= 2
-                    error('Eigenvectors are not computed for null eigenvalues.')
-                end
-                if rankMatrix == 0
-                    % This is the null matrix
-                    V = gem(0);
-                    return;
-                elseif rankMatrix == 1
-                    warning('There is only one non-zero eigenvalues, computing this one only.');
-                else
-                    warning(['There are only ', num2str(rankMatrix), ' non-zero eigenvalues, computing these ones only.']);
-                end
-                additionalSigmaMultiplicity = nbEigenvalues-rankMatrix;
-                nbEigenvalues = rankMatrix;
+    % We make sure we won't try to find non-zero eigenvalues when there
+    % are no more (this is numerically unstable)
+    if isequal(type,1)
+        rankMatrix = rank(this);
+        if rankMatrix < nbEigenvalues
+            if nargout >= 2
+                error('Eigenvectors are not computed for null eigenvalues.')
             end
-        end
-
-        % We make sure we won't try to invert a singular matrix (this is
-        % numerically unstable as well)
-        if isequal(type,2)
-            rankShifted = rank(this-sigma*eye(size(this)));
-            if size(this,1) - rankShifted >= nbEigenvalues
-                % Then we know that all requested eigenvalues are equal to
-                % sigma, but we still haven't computed corresponding
-                % eigenvectors (these would be given by a function such as
-                % 'null')
-                V = sigma*ones(nbEigenvalues,1);
-                if nargout >= 2
-                    error('Eigenvectors are not computed when sigma is an eigenvalue.')
-                end
+            if rankMatrix == 0
+                % This is the null matrix
+                V = gem(0);
                 return;
-            elseif size(this,1) - rankShifted > 0
-                error('Sigma is an eigenvalue of the considered matrix. Consider perturbing it a little bit to allow the numerical method to run smoothly.')
+            elseif rankMatrix == 1
+                warning('There is only one non-zero eigenvalues, computing this one only.');
+            else
+                warning(['There are only ', num2str(rankMatrix), ' non-zero eigenvalues, computing these ones only.']);
             end
+            additionalSigmaMultiplicity = nbEigenvalues-rankMatrix;
+            nbEigenvalues = rankMatrix;
         end
+    end
 
-        objId1 = this.objectIdentifier;
-        objId2 = sigma.objectIdentifier;
-        [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', objId1, nbEigenvalues, type, objId2);
-
-        % ...  and create a new matlab object to keep this handle
-        V = gem('encapsulate', newObjectIdentifierV);
-        D = gem('encapsulate', newObjectIdentifierD);
-
-        % We make sure the eigenvalues are ordered
-        if isequal(type, 1)
-            [junk reorder] = sort((diag(D)-sigma).^2,1,'descend');
-        else % then type is 2
-            [junk reorder] = sort((diag(D)-sigma).^2,1,'ascend');
-        end
-        subD.type='()';
-        subD.subs={reorder reorder};
-        D = subsref(D, subD);
-        subV.type='()';
-        subV.subs={':' reorder};
-        V = subsref(V, subV);
-
-        % We normalize the eigenvectors (this should not be done if the
-        % option 'nobalance' is passed (once this option is implemented)).
-        V = V*diag(1./sqrt(diag(V'*V)));
-
-        if nargout <= 1
-            V = diag(D);
-            if additionalSigmaMultiplicity > 0
-                V = [V; sigma*ones(additionalSigmaMultiplicity,1)];
+    % We make sure we won't try to invert a singular matrix (this is
+    % numerically unstable as well)
+    if isequal(type,2)
+        rankShifted = rank(this-sigma*eye(size(this)));
+        if size(this,1) - rankShifted >= nbEigenvalues
+            % Then we know that all requested eigenvalues are equal to
+            % sigma, but we still haven't computed corresponding
+            % eigenvectors (these would be given by a function such as
+            % 'null')
+            V = sigma*ones(nbEigenvalues,1);
+            if nargout >= 2
+                error('Eigenvectors are not computed when sigma is an eigenvalue.')
             end
+            return;
+        elseif size(this,1) - rankShifted > 0
+            error('Sigma is an eigenvalue of the considered matrix. Consider perturbing it a little bit to allow the numerical method to run smoothly.')
         end
+    end
 
-    else
-        error('Unsupported call to gem::eigs')
+    objId1 = this.objectIdentifier;
+    objId2 = sigma.objectIdentifier;
+    [newObjectIdentifierV newObjectIdentifierD] = gem_mex('eigs', objId1, nbEigenvalues, type, objId2);
+
+    % ...  and create a new matlab object to keep this handle
+    V = gem('encapsulate', newObjectIdentifierV);
+    D = gem('encapsulate', newObjectIdentifierD);
+
+    % We make sure the eigenvalues are ordered
+    if isequal(type, 1)
+        [junk reorder] = sort((diag(D)-sigma).^2,1,'descend');
+    else % then type is 2
+        [junk reorder] = sort((diag(D)-sigma).^2,1,'ascend');
+    end
+    subD.type='()';
+    subD.subs={reorder reorder};
+    D = subsref(D, subD);
+    subV.type='()';
+    subV.subs={':' reorder};
+    V = subsref(V, subV);
+
+    % We normalize the eigenvectors (this should not be done if the
+    % option 'nobalance' is passed (once this option is implemented)).
+    V = V*diag(1./sqrt(diag(V'*V)));
+
+    if nargout <= 1
+        V = diag(D);
+        if additionalSigmaMultiplicity > 0
+            V = [V; sigma*ones(additionalSigmaMultiplicity,1)];
+        end
     end
 
 end

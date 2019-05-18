@@ -262,7 +262,15 @@ classdef gem < handle
                     forceDefaultPrecision = 1;
 
                     % Create object
-                    this = gem(varargin{1});
+                    try
+                        this = gem(varargin{1});
+                    catch me
+                        % If there was an error we restore the default
+                        % precision
+                        this.setWorkingPrecision(previousPrecision);
+                        forceDefaultPrecision = 0;
+                        throw(me);
+                    end
 
                     % We don't need precision enforcement anymore
                     forceDefaultPrecision = 0;

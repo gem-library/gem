@@ -69,7 +69,7 @@ function [U S V] = svds(this, varargin)
         
         % We use svd on full matrices to compute all singular values if the
         % size is small
-        if size(this,1) <= 2
+        if size(this,1) <= 20
 %            warning('Too many singular values for svds, using svd on the full matrix instead.');
             this = full(this);
             if nargout >= 2

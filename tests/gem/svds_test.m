@@ -19,8 +19,14 @@ function test_consistency
         validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
         
         % Octave has its own option naming convention
-        assert( abs(svds(x{1}, 2, 'largest') - svds(double(x{1}), 2, 'L')) < 1e-9);
-        assert( abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0)) < 1e-9);
+        assert( sum(abs(svds(x{1}, 2, 'largest') - svds(double(x{1}), 2, 'L'))) < 1e-9);
+        assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
+        
+        % For coverage monitoring purpose (this is tested by matlab)
+        svds(x{1}, 14);
+        svds(x{1}, 15, 'smallest');
+        [U S V] = svds(x{1}, 14);
+        [U S V] = svds(x{1}, 15, 'smallest');
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;
@@ -61,7 +67,7 @@ function test_consistency
     validateDoubleConsistency(@(x) svds(x, 1), x);
     validateDoubleConsistency(@(x) svds(x, 3), x);
     if isOctave
-        assert( abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0)) < 1e-9);
+        assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
     else
         validateDoubleConsistency(@(x) svds(x, 1, 'smallest'), x);
     end
@@ -73,13 +79,15 @@ function test_precision
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     
     if isOctave
+        % NOTE: Due to bug #3, we only check whether the singular values
+        %       are identical for a matrix with degenerate eigenvalues
         x = {gem(eye(15))};
 
         targetPrecision = 10^(-(gemWorkingPrecision-10));
         for i = 1:length(x)
-            [V D] = eigs(x{i});
+            S = svds(x{i});
 
-            precision = double(abs(norm( V*D - x{i}*V ,1)));
+            precision = double(abs(norm( S-1 , 1)));
             assert(precision < targetPrecision);
         end
     else
@@ -87,13 +95,19 @@ function test_precision
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
+                % NOTE: Due to bug #3 we don't check imaginary symmetric
+                %       matrices
+                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
 
                 targetPrecision = 10^(-(gemWorkingPrecision-10));
                 for i = 1:length(x)
-                    [V D] = eigs(x{i});
+                    [U1 S1] = svds(x{i}, 1);
+                    [U S V] = svds(x{i}, 1);
 
-                    precision = double(abs(norm( V*D - x{i}*V ,1)));
+                    assert(norm(U1 - U) <= 1e-6);
+                    assert(norm(S1 - S) <= 1e-6);
+
+                    precision = double(abs(norm( S - U'*x{i}*V ,1)));
                     assert(precision < targetPrecision);
                 end
 

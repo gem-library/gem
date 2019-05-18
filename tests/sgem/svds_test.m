@@ -19,8 +19,14 @@ function test_consistency
         validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
 
         % Octave has its own option naming convention
-        assert( abs(svds(x{1}, 2, 'largest') - svds(double(x{1}), 2, 'L')) < 1e-9);
-        assert( abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0)) < 1e-9);
+        assert( sum(abs(svds(x{1}, 2, 'largest') - svds(double(x{1}), 2, 'L'))) < 1e-9);
+        assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
+
+        % For coverage monitoring purpose (this is tested by matlab)
+        svds(x{1}, 14);
+        svds(x{1}, 15, 'smallest');
+        [U S V] = svds(x{1}, 14);
+        [U S V] = svds(x{1}, 15, 'smallest');
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;
@@ -56,7 +62,7 @@ function test_consistency
     validateDoubleConsistency(@(x) svds(sparse(x), 1), x);
     validateDoubleConsistency(@(x) svds(sparse(x), 3), x);
     if isOctave
-        assert( abs(svds(sparse(x{1}), 2, 'smallest') - svds(double(sparse(x{1})), 2, 0)) < 1e-9);
+        assert( sum(abs(svds(sparse(x{1}), 2, 'smallest') - svds(double(sparse(x{1})), 2, 0))) < 1e-9);
     else
         validateDoubleConsistency(@(x) svds(sparse(x), 1, 'smallest'), x);
     end
@@ -71,9 +77,9 @@ function test_precision
 
         targetPrecision = 10^(-(gemWorkingPrecision-10));
         for i = 1:length(x)
-            [V D] = eigs(x{i});
+            S = svds(x{i});
 
-            precision = double(abs(norm( V*D - x{i}*V ,1)));
+            precision = double(abs(norm( S-1 , 1)));
             assert(precision < targetPrecision);
         end
     else
@@ -81,19 +87,18 @@ function test_precision
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 15, {'PQ', 'PQR', 'PQI', 'PS', 'PSR', 'PSI'});
+                x = generateMatrices(2, 15, {'PQR', 'PQR', 'PQI', 'PS', 'PSR', 'PSI'});
 
-                % Spectra sometimes stops at a precision of ~1e-15! So we don't check
-                % this for now unfortunately with a very high precision,,,
-                %targetPrecision = 10^(-(gemWorkingPrecision-10));
-                targetPrecision = 1e-9;
+                targetPrecision = 10^(-(gemWorkingPrecision-10));
                 for i = 1:length(x)
-                    if size(x{i},1) >= 8
-                        [V D] = eigs(x{i});
+                    [U1 S1] = svds(x{i});
+                    [U S V] = svds(x{i});
 
-                        precision = double(abs(norm( V*D - x{i}*V ,1)));
-                        assert(precision < targetPrecision);
-                    end
+                    assert(norm(U1 - U) <= 1e-6);
+                    assert(norm(S1 - S) <= 1e-6);
+
+                    precision = double(abs(norm( S - U'*x{i}*V ,1)));
+                    assert(precision < targetPrecision);
                 end
 
                 testRun = true;

@@ -114,7 +114,16 @@ function [V D] = eigs(this, varargin)
                 if nargout >= 2
                     error('Eigenvectors are not computed for null eigenvalues.')
                 end
-                if rankMatrix == 1
+                if rankMatrix == 0
+                    % This is the null matrix
+                    if nargout == 2
+                        V = gem(zeros(size(this,1),1));
+                        D = gem(0);
+                    else
+                        V = gem(0);
+                    end
+                    return;
+                elseif rankMatrix == 1
                     warning('There is only one non-zero eigenvalues, computing this one only.');
                 else
                     warning(['There are only ', num2str(rankMatrix), ' non-zero eigenvalues, computing these ones only.']);

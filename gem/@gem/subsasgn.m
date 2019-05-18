@@ -73,7 +73,7 @@ if length(indices) == 1
         values = reshape(values, [numel(values) 1]);
     end
 else
-    if (min(indices{1}) < 1) || (min(indices{2}) < 1)
+    if isempty(indices{1}) || isempty(indices{2}) || (min(indices{1}) < 1) || (min(indices{2}) < 1)
         error('Indices out of bound in gem::subsasgn')
     end
     if (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))

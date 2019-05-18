@@ -20,6 +20,12 @@ function test_consistency
         validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
         validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x, 1e-9, 1);
         validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 2)), x, 1e-9);
+        
+        % For coverage monitoring purpose (this is tested by matlab)
+        eigs(x{1}, [], 14);
+        eigs(x{1}, [], 15, 'sm');
+        [V D] = eigs(x{1}, [], 14);
+        [V D] = eigs(x{1}, [], 15, 'sm');
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;

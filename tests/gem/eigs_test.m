@@ -22,10 +22,11 @@ function test_consistency
         validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 2)), x, 1e-9);
         
         % For coverage monitoring purpose (this is tested by matlab)
-        eigs(x{1}, [], 14);
         eigs(x{1}, [], 15, 'sm');
-        [V D] = eigs(x{1}, [], 14);
         [V D] = eigs(x{1}, [], 15, 'sm');
+        x = {gem(diag(ones(1,5),1) + diag(ones(1,4),-2))};
+        eigs(x{1}, [], 6);
+        [V D] = eigs(x{1}, [], 6);
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;
@@ -56,6 +57,9 @@ function test_consistency
         end
     end
     
+    % null matrix
+    validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {gem(zeros(3))}, 1e-9);
+
     % We also check some low-rank matrices
     vect = gemRand(5,1)*10-5;
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
@@ -66,8 +70,10 @@ function test_consistency
     vect = gemRand(14,1)*10-5;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
 
-    validateDoubleConsistency(@(x) eigs(x, [], 1), x);
-    validateDoubleConsistency(@(x) eigs(x, [], 3), x);
+    % warning: octave doesn't sort out eigenvalues when all don't
+    % converge...
+    validateDoubleConsistency(@(x) sort(eigs(x, [], 1)), x);
+    validateDoubleConsistency(@(x) sort(eigs(x, [], 3)), x);
     if isOctave
         % sometimes octave's algorithm diverges... so we just run them here
         % for coverage purpose (they are teste in matlab)

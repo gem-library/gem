@@ -25,6 +25,10 @@ function test_consistency
         z(:,1) = 1;
         assert(abs(max(max(y-z))) <= 1e-6);
         
+        y(:) = 1;
+        z(:) = 1;
+        assert(abs(max(max(y-z))) <= 1e-6);
+
         y(1:2,1:2) = 1;
         z(1:2,1:2) = 1;
         assert(abs(max(max(y-z))) <= 1e-6);
@@ -55,6 +59,7 @@ function test_consistency
 
     x = gem([]);
     x(1,1:3) = 2;
+    x(5) = 2;
 
     x = gem([]);
     x(1:3,1) = 2;
@@ -97,6 +102,20 @@ function test_inputs
     % index is numeric
     try
         x('1') = 2;
+        assert(false);
+    catch
+    end
+    
+    % cannot assign vector to nothing
+    try
+        x([]) = [1 2];
+        assert(false);
+    catch
+    end
+    
+    % cannot change number of elements
+    try
+        x(1:2) = [1 2 3];
         assert(false);
     catch
     end

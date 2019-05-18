@@ -52,6 +52,9 @@ function test_consistency
             end
         end
     end
+    
+    % null matrix
+    validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {sgem(zeros(3))}, 1e-9);
 
     % We also check some low-rank matrices
     vect = gemRand(5,1)*10-5;
@@ -63,8 +66,10 @@ function test_consistency
     vect = gemRand(14,1)*10-5;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
 
-    validateDoubleConsistency(@(x) eigs(sparse(x), [], 1), x);
-    validateDoubleConsistency(@(x) eigs(sparse(x), [], 3), x);
+    % warning: octave doesn't sort out eigenvalues when all don't
+    % converge...
+    validateDoubleConsistency(@(x) sort(eigs(sparse(x), [], 1)), x);
+    validateDoubleConsistency(@(x) sort(eigs(sparse(x), [], 3)), x);
     if isOctave
         % sometimes octave's algorithm diverges... so we just run them here
         % for coverage purpose (they are teste in matlab)

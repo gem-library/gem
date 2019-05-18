@@ -166,12 +166,7 @@ function [V D] = eigs(this, varargin)
                 end
                 if rankMatrix == 0
                     % This is the null matrix
-                    if nargout == 2
-                        V = gem(zeros(size(this,1),1));
-                        D = gem(0);
-                    else
-                        V = gem(0);
-                    end
+                    V = gem(0);
                     return;
                 elseif rankMatrix == 1
                     warning('There is only one non-zero eigenvalues, computing this one only.');

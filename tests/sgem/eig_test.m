@@ -7,9 +7,5 @@ function test_suite = eig_test()
 end
 
 function test_inputs
-    try
-        eig(sgem(1));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eig(sgem(1)));
 end

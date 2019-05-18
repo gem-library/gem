@@ -28,57 +28,21 @@ function test_inputs
     x = sparse(gemRand(3));
     
     % maximum 2 dimensions
-    try
-        x(1,2,3);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x(1,2,3));
     
     % minimum and maximum indices
-    try
-        x(0);
-        assert(false);
-    catch
-    end
-    try
-        x(1,0);
-        assert(false);
-    catch
-    end
-    try
-        x(20);
-        assert(false);
-    catch
-    end
-    try
-        x(1:4,1:4);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x(0));
+    shouldProduceAnError(@() x(1,0));
+    shouldProduceAnError(@() x(20));
+    shouldProduceAnError(@() x(1:4,1:4));
     
     % index is numeric
-    try
-        x('1');
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x('1'));
     
     % we cannot access protected properties
-    try
-        x.objectIdentifier;
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x.objectIdentifier);
     
     % we cannot create an object of more than 2 dimensions
-    try
-        x(cat(3,[1 2; 1 2], [2 3; 2 3]));
-        assert(false);
-    catch
-    end
-    try
-        x(1,cat(3,[1 2; 1 2], [2 3; 2 3]));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x(cat(3,[1 2; 1 2], [2 3; 2 3])));
+    shouldProduceAnError(@() x(1,cat(3,[1 2; 1 2], [2 3; 2 3])));
 end

@@ -21,15 +21,6 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        all(gemRand, 'alll');
-        assert(false);
-    catch
-    end
-    
-    try
-        all(gemRand, -1);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() all(gemRand, 'alll'));
+    shouldProduceAnError(@() all(gemRand, -1));
 end

@@ -136,89 +136,37 @@ end
 
 function test_inputs
     % maximum 3 input supported
-    try
-        eigs(gemRand(2), [], 1, gemRand(1), gemRand(1));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2), [], 1, gemRand(1), gemRand(1)));
     
     % input 2 must be empty
-    try
-        eigs(gemRand(2), gemRand(1));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2), gemRand(1)));
     
     % input 3 is a single positive number
-    try
-        eigs(gemRand(2), [], gemRand(1,2));
-        assert(false);
-    catch
-    end
-    try
-        eigs(gemRand(2), [], -1);
-        assert(false);
-    catch
-    end
-    try
-        eigs(gemRand(2), [], 4);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2), [], gemRand(1,2)));
+    shouldProduceAnError(@() eigs(gemRand(2), [], -1));
+    shouldProduceAnError(@() eigs(gemRand(2), [], 4));
     [V D] = eigs(gemRand(2), [], 0);
     assert(isempty(V));
     assert(isempty(D));
     
     % input 4 cannot be arbitrary
-    try
-        eigs(gemRand(2), [], 1, 'small');
-        assert(false);
-    catch
-    end
-    try
-        eigs(gemRand(2), [], 1, [1 2]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2), [], 1, 'small'));
+    shouldProduceAnError(@() eigs(gemRand(2), [], 1, [1 2]));
     
     % maximum 2 outputs supported
-    try
-        [V D W] = eigs(gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2)), 3);
     
     % input matrix must be squares
-    try
-        eigs(gemRand(2,3));
-        assert(false);
-    catch
-    end
-    try
-        eigs(gemRand(20,30));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(gemRand(2,3)));
+    shouldProduceAnError(@() eigs(gemRand(20,30)));
     
     % no eigenvectors computed for zero eigenvalues
-    try
-        vect = gemRand(4,1);
-        [V D] = eigs(vect*vect', [], 2);
-        assert(false);
-    catch
-    end
-    try
-        vect = gemRand(4,1);
-        [V D] = eigs(vect*vect', [], 1, 'sm');
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(vect*vect', [], 2), 2);
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(vect*vect', [], 1, 'sm'), 2);
 
     % no computation over an existing eigenvalue
-    try
-        vect = gemRand(4,1);
-        eigs(vect*vect' + (vect+1)*(vect+1)', [], 3, 0)
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(vect*vect' + (vect+1)*(vect+1)', [], 3, 0));
 end

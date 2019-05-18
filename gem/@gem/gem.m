@@ -332,7 +332,7 @@ classdef gem < handle
             end
             if nargin >= 1
                 if precision < 1
-                    error('The precision need to be larger or equal to 1    ');
+                    error('The precision need to be larger or equal to 1');
                 end
                 precision = double(newValue);
                 % We call the mex interface to make this the default

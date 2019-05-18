@@ -75,59 +75,86 @@ function test_inputs
     % maximum 2 dimensions
     try
         x(1,2,3) = gem(1);
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % only parentheses
     try
         x.t = gem(1);
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % minimum and maximum indices
     try
         x(0) = 1;
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     try
         x(1,0) = 1;
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     try
         x(20) = 1;
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % index is numeric
     try
         x('1') = 2;
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % cannot assign vector to nothing
     try
         x([]) = [1 2];
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % cannot change number of elements
     try
         x(1:2) = [1 2 3];
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
     
     % we cannot create an object of more than 2 dimensions
     try
         x(1:2,1:2) = [1 2 3; 1 2 3];
-        assert(false);
-    catch
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
     end
 end

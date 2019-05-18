@@ -21,17 +21,8 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        sum(sparse(gemRand), 'alll');
-        assert(false);
-    catch
-    end
-    
-    try
-        sum(sparse(gemRand), -1);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() sum(sparse(gemRand), 'alll'));
+    shouldProduceAnError(@() sum(sparse(gemRand), -1));
 end
 
 function test_type

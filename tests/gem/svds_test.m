@@ -130,65 +130,29 @@ end
 
 function test_inputs
     % maximum 3 input supported
-    try
-        svds(gemRand(2), 1, gemRand(1), gemRand(1));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(gemRand(2), 1, gemRand(1), gemRand(1)));
     
     % input 2 is a single positive number
-    try
-        svds(gemRand(2), gemRand(1,2));
-        assert(false);
-    catch
-    end
-    try
-        svds(gemRand(2), -1);
-        assert(false);
-    catch
-    end
-    try
-        svds(gemRand(2), 4);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(gemRand(2), gemRand(1,2)));
+    shouldProduceAnError(@() svds(gemRand(2), -1));
+    shouldProduceAnError(@() svds(gemRand(2), 4));
     [U S V] = svds(gemRand(2), 0);
     assert(isempty(U));
     assert(isempty(S));
     assert(isempty(V));
     
     % input 3 cannot be arbitrary
-    try
-        svds(gemRand(2), 1, 'small');
-        assert(false);
-    catch
-    end
-    try
-        svds(gemRand(2), 1, [1 2]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(gemRand(2), 1, 'small'));
+    shouldProduceAnError(@() svds(gemRand(2), 1, [1 2]));
     
     % maximum 3 outputs supported
-    try
-        [U S V P] = svds(gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(gemRand(2)), 4);
         
     % no eigenvectors computed for zero eigenvalues
-    try
-        vect = gemRand(4,1);
-        [U S V] = svds(vect*vect', 2);
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() svds(vect*vect', 2), 3);
     
     % no computation over an existing eigenvalue
-    try
-        vect = gemRand(4,1);
-        svds(vect*vect' + (vect+1)*(vect+1)', 3, 'smallest')
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() svds(vect*vect' + (vect+1)*(vect+1)', 3, 'smallest'));
 end

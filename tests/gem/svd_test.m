@@ -32,23 +32,11 @@ end
 
 function test_inputs
     % maximum 2 input supported
-    try
-        svd(gemRand(2), 'econ', gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svd(gemRand(2), 'econ', gemRand(2)));
     
     % input 1 cannot be anything
-    try
-        svd(gemRand(2), 'economic');
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svd(gemRand(2), 'economic'));
     
     % maximum 2 outputs supported
-    try
-        [S V D P] = svd(gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svd(gemRand(2)), 4);
 end

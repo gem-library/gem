@@ -31,23 +31,11 @@ end
 
 function test_inputs
     % maximum 1 input supported
-    try
-        eig(gemRand(2), gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eig(gemRand(2), gemRand(2)));
     
     % maximum 2 outputs supported
-    try
-        [V D W] = eig(gemRand(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eig(gemRand(2)), 3);
     
     % input matrix must be squares
-    try
-        eig(gemRand(2,3));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eig(gemRand(2,3)));
 end

@@ -21,15 +21,6 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        any(sparse(gemRand), 'alll');
-        assert(false);
-    catch
-    end
-    
-    try
-        any(sparse(gemRand), -1);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() any(sparse(gemRand), 'alll'));
+    shouldProduceAnError(@() any(sparse(gemRand), -1));
 end

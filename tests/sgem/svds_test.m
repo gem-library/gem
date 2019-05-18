@@ -122,65 +122,29 @@ function test_inputs
     x = sparse(gemRand(2));
     
     % maximum 3 input supported
-    try
-        svds(x, 1, 2, 2);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(x, 1, 2, 2));
     
     % input 2 is a single positive number
-    try
-        svds(x, [1 2]);
-        assert(false);
-    catch
-    end
-    try
-        svds(x, -1);
-        assert(false);
-    catch
-    end
-    try
-        svds(x, 4);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(x, [1 2]));
+    shouldProduceAnError(@() svds(x, -1));
+    shouldProduceAnError(@() svds(x, 4));
     [U S V] = svds(x, 0);
     assert(isempty(U));
     assert(isempty(S));
     assert(isempty(V));
     
     % input 3 cannot be arbitrary
-    try
-        svds(x, 1, 'small');
-        assert(false);
-    catch
-    end
-    try
-        svds(x, 1, [1 2]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(x, 1, 'small'));
+    shouldProduceAnError(@() svds(x, 1, [1 2]));
     
     % maximum 3 outputs supported
-    try
-        [U S V P] = svds(x);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svds(x), 4);
     
     % no eigenvectors computed for zero eigenvalues
-    try
-        vect = gemRand(4,1);
-        [U S V P] = svds(sparse(vect*vect'), 2);
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() svds(sparse(vect*vect'), 2), 4);
     
     % no computation over an existing eigenvalue
-    try
-        vect = gemRand(4,1);
-        svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest')
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest'));
 end

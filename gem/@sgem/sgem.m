@@ -112,11 +112,12 @@ classdef sgem < handle
                         this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
                         || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
-                        % For integers, we set the values manually to make
-                        % sure we don't loose any precision
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, zeros(size(s)), m, n, this.getWorkingPrecision);
+                        % For integers, we first convert the values
+                        % manually to make sure we don't loose any
+                        % precision
                         s_values = gem(s);
-                        this(:) = s_values;
+                        objId = s_values.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     else
                         if ~isa(s, 'double')
                             s = double(s);
@@ -127,6 +128,8 @@ classdef sgem < handle
                     % We first create a dense gem object, then return its
                     % sparse version
                     this = sgem(gem(varargin{1}));
+                else
+                    error('Wrong instruction upon creation of a new sgem object.');
                 end
             elseif nargin == 2
                 if isequal(lower(varargin{1}),'encapsulate') && isequal(class(varargin{2}), 'uint64')

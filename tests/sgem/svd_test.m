@@ -7,9 +7,5 @@ function test_suite = svd_test()
 end
 
 function test_inputs
-    try
-        svd(sgem(1));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() svd(sgem(1)));
 end

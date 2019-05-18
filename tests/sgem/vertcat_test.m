@@ -45,9 +45,5 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        vertcat(sgem([1 2]), sgem(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() vertcat(sgem([1 2]), sgem(2)));
 end

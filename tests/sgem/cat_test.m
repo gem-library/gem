@@ -31,9 +31,5 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        cat(3, sgem(1), sgem(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() cat(3, sgem(1), sgem(2)));
 end

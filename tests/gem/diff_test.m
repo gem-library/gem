@@ -37,27 +37,8 @@ function test_empty
 end
 
 function test_inputs
-    try
-        diff(gem([1 2 3]), 1.5);
-        assert(false);
-    catch
-    end
-    
-    try
-        diff(gem([1 2 3]), [1 2]);
-        assert(false);
-    catch
-    end
-    
-    try
-        diff(gem([1 2 3]), 1, 1.5);
-        assert(false);
-    catch
-    end
-    
-    try
-        diff(gem([1 2 3]), 1, [1 2]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() diff(gem([1 2 3]), 1.5));
+    shouldProduceAnError(@() diff(gem([1 2 3]), [1 2]));
+    shouldProduceAnError(@() diff(gem([1 2 3]), 1, 1.5));
+    shouldProduceAnError(@() diff(gem([1 2 3]), 1, [1 2]));
 end

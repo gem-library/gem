@@ -16,22 +16,10 @@ function test_inputs
     assert(isequal(size(gemRandn), [1 1]));
     assert(isequal(size(gemRand(3)), [3 3]));
     assert(isequal(size(gemRand([4 5])), [4 5]));
-    try
-        gemRand([1,2,3]);
-        assert(false);
-    catch
-    end
-    
+    shouldProduceAnError(@() gemRand([1,2,3]));
+
     assert(isequal(size(gemRand(4, 5)), [4 5]));
-    try
-        gemRand([1 2],2);
-        assert(false);
-    catch
-    end
-    
-    try
-        gemRand(1,2,3);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() gemRand([1 2],2));
+
+    shouldProduceAnError(@() gemRand(1,2,3));
 end

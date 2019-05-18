@@ -31,9 +31,5 @@ function test_empty
 end
 
 function test_inputs
-    try
-        diag(sgem(1), 1.5);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() diag(sgem(1), 1.5));
 end

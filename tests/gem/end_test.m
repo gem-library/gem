@@ -15,9 +15,5 @@ end
 
 function test_inputs
     x = gemRand(2,3);
-    try
-        x(1,1,end);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() x(1,1,end));
 end

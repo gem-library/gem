@@ -30,10 +30,6 @@ function test_seed
 end
 
 function test_inputs
-    try
-        gemRng([2 3]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() gemRng([2 3]));
 end
 

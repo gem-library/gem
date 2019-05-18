@@ -40,9 +40,5 @@ function test_consistency
 end
 
 function test_inputs
-    try
-        horzcat(gem([1 2]'), gem(2));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() horzcat(gem([1 2]'), gem(2)));
 end

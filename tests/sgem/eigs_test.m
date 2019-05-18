@@ -148,89 +148,37 @@ function test_inputs
     x = sparse(gemRand(2));
     
     % maximum 4 input supported
-    try
-        eigs(x, [], 1, 2, 2);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(x, [], 1, 2, 2));
     
     % input 2 must be empty
-    try
-        eigs(x, 2);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(x, 2));
     
     % input 3 is a single positive number
-    try
-        eigs(x, [], [1 2]);
-        assert(false);
-    catch
-    end
-    try
-        eigs(x, [], -1);
-        assert(false);
-    catch
-    end
-    try
-        eigs(x, [], 4);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(x, [], [1 2]));
+    shouldProduceAnError(@() eigs(x, [], -1));
+    shouldProduceAnError(@() eigs(x, [], 4));
     [V D] = eigs(x, [], 0);
     assert(isempty(V));
     assert(isempty(D));
     
     % input 4 cannot be arbitrary
-    try
-        eigs(x, [], 1, 'small');
-        assert(false);
-    catch
-    end
-    try
-        eigs(x, [], 1, [1 2]);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(x, [], 1, 'small'));
+    shouldProduceAnError(@() eigs(x, [], 1, [1 2]));
     
     % maximum 2 outputs supported
-    try
-        [V D W] = eigs(x);
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(x), 3);
     
     % input matrix must be squares
-    try
-        eigs(sparse(gemRand(2,3)));
-        assert(false);
-    catch
-    end
-    try
-        eigs(sparse(gemRand(20,30)));
-        assert(false);
-    catch
-    end
+    shouldProduceAnError(@() eigs(sparse(gemRand(2,3))));
+    shouldProduceAnError(@() eigs(sparse(gemRand(20,30))));
     
     % no eigenvectors computed for zero eigenvalues
-    try
-        vect = gemRand(4,1);
-        [V D] = eigs(sparse(vect*vect'), [], 2);
-        assert(false);
-    catch
-    end
-    try
-        vect = gemRand(4,1);
-        [V D] = eigs(sparse(vect*vect'), [], 1, 'sm');
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 2), 2);
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 1, 'sm'), 2);
     
     % no computation over an existing eigenvalue
-    try
-        vect = gemRand(4,1);
-        eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0)
-        assert(false);
-    catch
-    end
+    vect = gemRand(4,1);
+    shouldProduceAnError(@() eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0));
 end

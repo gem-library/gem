@@ -24,6 +24,10 @@ function [V D] = eigs(this, varargin)
         error('Too many arguments in gem::eigs');
     end
 
+    if size(this,1) ~= size(this,2)
+        error('Matrix must be square in gem::eigs');
+    end
+    
     if (length(varargin) > 0) && (~isempty(varargin{1}))
         error('Second argument in sgem::eigs should be empty');
     end

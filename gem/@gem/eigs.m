@@ -1,15 +1,17 @@
 % eigs - partial eigenvalues and eigenvectors
 %
 % supported formats :
-%   e = eigs(a, [k])          : k eigenvalues of with largest magnitude
-%   [v d] = eigs(a, [k])      : k eigenvectors and eigenvalues of a
-%                               with largest magnitude (a*v = v*d)
-%   [v d] = eigs(a, k, sigma) : first k eigenvectors and eigenvalues of a
-%                               smallest in magnitude to sigma.
-%                               With sigma = 'lm', 'sm', eigenvalues
-%                               with largest or smallest magnitude.
-%
-% The default value of k is 6.
+%   e = eigs(a)                   : 6 eigenvalues of with largest magnitude
+%   e = eigs(a, [], k)            : k eigenvalues of with largest magnitude
+%   [v d] = eigs(a, [], k)        : k eigenvectors and eigenvalues of a
+%                                   with largest magnitude (a*v = v*d)
+%   [v d] = eigs(a, [], k, sigma) : first k eigenvectors and eigenvalues of
+%                                   a smallest in magnitude to sigma.
+%                                   With sigma = 'lm' or 'largestabs' for
+%                                   eigenvalues with the largest magnitude,
+%                                   and sigma = 'sm' or 'smallestabs' for
+%                                   eigenvalues with the smallest
+%                                   magnitude.
 %
 % Note:
 %  - The precision of the computation performed here is gemWorkingPrecision*2/3
@@ -17,41 +19,49 @@
 %    inverted, so if this is crucial information, one should double check
 %    the last eigenvalues by computing a few more eigenvalues than needed.
 function [V D] = eigs(this, varargin)
-    % This function can involve at most two parameters
-    if length(varargin) > 2
-        error('Wrong number of arguments in gem::eigs');
+    % This function can involve at most three parameters
+    if length(varargin) > 3
+        error('Too many arguments in gem::eigs');
     end
 
-    if (length(varargin) > 0) && (~isnumeric(varargin{1}) || (numel(varargin{1}) ~= 1))
-        error('The second argument of gem::eigs must be a single number');
-    elseif (length(varargin) > 0) && ~isequal(class(varargin{1}), 'double')
+    if (length(varargin) > 0) && (~isempty(varargin{1}))
+        error('Second argument in sgem::eigs should be empty');
+    end
+    
+    if (length(varargin) > 1) && (~isnumeric(varargin{2}) || (numel(varargin{2}) ~= 1))
+        error('The third argument of gem::eigs must be a single number');
+    elseif (length(varargin) > 1) && ~isequal(class(varargin{2}), 'double')
         % We make sure that the number of eigenvalues to be computed was
         % specified as a double
-        varargin{1} = double(varargin{1});
+        varargin{2} = double(varargin{2});
     end
 
     % Extract the requested number of eigenvalues
-    if length(varargin) > 0
-        nbEigenvalues = varargin{1};
+    if length(varargin) > 1
+        nbEigenvalues = varargin{2};
     else
         nbEigenvalues = min(size(this,1), 6);
     end
 
     % The number of eigenvalues computed must be larger than zero
-    if nbEigenvalues < 1
-        error('gem::eigs cannot compute less than 1 eigenvalue');
+    if (nbEigenvalues == 0) || isempty(this)
+        V = gem([]);
+        D = gem([]);
+        return;
+    elseif nbEigenvalues < 0
+        error('gem::eigs cannot compute a negative number of eigenvalues');
     end
 
     % We check if there is a second parameter
     type = 1;
     sigma = 0;
-    if length(varargin) > 1
-        if ischar(varargin{2})
-            switch lower(varargin{2})
-                case 'lm'
+    if length(varargin) > 2
+        if ischar(varargin{3})
+            switch lower(varargin{3})
+                case {'lm', 'largestabs'}
                     % Largest magnitude
                     type = 1;
-                case 'sm'
+                case {'sm', 'smallestabs'}
                     % Smallest magnitude
                     type = 2;
 % % The following cases are not implemented at the moment:
@@ -67,17 +77,12 @@ function [V D] = eigs(this, varargin)
                     error('Third argument of gem::eigs not recognized');
             end
         else
-            if numel(varargin{2}) > 1
+            if numel(varargin{3}) > 1
                 error('sigma must be a single number in gem::eigs');
             end
             type = 2;
-            sigma = varargin{2};
+            sigma = varargin{3};
         end
-    end
-
-    % There should be no more parameters
-    if length(varargin) > 2
-        error('Too many arguments in gem::eigs');
     end
 
     if nbEigenvalues > size(this,1) - 2 + ishermitian(this)
@@ -91,8 +96,10 @@ function [V D] = eigs(this, varargin)
             [V D] = eig(this);
             % We make sure the eigenvalues are ordered (not guaranteed by
             % eig)
-            [D reorder] = sort(diag(D),1,'descend');
-            D = diag(D);
+            [junk reorder] = sort((diag(D)-sigma).^2,1,'descend');
+            subD.type='()';
+            subD.subs={reorder reorder};
+            D = subsref(D, subD);
             subV.type='()';
             subV.subs={':' reorder};
             V = subsref(V, subV);
@@ -113,9 +120,12 @@ function [V D] = eigs(this, varargin)
             end
         else
             V = eig(this);
-            % We make sure the eigenvalues are ordered (not guaranteed by
-            % eig)
-            V = sort(V,1,'descend');
+            % We make sure the eigenvalues are ordered by magnitude (not
+            % guaranteed by eig)
+            [junk reorder] = sort((V-sigma).^2,1,'descend');
+            subV.type='()';
+            subV.subs={reorder [1]};
+            V = subsref(V, subV);
             if isequal(type, 2)
                 subV.type='()';
                 subV.subs={[size(V,1):-1:size(V,1)-nbEigenvalues+1] [1]};
@@ -141,7 +151,7 @@ function [V D] = eigs(this, varargin)
             sigma = gem(sigma);
         end
 
-        % The algorithm we use doen't handle eigenvalues equal to sigma. So
+        % The algorithm we use doesn't handle eigenvalues equal to sigma. So
         % this variable tells how many times it needs to be added
         % mannually.
         additionalSigmaMultiplicity = 0;
@@ -190,6 +200,19 @@ function [V D] = eigs(this, varargin)
         % ...  and create a new matlab object to keep this handle
         V = gem('encapsulate', newObjectIdentifierV);
         D = gem('encapsulate', newObjectIdentifierD);
+
+        % We make sure the eigenvalues are ordered
+        if isequal(type, 1)
+            [junk reorder] = sort((diag(D)-sigma).^2,1,'descend');
+        else % then type is 2
+            [junk reorder] = sort((diag(D)-sigma).^2,1,'ascend');
+        end
+        subD.type='()';
+        subD.subs={reorder reorder};
+        D = subsref(D, subD);
+        subV.type='()';
+        subV.subs={':' reorder};
+        V = subsref(V, subV);
 
         % We normalize the eigenvectors (this should not be done if the
         % option 'nobalance' is passed (once this option is implemented)).

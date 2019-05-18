@@ -10,14 +10,15 @@ if nargin < 2
 end
 
 if nargin < 3
-    epsilon = 1e-13;
+    epsilon = 1e-12;
 end
 
 if ~isa(data, 'cell')
     error('data should be provided in a cell array');
 end
 
-checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(x-y))) <= epsilon));
+xdy = @(x,y) double(x)-double(y); % To circumvent bug in octave 4.4 not present in octave 4.2
+checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(xdy(x,y)))) <= epsilon));
 % To check the value of each test individually, use:
 %   cellfun(@(x) full(max(max(abs(func(x)-func(double(x)))))), data)
 %   cellfun(@(x) full(checkOk(func(x), func(double(x)))), data)

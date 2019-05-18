@@ -12,7 +12,7 @@ if nargin < 4
 end
 
 if nargin < 5
-    epsilon = 1e-14;
+    epsilon = 1e-12;
 end
 
 if ~isa(data1, 'cell') || ~isa(data2, 'cell') || ~isa(data3, 'cell')
@@ -25,7 +25,8 @@ if ((numel(data1) > 1) && (numel(data2) > 1) && ~isequal(size(data1), size(data2
     error('incompatible data dimensions');
 end
 
-checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(x-y))) <= epsilon));
+xdy = @(x,y) double(x)-double(y); % To circumvent bug in octave 4.4 not present in octave 4.2
+checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (isequal(numel(x), numel(y)) && (max(max(abs(xdy(x,y)))) <= epsilon));
 if numel(data1) == 1
     if numel(data2) == 1
         % To check the value of each test individually, use:

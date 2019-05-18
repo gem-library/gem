@@ -5,14 +5,23 @@
 %   s = svd(a,'econ')       : singular values of a
 %   [u s v] = svd(a,'econ') : singular values of a with left and right
 %                             economic singular vectors u and v (a = u*s*v')
+%
+% Option 'econ' can be replaced by 0 as well.
 function [U S V] = svd(this, varargin)
     % This function can involve at most one argument
     if length(varargin) > 1
         error('Wrong number of arguments in gem::svd');
     end
 
+    if isempty(this)
+        U = gem([]);
+        S = gem([]);
+        V = gem([]);
+        return;
+    end
+    
     % We check if the arguments are fine
-    if (nargout > 1) && ((length(varargin) < 1) || ~isequal(varargin{1},'econ'))
+    if ((nargout > 1) || (nargin >= 2)) && ((length(varargin) < 1) || (~isequal(varargin{1},'econ') && ((numel(varargin{1}) ~= 1) || (varargin{1} ~= 0))))
         error('Only the economic decomposition is available in gem::svd');
     end
 

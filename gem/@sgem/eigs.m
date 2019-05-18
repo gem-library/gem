@@ -40,7 +40,7 @@ function [V D] = eigs(this, varargin)
     if length(varargin) > 1
         nbEigenvalues = varargin{2};
     else
-        nbEigenvalues = min(size(this,1), 6);
+        nbEigenvalues = min(size(this,1) - 2 + ishermitian(this), 6);
     end
 
     % The number of eigenvalues computed must be larger than zero

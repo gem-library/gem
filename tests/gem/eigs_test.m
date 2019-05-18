@@ -8,31 +8,44 @@ end
 
 function test_consistency
     
-    % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
-    testRun = false;
-    while ~testRun
-        try
-            x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
+    % Octave has trouble with its own eigs, so we go molo!
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    
+    if isOctave
+        x = {gem(eye(15))};
 
-            validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9);
-            validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9);
+        validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 2)), x, 1e-9);
+    else
+        % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
+        testRun = false;
+        while ~testRun
+            try
+                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
 
-            validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9);
-            validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9);
+                validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
+                validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);
 
-%             % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
-%             for i = 1:length(x)
-%                 if rank(x{i}) == size(x{i},1)
-%                     validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x(i), 1e-9);
+                validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9, 1);
+                validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
+
+%                 % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
+%                 for i = 1:length(x)
+%                     if rank(x{i}) == size(x{i},1)
+%                         validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x(i), 1e-9);
+%                     end
 %                 end
-%             end
-%             validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 1)), x, 1e-9);
-%             validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 1)), x, 1e-9);
+%                 validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 1)), x, 1e-9);
 
-            testRun = true;
-        catch me
-            if ~isequal(me.message, 'Eigenvalue decomposition failed.')
-                assert(false);
+                testRun = true;
+            catch me
+                if ~isequal(me.message, 'Eigenvalue decomposition failed.')
+                    assert(false);
+                end
             end
         end
     end
@@ -46,24 +59,40 @@ function test_consistency
 end
 
 function test_precision
-    % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
-    testRun = false;
-    while ~testRun
-        try
-            x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
 
-            targetPrecision = 10^(-(gemWorkingPrecision-10));
-            for i = 1:length(x)
-                [V D] = eigs(x{i});
+    % Octave has trouble with its own eigs, so we go molo!
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    
+    if isOctave
+        x = {gem(eye(15))};
 
-                precision = double(abs(norm( V*D - x{i}*V ,1)));
-                assert(precision < targetPrecision);
-            end
-            
-            testRun = true;
-        catch me
-            if ~isequal(me.message, 'Eigenvalue decomposition failed.')
-                assert(false);
+        targetPrecision = 10^(-(gemWorkingPrecision-10));
+        for i = 1:length(x)
+            [V D] = eigs(x{i});
+
+            precision = double(abs(norm( V*D - x{i}*V ,1)));
+            assert(precision < targetPrecision);
+        end
+    else
+        % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
+        testRun = false;
+        while ~testRun
+            try
+                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
+
+                targetPrecision = 10^(-(gemWorkingPrecision-10));
+                for i = 1:length(x)
+                    [V D] = eigs(x{i});
+
+                    precision = double(abs(norm( V*D - x{i}*V ,1)));
+                    assert(precision < targetPrecision);
+                end
+
+                testRun = true;
+            catch me
+                if ~isequal(me.message, 'Eigenvalue decomposition failed.')
+                    assert(false);
+                end
             end
         end
     end

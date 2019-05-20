@@ -15,7 +15,7 @@ function test_consistency
         x = {sgem(eye(15))};
 
         validateDoubleConsistency(@(x) svds(x), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) svds(x, 1), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) svds(x, gem(1)), x, 1e-9, 1);
         validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
 
         % Octave has its own option naming convention
@@ -23,12 +23,13 @@ function test_consistency
         assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
 
         % For coverage monitoring purpose (this is tested by matlab)
-        svds(x{1}, 14, 'smallest');
+        svds(x{1}, 15, 'smallest');
         [U S] = svds(x{1}, 5, 'smallest');
-        [U S V] = svds(x{1}, 14, 'smallest');
-        x = {gem(diag(ones(1,5),1) + diag(ones(1,4),-2))};
-        svds(x{1}, 4);
-        [U S V] = svds(x{1}, 4);
+        [U S V] = svds(x{1}, 5, 'smallest');
+        [U S V] = svds(x{1}, 15, 'smallest');
+        x = {sgem(diag(ones(1,5),1) + diag(ones(1,4),-2))};
+        svds(x{1}, 5);
+        [U S V] = svds(x{1}, 5);
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;
@@ -39,8 +40,7 @@ function test_consistency
                 for i = 1:length(x)
                     if min(size(x{i})) >= 8
                         validateDoubleConsistency(@(x) svds(x), x(i), 1e-9, 1);
-                        validateDoubleConsistency(@(x) svds(x, 3), x(i), 1e-9, 1);
-                        validateDoubleConsistency(@(x) svds(x, 3), x(i), 1e-9, 1);
+                        validateDoubleConsistency(@(x) svds(x, gem(3)), x(i), 1e-9, 1);
                         validateDoubleConsistency(@(x) svds(x, 3, 'largest'), x(i), 1e-9, 1);
                     end
                 end

@@ -15,7 +15,7 @@ function test_consistency
         x = {gem(eye(15))};
 
         validateDoubleConsistency(@(x) svds(x), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) svds(x, 1), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) svds(x, gem(1)), x, 1e-9, 1);
         validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
         
         % Octave has its own option naming convention
@@ -38,8 +38,7 @@ function test_consistency
                 x = generateMatrices(2, 5, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
 
                 validateDoubleConsistency(@(x) svds(x), x, 1e-9, 1);
-                validateDoubleConsistency(@(x) svds(x, 1), x, 1e-9, 1);
-
+                validateDoubleConsistency(@(x) svds(x, gem(1)), x, 1e-9, 1);
                 validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
                 validateDoubleConsistency(@(x) svds(x, min(2,size(x,1)), 'largest'), x, 1e-9, 1);
 

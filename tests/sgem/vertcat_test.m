@@ -7,7 +7,7 @@ function test_suite = vertcat_test()
 end
 
 function test_consistency
-    y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
+    y = generateMatrices(15, 20, {'A', 'AR', 'AI'});
     
     % We also want to have at least one 'large' matrix
     y2 = generateMatrices(1, 20, {'A'});

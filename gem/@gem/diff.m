@@ -16,14 +16,15 @@ function result = diff(this, n, dim)
         if (numel(n) ~= 1) || (n < 1) || (round(n) ~= n)
             error('N must be an integer');
             % Here we could support more than matlab by allowing 
-            % differences of order 0 (and returns itself)
+            % differences of order 0 (and returns itself) For this, also
+            % uncomment the lines below
         end
     end
     
-    if n == 0
-        result = this;
-        return;
-    end
+%     if n == 0
+%         result = this;
+%         return;
+%     end
     
     if n > 1
         if nargin < 3

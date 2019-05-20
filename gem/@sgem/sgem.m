@@ -203,8 +203,14 @@ classdef sgem < handle
                     % this data to the C++ library. Since we are creating a
                     % sparse object, we transfer the information in an
                     % optimized way
-                    i = double(varargin{1}); % We make sure i and j are double arrays
-                    j = double(varargin{2});
+                    i = varargin{1};
+                    j = varargin{2};
+                    if ~isa(i, 'double')
+                        i = double(i); % We make sure i and j are double arrays
+                    end
+                    if ~isa(j, 'double')
+                        j = double(j);
+                    end
                     s = full(varargin{3}); % We make sure s is not sparse
                     m = max(i);
                     n = max(j);
@@ -296,11 +302,23 @@ classdef sgem < handle
                     % this data to the C++ library. Since we are creating a
                     % sparse object, we transfer the information in an
                     % optimized way
-                    i = double(varargin{1}); % We make sure i and j are double arrays
-                    j = double(varargin{2});
+                    i = varargin{1};
+                    j = varargin{2};
+                    if ~isa(i, 'double')
+                        i = double(i); % We make sure i and j are double arrays
+                    end
+                    if ~isa(j, 'double')
+                        j = double(j);
+                    end
                     s = full(varargin{3}); % We make sure s is not sparse
-                    m = double(varargin{4}); % We make sure m and n are doubles
-                    n = double(varargin{5});
+                    m = varargin{4};
+                    n = varargin{5};
+                    if ~isa(m, 'double')
+                        m = double(m); % We make sure m and n are doubles
+                    end
+                    if ~isa(n, 'double')
+                        n = double(n);
+                    end
                     if numel(i) ~= numel(s)
                         s = ones(1,numel(i))*s;
                     end
@@ -332,7 +350,10 @@ classdef sgem < handle
                         objId = s.objectIdentifier;
                         this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
                     else
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, double(s), m, n, this.getWorkingPrecision);
+                        if ~isa(s, 'double') % we make sure s is a double
+                            s = double(s);
+                        end
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, this.getWorkingPrecision);
                     end
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
@@ -432,7 +453,10 @@ classdef sgem < handle
                 if precision < 1
                     error('The precision need to be larger or equal to 1    ');
                 end
-                precision = double(newValue);
+                if ~isa(newValue, 'double')
+                    newValue = double(newValue);
+                end
+                precision = newValue;
                 % We call the mex interface to make this the default
                 % working precision
                 sgem_mex('setWorkingPrecision', precision);
@@ -448,7 +472,10 @@ classdef sgem < handle
             end
             if nargin >= 1
                 if newValue >= 1
-                    precision = double(newValue);
+                    if ~isa(newValue, 'double')
+                        newValue = double(newValue);
+                    end
+                    precision = newValue;
                 else
                     % This means plotting as many nonzero digits as
                     % available
@@ -467,7 +494,10 @@ classdef sgem < handle
             end
             if nargin >= 1
                 if (newValue == 1) || (newValue == 0)
-                    likeMatlab = double(newValue);
+                    if ~isa(newValue, 'double')
+                        newValue = double(newValue);
+                    end
+                    likeMatlab = newValue;
                 end
             end
             value = likeMatlab;

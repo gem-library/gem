@@ -110,7 +110,7 @@ classdef gem < handle
                         if ~isa(varargin{1}, 'double')
                             varargin{1} = double(varargin{1});
                         end
-                        this.objectIdentifier = gem_mex('newFromMatlab', full(varargin{1}), this.getWorkingPrecision);
+                        this.objectIdentifier = gem_mex('newFromMatlab', full(varargin{1}), gem.workingPrecision);
                     end
                 elseif ischar(varargin{1})
                     % We embed the string into a cell array so that the c++
@@ -120,22 +120,22 @@ classdef gem < handle
                     % constant
                     switch lower(varargin{1})
                         case 'log2'
-                            precision = this.getWorkingPrecision; % This is the precision at which this constant will be computed (with this line, we make sure the precision has been set in the C++ library)
+                            precision = gem.workingPrecision; % This is the precision at which this constant will be computed (with this line, we make sure the precision has been set in the C++ library)
                             this.objectIdentifier = gem_mex('const_log2');
                             return;
                         case 'pi'
-                            precision = this.getWorkingPrecision;
+                            precision = gem.workingPrecision;
                             this.objectIdentifier = gem_mex('const_pi');
                             return;
                         case 'e'
                             this = exp(gem(1));
                             return;
                         case 'euler'
-                            precision = this.getWorkingPrecision;
+                            precision = gem.workingPrecision;
                             this.objectIdentifier = gem_mex('const_euler');
                             return;
                         case 'catalan'
-                            precision = this.getWorkingPrecision;
+                            precision = gem.workingPrecision;
                             this.objectIdentifier = gem_mex('const_catalan');
                             return;
                     end
@@ -166,11 +166,11 @@ classdef gem < handle
 
                     % Now we set the precision and construct the c++ object
                     if isempty(forceDefaultPrecision) || (forceDefaultPrecision ~= 1)
-                        precision = max(this.getWorkingPrecision, gem.nbDigitsFromString(varargin{1}));
+                        precision = max(gem.workingPrecision, gem.nbDigitsFromString(varargin{1}));
                     else
                         % We force the precision to be the one requested by
                         % the user
-                        precision = this.getWorkingPrecision;
+                        precision = gem.workingPrecision;
                     end
                     this.objectIdentifier = gem_mex('newFromMatlab', {varargin{1}}, precision);
                 elseif iscell(varargin{1})
@@ -200,7 +200,7 @@ classdef gem < handle
 
                     % We verify that the precision high enough to make sure all
                     % numbers are well translated
-                    precision = this.getWorkingPrecision;
+                    precision = gem.workingPrecision;
                     for i = 1:numel(varargin{1})
                         if isnumeric(varargin{1}{i})
                             precision = max(precision, 15);
@@ -252,10 +252,10 @@ classdef gem < handle
                     end
 
                     % Save default precision
-                    previousPrecision = this.getWorkingPrecision;
+                    previousPrecision = gem.workingPrecision;
 
                     % Assigned desired precision
-                    this.setWorkingPrecision(varargin{2});
+                    gem.workingPrecision(varargin{2});
 
                     % We tell the library that the precision must be
                     % enforced
@@ -267,7 +267,7 @@ classdef gem < handle
                     catch me
                         % If there was an error we restore the default
                         % precision
-                        this.setWorkingPrecision(previousPrecision);
+                        gem.workingPrecision(previousPrecision);
                         forceDefaultPrecision = 0;
                         throw(me);
                     end
@@ -276,7 +276,7 @@ classdef gem < handle
                     forceDefaultPrecision = 0;
 
                     % We restore the default precision
-                    this.setWorkingPrecision(previousPrecision);
+                    gem.workingPrecision(previousPrecision);
                 else
                     error('Wrong instruction upon creation of a new gem object.');
                 end
@@ -339,11 +339,11 @@ classdef gem < handle
                 gem_mex('setWorkingPrecision', precision);
             end
             if nargin >= 1
-                if precision < 1
-                    error('The precision need to be larger or equal to 1');
-                end
                 if ~isa(newValue, 'double')
                     newValue = double(newValue);
+                end
+                if newValue < 1
+                    error('The precision need to be larger or equal to 1');
                 end
                 precision = newValue;
                 % We call the mex interface to make this the default

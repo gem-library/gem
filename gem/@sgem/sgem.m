@@ -20,7 +20,7 @@
 %   sgem(i,j,s,precision)      % same if m=max(i) and n=max(j);
 
 % The precision of gem objects is set at construction. Either explicitely,
-% or by using the global function gemSetWorkingPrecision. The default value
+% or by using the global function gemWorkingPrecision. The default value
 % is 50 digits.
 
 % For numbers specified as strings, the precision is always set to be at least
@@ -84,7 +84,7 @@ classdef sgem < handle
                 elseif isequal(class(varargin{1}), 'gem')
                     % The we create a sparse version of the provided dense
                     % gem object with default threshold
-                    threshold = min(size(varargin{1}))*10^gem(-this.getWorkingPrecision);
+                    threshold = min(size(varargin{1}))*10^gem(-sgem.workingPrecision);
                     objId1 = varargin{1}.objectIdentifier;
                     objId2 = threshold.objectIdentifier;
                     this.objectIdentifier = sgem_mex('sparse', objId1, objId2);
@@ -114,12 +114,12 @@ classdef sgem < handle
                         % precision
                         s_values = gem(s);
                         objId = s_values.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, sgem.workingPrecision);
                     else
                         if ~isa(s, 'double')
                             s = double(s);
                         end
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, sgem.workingPrecision);
                     end
                 elseif ischar(varargin{1}) || iscell(varargin{1})
                     % We first create a dense gem object, then return its
@@ -174,10 +174,10 @@ classdef sgem < handle
                     end
 
                     % Save default precision
-                    previousPrecision = this.getWorkingPrecision;
+                    previousPrecision = sgem.workingPrecision;
 
                     % Assigned desired precision
-                    this.setWorkingPrecision(varargin{2});
+                    sgem.workingPrecision(varargin{2});
 
                     % Create object
                     try
@@ -185,12 +185,12 @@ classdef sgem < handle
                     catch me
                         % If there was an error we restore the default
                         % precision
-                        this.setWorkingPrecision(previousPrecision);
+                        sgem.workingPrecision(previousPrecision);
                         throw(me);
                     end
 
                     % We restore the default precision
-                    this.setWorkingPrecision(previousPrecision);
+                    sgem.workingPrecision(previousPrecision);
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
                 end
@@ -228,7 +228,7 @@ classdef sgem < handle
                     end
                     % We verify that s contains no zero element
                     sel = find(s);
-                    if ~isequal(sel',1:numel(s))
+                    if ~isequal(sel,[1:numel(s)]')
                         i = i(sel);
                         j = j(sel);
                         s = s(sel);
@@ -240,20 +240,20 @@ classdef sgem < handle
                     end
                     if isequal(class(s),'gem')
                         objId = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
-                    elseif isa(varargin{1}, 'uint8') || isa(varargin{1}, 'uint16') || isa(varargin{1}, 'uint32') || isa(varargin{1}, 'uint64') ...
-                        || isa(varargin{1}, 'int8') || isa(varargin{1}, 'int16') || isa(varargin{1}, 'int32') || isa(varargin{1}, 'int64')
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, sgem.workingPrecision);
+                    elseif isa(s, 'uint8') || isa(s, 'uint16') || isa(s, 'uint32') || isa(s, 'uint64') ...
+                        || isa(s, 'int8') || isa(s, 'int16') || isa(s, 'int32') || isa(s, 'int64')
                         % For integers, we first convert the values
                         % manually to make sure we don't loose any
                         % precision
                         s_values = gem(s);
                         objId = s_values.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, sgem.workingPrecision);
                     else
                         if ~isa(s, 'double')
                             s = double(s);
                         end
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, sgem.workingPrecision);
                     end
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
@@ -271,10 +271,10 @@ classdef sgem < handle
                     end
 
                     % Save default precision
-                    previousPrecision = this.getWorkingPrecision;
+                    previousPrecision = sgem.workingPrecision;
 
                     % Assigned desired precision
-                    this.setWorkingPrecision(varargin{4});
+                    sgem.workingPrecision(varargin{4});
 
                     % Create object
                     try
@@ -282,12 +282,12 @@ classdef sgem < handle
                     catch me
                         % If there was an error we restore the default
                         % precision
-                        this.setWorkingPrecision(previousPrecision);
+                        sgem.workingPrecision(previousPrecision);
                         throw(me);
                     end
 
                     % We restore the default precision
-                    this.setWorkingPrecision(previousPrecision);
+                    sgem.workingPrecision(previousPrecision);
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
                 end
@@ -333,7 +333,7 @@ classdef sgem < handle
                     end
                     % We verify that s contains no zero element
                     sel = find(s);
-                    if ~isequal(sel,1:numel(s))
+                    if ~isequal(sel,[1:numel(s)]')
                         i = i(sel);
                         j = j(sel);
                         s = s(sel);
@@ -348,12 +348,20 @@ classdef sgem < handle
                     end
                     if isequal(class(s),'gem')
                         objId = s.objectIdentifier;
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, sgem.workingPrecision);
+                    elseif isa(s, 'uint8') || isa(s, 'uint16') || isa(s, 'uint32') || isa(s, 'uint64') ...
+                        || isa(s, 'int8') || isa(s, 'int16') || isa(s, 'int32') || isa(s, 'int64')
+                        % For integers, we first convert the values
+                        % manually to make sure we don't loose any
+                        % precision
+                        s_values = gem(s);
+                        objId = s_values.objectIdentifier;
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, objId, m, n, sgem.workingPrecision);
                     else
                         if ~isa(s, 'double') % we make sure s is a double
                             s = double(s);
                         end
-                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, this.getWorkingPrecision);
+                        this.objectIdentifier = sgem_mex('newFromMatlab', i, j, s, m, n, sgem.workingPrecision);
                     end
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
@@ -371,10 +379,10 @@ classdef sgem < handle
                     end
 
                     % Save default precision
-                    previousPrecision = this.getWorkingPrecision;
+                    previousPrecision = sgem.workingPrecision;
 
                     % Assigned desired precision
-                    this.setWorkingPrecision(varargin{6});
+                    sgem.workingPrecision(varargin{6});
 
                     % Create object
                     try
@@ -382,12 +390,12 @@ classdef sgem < handle
                     catch me
                         % If there was an error we restore the default
                         % precision
-                        this.setWorkingPrecision(previousPrecision);
+                        sgem.workingPrecision(previousPrecision);
                         throw(me);
                     end
 
                     % We restore the default precision
-                    this.setWorkingPrecision(previousPrecision);
+                    sgem.workingPrecision(previousPrecision);
                 else
                     error('Wrong instruction upon creation of a new sgem object.');
                 end
@@ -450,11 +458,11 @@ classdef sgem < handle
                 sgem_mex('setWorkingPrecision', precision);
             end
             if nargin >= 1
-                if precision < 1
-                    error('The precision need to be larger or equal to 1    ');
-                end
                 if ~isa(newValue, 'double')
                     newValue = double(newValue);
+                end
+                if newValue < 1
+                    error('The precision need to be larger or equal to 1');
                 end
                 precision = newValue;
                 % We call the mex interface to make this the default

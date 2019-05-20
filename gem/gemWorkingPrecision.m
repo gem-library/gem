@@ -32,13 +32,11 @@
 %   gem(1.23456789012345,15)*gem(1.23456789012345,15)
 % only returns 10 digits : 1.524157875
 function precision = gemWorkingPrecision(precision)
-    tmp = gem(0);
     if nargin < 1
-        precision = tmp.getWorkingPrecision;
+        precision = gem.workingPrecision;
     else
-        tmp.setWorkingPrecision(precision);
+        gem.workingPrecision(precision);
         % We also set the precision for the sparse objects
-        stmp = sgem(0);
-        stmp.setWorkingPrecision(precision);
+        sgem.workingPrecision(precision);
     end
 end

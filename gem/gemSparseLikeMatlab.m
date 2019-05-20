@@ -32,10 +32,9 @@
 % To set the library to behave like Matlab, use
 %   gemSparseLikeMatlab(1)
 function likeMatlab = gemSparseLikeMatlab(likeMatlab)
-    tmp = sgem(0);
     if nargin < 1
-        likeMatlab = getSparseLikeMatlab(tmp);
+        likeMatlab = sgem.sparseLikeMatlab;
     else
-        setSparseLikeMatlab(tmp,likeMatlab);
+        sgem.sparseLikeMatlab(likeMatlab);
     end
 end

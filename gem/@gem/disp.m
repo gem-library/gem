@@ -7,7 +7,7 @@
 % Note: Here, the precision is the number of printed digits (including leading zeros)
 function disp(this, arg2)
     % The default display precision
-    displayPrecision = this.getDisplayPrecision;
+    displayPrecision = gem.displayPrecision;
 
     % Some versions of matlab provide the name as a second argument
     if (nargin >= 2)

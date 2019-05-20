@@ -9,7 +9,7 @@
 % Note: Here, the precision is the number of significant digits printed
 function display(this, arg2, arg3)
     % The default display precision
-    displayPrecision = this.getDisplayPrecision;
+    displayPrecision = sgem.displayPrecision;
 
     % Some versions of matlab provide the name as a second argument
     if (nargin >= 2) && ischar(arg2)

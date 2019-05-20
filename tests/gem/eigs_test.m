@@ -25,8 +25,8 @@ function test_consistency
         eigs(x{1}, [], 15, 'sm');
         [V D] = eigs(x{1}, [], 15, 'sm');
         x = {gem(diag(ones(1,5),1) + diag(ones(1,4),-2))};
-        eigs(x{1}, [], 6);
-        [V D] = eigs(x{1}, [], 6);
+        eigs(x{1}, [], 5);
+        [V D] = eigs(x{1}, [], 5);
     else
         % Once in a while the eigenvalue decomposition can fail and that's ok -- for now
         testRun = false;

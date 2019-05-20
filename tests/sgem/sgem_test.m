@@ -36,18 +36,22 @@ function test_consistency
 
     assert(sum(abs(sgem({2, 4i, '234', '2 + 0.5i'}) - [2, 4i, 234, 2+0.5i])) < 1e-5);
     
+
+    %% Constructor with 2 inputs
     assert(precision(sgem(765.3, 132)) == 132)
     %assert(precision(sgem('765.3', 132)) == 132)
     %assert(precision(sgem('24187658761246014609186358071360487246327480125801759037587107624610460237462469234081248023123414872424618608123480214237491724',12)) == 12)
 
     assert(nnz(sgem(gem([1 2 3 4 5]), 2.5)) == 3)
     
+    
+    %% Constructor with 3 inputs
     [i j s] = find(rand(1,3));
     i = [i 2];
     j = [j 2];
     s = [s 0];
-    assert(sum(sum(abs(sgem(i,j,s) - [s(1) s(2) s(3); 0 0 0]))) < 1e-9);
-    assert(sum(sum(abs(sgem(i,j,s(1)) - [s(1) s(1) s(1); 0 s(1) 0]))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s(1)) - sparse(i,j,s(1))))) < 1e-9);
     s = 0*s;
     assert(nnz(sgem(i,j,s)) == 0);
     assert(isequal(size(sgem(i,j,s)), [2 3]));
@@ -58,9 +62,30 @@ function test_consistency
     
     s = gem({'12.3', '1e-12', 432, 123152});
     assert(sum(sum(abs(sgem(i,j,s) - [12.3 1e-12 432; 0 123152 0]))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
 
     s = [123 456 789 102];
     assert(sum(sum(abs(sgem(i,j,s,2) - [123 456 789; 0 102 0]))) > 1e-3);
+    assert(sum(sum(abs(sgem(i,j,s,2) - sparse(i,j,s)))) > 1e-3);
+    
+    % We try several cases
+    x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'A', 'AR', 'AI'});
+    for co = 1:length(x)
+        [i j s] = find(double(x{co}));
+        assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+        [i j s] = find(x{co});
+        assert(sum(sum(abs(sgem(i,j,s) - x{co}))) < 1e-40);
+    end
+    
+    
+%     % We try several cases -- this can include empty lines/columns so we need to take into account the size when constructing
+%     x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'A', 'AR', 'AI'});
+%     for co = 1:length(x)
+%         [i j s] = find(double(x{co}));
+%         assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+%         [i j s] = find(x{co});
+%         assert(sum(sum(abs(sgem(i,j,s) - x{co}))) < 1e-40);
+%     end
 end
 
 function test_inputs

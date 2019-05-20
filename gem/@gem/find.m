@@ -41,9 +41,9 @@ function [I, J, V] = find(this, k, mode)
 
     % For row vectors, the outputs are row vectors
     if size(this,1) == 1
-        I = I';
-        J = J';
-        V = V';
+        I = I.';
+        J = J.';
+        V = V.';
     end
     if nargout <= 1
         % We translate the indices into linear indices

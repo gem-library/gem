@@ -143,11 +143,6 @@ function [V D] = eigs(this, varargin)
         return;
     end
 
-    % The matrix must be square
-    if size(this, 1) ~= size(this,2)
-        error('Matrix must be square in gem::eigs');
-    end
-
     % We make sure sigma is a gem object
     if ~isequal(class(sigma),'gem')
         sigma = gem(sigma);

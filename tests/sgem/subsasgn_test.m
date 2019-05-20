@@ -29,6 +29,10 @@ function test_consistency
         z(:) = 1;
         assert(abs(max(max(y-z))) <= 1e-6);
 
+        y([]) = 3;
+        z([]) = 3;
+        assert(abs(max(max(y-z))) <= 1e-6);
+
         y(1:2,1:2) = 1;
         z(1:2,1:2) = 1;
         assert(abs(max(max(y-z))) <= 1e-6);
@@ -54,14 +58,14 @@ function test_consistency
         assert(abs(max(max(y-z))) <= 1e-6);
     end
     
-    x = gem([]);
+    x = sgem([]);
     x(1:3) = 2;
 
-    x = gem([]);
+    x = sgem([]);
     x(1,1:3) = 2;
     x(5) = 2;
 
-    x = gem([]);
+    x = sgem([]);
     x(1:3,1) = 2;
 end
 
@@ -70,7 +74,7 @@ function test_inputs
     
     % maximum 2 dimensions
     try
-        x(1,2,3) = gem(1);
+        x(1,2,3) = sgem(1);
         error('The error test failed')
     catch me
         if isequal(me.message, 'The error test failed')
@@ -80,7 +84,7 @@ function test_inputs
     
     % only parentheses
     try
-        x.t = gem(1);
+        x.t = sgem(1);
         error('The error test failed')
     catch me
         if isequal(me.message, 'The error test failed')

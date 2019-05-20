@@ -39,6 +39,11 @@ function test_consistency
     assert(precision(gem(765.3, 132)) == 132)
     assert(precision(gem('765.3', 132)) == 132)
     assert(precision(gem('24187658761246014609186358071360487246327480125801759037587107624610460237462469234081248023123414872424618608123480214237491724',12)) == 12)
+
+    
+    %% Sub-functions
+    gem.workingPrecision(gem(gem.workingPrecision));
+    gem.displayPrecision(gem(gem.displayPrecision));
 end
 
 function test_inputs
@@ -61,4 +66,7 @@ function test_inputs
     shouldProduceAnError(@() gem(12.3, 0));
     
     shouldProduceAnError(@() gem(1, 2, 3));    
+
+    % Sub-functions
+    shouldProduceAnError(@() gem.workingPrecision(-1));
 end

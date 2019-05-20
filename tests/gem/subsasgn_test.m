@@ -56,6 +56,10 @@ function test_consistency
         y(1, [1 2]) = [1 2];
         z(1, [1 2]) = [1 2];
         assert(abs(max(max(y-z))) <= 1e-6);
+
+        y(1, [1 2 3 4]) = [1 2 3 4]';
+        z(1, [1 2 3 4]) = [1 2 3 4]';
+        assert(abs(max(max(y-z))) <= 1e-6);
     end
     
     x = gem([]);
@@ -67,6 +71,10 @@ function test_consistency
 
     x = gem([]);
     x(1:3,1) = 2;
+    x(4) = 4;
+    x = x';
+    x(5) = 5;
+    x(6:7) = [6 7];
 end
 
 function test_inputs
@@ -85,6 +93,14 @@ function test_inputs
     % only parentheses
     try
         x.t = gem(1);
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
+    end
+    try
+        x{1} = sgem(1);
         error('The error test failed')
     catch me
         if isequal(me.message, 'The error test failed')
@@ -151,6 +167,16 @@ function test_inputs
     % we cannot create an object of more than 2 dimensions
     try
         x(1:2,1:2) = [1 2 3; 1 2 3];
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
+    end
+    
+    % we don't accept assignment if a transposition is needed first
+    try
+        x(1:2,1:3) = [1 2 3; 4 5 6]';
         error('The error test failed')
     catch me
         if isequal(me.message, 'The error test failed')

@@ -40,8 +40,29 @@ function test_inputs
     shouldProduceAnError(@() x('1'));
     
     % we cannot access protected properties
-    shouldProduceAnError(@() x.objectIdentifier);
+    try
+        a = x.objectIdentifier;
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
+    end
     
+    % nor anything else
+    try
+        a = x.whynot;
+        error('The error test failed')
+    catch me
+        if isequal(me.message, 'The error test failed')
+            assert(false);
+        end
+    end
+    
+    % We cannot access elements beyond the object dimension
+    shouldProduceAnError(@() x(10));
+    shouldProduceAnError(@() x(5,1));
+
     % we cannot create an object of more than 2 dimensions
     shouldProduceAnError(@() x(cat(3,[1 2; 1 2], [2 3; 2 3])));
     shouldProduceAnError(@() x(1,cat(3,[1 2; 1 2], [2 3; 2 3])));

@@ -25,8 +25,8 @@ switch subs.type
                     % We are calling with several indices, as in a(:,1)
                     indices{i} = 1:s(i);
                 end
-            elseif isequal(subs.subs{i}, 0)
-                indices{i} = [];
+%            elseif isequal(subs.subs{i}, 0)
+%                indices{i} = [];
             else
                 error('Unrecognized indexing in sgem::subsref')
             end

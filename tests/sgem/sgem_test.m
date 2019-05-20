@@ -59,33 +59,82 @@ function test_consistency
     assert(sum(sum(abs(sgem(i,j,s) - [1 2 3; 0 4 0]))) < 1e-9);
     s = single([1 2 3 4]);
     assert(sum(sum(abs(sgem(i,j,s) - [1 2 3; 0 4 0]))) < 1e-9);
+    assert(sum(sum(abs(sgem(gem(i),gem(j),s) - [1 2 3; 0 4 0]))) < 1e-9);
     
     s = gem({'12.3', '1e-12', 432, 123152});
     assert(sum(sum(abs(sgem(i,j,s) - [12.3 1e-12 432; 0 123152 0]))) < 1e-9);
     assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+
+    % We try several cases
+    x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'A', 'AR', 'AI'});
+    for co = 1:length(x)
+        [i j s] = find(double(x{co}));
+        assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+        assert(sum(sum(abs(sgem(gem(i),gem(j),s) - sparse(i,j,s)))) < 1e-9);
+        [i j s] = find(x{co});
+        assert(sum(sum(abs(sgem(i,j,s) - x{co}))) < 1e-40);
+    end
+    
+    
+    %% Constructor with 4 inputs
+    [i j s] = find(rand(1,3));
+    i = [i 2];
+    j = [j 2];
+    s = [123 456 789 102];
+    assert(sum(sum(abs(sgem(i,j,s,2) - [123 456 789; 0 102 0]))) > 1e-3);
+    assert(sum(sum(abs(sgem(i,j,s,2) - sparse(i,j,s)))) > 1e-3);
+    
+
+    %% Constructor with 5 inputs
+    [i j s] = find(rand(1,3));
+    i = [i 2];
+    j = [j 2];
+    s = [s 0];
+    assert(sum(sum(abs(sgem(i,j,s,10,10) - sparse(i,j,s,10,10)))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s(1),10,10) - sparse(i,j,s(1),10,10)))) < 1e-9);
+    s = 0*s;
+    assert(nnz(sgem(i,j,s,10,10)) == 0);
+    assert(isequal(size(sgem(i,j,s,10,10)), [10 10]));
+    s = uint32([1 2 3 4]);
+    assert(sum(sum(abs(sgem(i,j,s,3,3) - [1 2 3; 0 4 0; 0 0 0]))) < 1e-9);
+    s = single([1 2 3 4]);
+    assert(sum(sum(abs(sgem(i,j,s,3,3) - [1 2 3; 0 4 0; 0 0 0]))) < 1e-9);
+    assert(sum(sum(abs(sgem(gem(i),gem(j),s,3,3) - [1 2 3; 0 4 0; 0 0 0]))) < 1e-9);
+    
+    s = gem({'12.3', '1e-12', 432, 123152});
+    assert(sum(sum(abs(sgem(i,j,s,3,3) - [12.3 1e-12 432; 0 123152 0; 0 0 0]))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s,3,3) - sparse(i,j,s,3,3)))) < 1e-9);
 
     s = [123 456 789 102];
     assert(sum(sum(abs(sgem(i,j,s,2) - [123 456 789; 0 102 0]))) > 1e-3);
     assert(sum(sum(abs(sgem(i,j,s,2) - sparse(i,j,s)))) > 1e-3);
     
     % We try several cases
-    x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'A', 'AR', 'AI'});
+    x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'P', 'PR', 'PI'});
     for co = 1:length(x)
         [i j s] = find(double(x{co}));
-        assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
+        assert(sum(sum(abs(sgem(i,j,s,size(x{co},1),size(x{co},2)) - sparse(i,j,s,size(x{co},1),size(x{co},2))))) < 1e-9);
+        assert(sum(sum(abs(sgem(gem(i),gem(j),s,size(x{co},1),size(x{co},2)) - sparse(i,j,s,size(x{co},1),size(x{co},2))))) < 1e-9);
         [i j s] = find(x{co});
-        assert(sum(sum(abs(sgem(i,j,s) - x{co}))) < 1e-40);
+        assert(sum(sum(abs(sgem(i,j,s,size(x{co},1),size(x{co},2)) - x{co}))) < 1e-40);
     end
     
     
-%     % We try several cases -- this can include empty lines/columns so we need to take into account the size when constructing
-%     x = generateMatrices(2, 15, {'F', 'FR', 'FI', 'A', 'AR', 'AI'});
-%     for co = 1:length(x)
-%         [i j s] = find(double(x{co}));
-%         assert(sum(sum(abs(sgem(i,j,s) - sparse(i,j,s)))) < 1e-9);
-%         [i j s] = find(x{co});
-%         assert(sum(sum(abs(sgem(i,j,s) - x{co}))) < 1e-40);
-%     end
+    %% Constructor with 6 inputs
+    [i j s] = find(rand(1,3));
+    i = [i 2];
+    j = [j 2];
+    s = [123 456 789 102];
+    assert(sum(sum(abs(sgem(i,j,s,3,3,2) - [123 456 789; 0 102 0; 0 0 0]))) > 1e-3);
+    assert(sum(sum(abs(sgem(i,j,s,3,3,2) - sparse(i,j,s,3,3)))) > 1e-3);
+
+
+    %% Sub-functions
+    sgem.workingPrecision(gem(sgem.workingPrecision));
+    sgem.displayPrecision(gem(sgem.displayPrecision));
+    slm = sgem.sparseLikeMatlab;
+    sgem.sparseLikeMatlab(gem(0));
+    sgem.sparseLikeMatlab(slm);
 end
 
 function test_inputs
@@ -113,5 +162,14 @@ function test_inputs
     shouldProduceAnError(@() sgem(12.3, 0));
     
     shouldProduceAnError(@() sgem(1, 2, 3, [1 2]));
+    shouldProduceAnError(@() sgem(1, 2, 3, 0.5));
+
+    shouldProduceAnError(@() sgem(1, 2, 3, 1, 1));
+    shouldProduceAnError(@() sgem(1, 2, 3, 1, 2, 0.5));
+    shouldProduceAnError(@() sgem(1, 2, 3, 1, 2, [1 2]));
+
     shouldProduceAnError(@() sgem(1, 2, 3, 4, 5, 6, 7));
+    
+    % Sub-functions
+    shouldProduceAnError(@() sgem.workingPrecision(-1));
 end

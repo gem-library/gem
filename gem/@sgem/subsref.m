@@ -26,8 +26,8 @@ switch varargin{1}(1).type
                     % We are calling with several indices, as in a(:,1)
                     indices{i} = 1:s(i);
                 end
-            elseif isequal(varargin{1}.subs{i}, 0)
-                indices{i} = [];
+%            elseif isequal(varargin{1}.subs{i}, 0)
+%                indices{i} = [];
             else
                 error('Unrecognized indexing in sgem::subsref')
             end
@@ -37,18 +37,6 @@ switch varargin{1}(1).type
         % not accessible anymore... we restore it for the methods meant to
         % be public
         switch varargin{1}(1).subs
-            case 'getWorkingPrecision'
-                result = this.getWorkingPrecision;
-                return;
-            case 'setWorkingPrecision'
-                this.setWorkingPrecision(varargin{1}(2).subs{1});
-                return;
-            case 'getDisplayPrecision'
-                result = this.getDisplayPrecision;
-                return;
-            case 'setDisplayPrecision'
-                this.setDisplayPrecision(varargin{1}(2).subs{1});
-                return;
             case 'objectIdentifier'
                 % The gem class is allowed to access this private function
                 [ST I] = dbstack('-completenames');

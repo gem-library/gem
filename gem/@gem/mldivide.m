@@ -33,13 +33,13 @@ function result = mldivide(this, varargin)
     end
     
     % We check if the denominator is singular
-    if rank(this) < size(this,1)
+    if ~(isa(this, 'double') && issparse(this)) && (rank(this) < size(this,1))
         error('Matrix is singular in gem::mldivide');
     end
 
     % We check the conditioning number of the matrix
-    rcond = cond(this);
-    if rcond > 10^gemWorkingPrecision
+    rcond = cond(gemify(this));
+    if rcond > 10^(gemWorkingPrecision-3)
         warning(['Matrix is close to singular. Result may be inaccurate. RCOND = ', toStrings(rcond)]);
     end
 

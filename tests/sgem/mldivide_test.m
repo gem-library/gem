@@ -6,8 +6,19 @@ function test_suite = mldivide_test()
     initTestSuite;
 end
 
+function test_consistency
+    % division by a scalar is simple
+    x = generateMatrices(2, 5, {'P', 'PR', 'PI'});
+    r = rand;
+    validateDoubleConsistency(@(x) mldivide(r, x), x, 1e-5);
+    
+    % This should produce a warning because the matrix is almost singular
+    mldivide(sgem([1 0; 1 1e-47]), [1 0]');
+end
+
 function test_precision
     % NOTE : Due to issue #5, there is nothing to test here at the moment
+    
 %     % matrix division between two matrices
 %     y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
 %     for i = 1:numel(y)
@@ -31,6 +42,9 @@ function test_inputs
     shouldProduceAnError(@() mldivide(x));
     shouldProduceAnError(@() mldivide(x,x,x));
     
+    % We cannot solve singular problems
+    shouldProduceAnError(@() mldivide(sgem([1 0; 1 0]), [1 0]'));
+
     % sizes should match
     shouldProduceAnError(@() mldivide(x, [1 2 3]));
 end

@@ -3,7 +3,7 @@ function result = mtimes(this, varargin)
     % This is a function which involves a second instance of a similar object,
     % so we check if this second instance was also provided
     if length(varargin) ~= 1
-        error('Wrong number of arguments in sgem::plus');
+        error('Wrong number of arguments in sgem::mtimes');
     end
 
     % If the second type is more elaborated than just a number, we let the

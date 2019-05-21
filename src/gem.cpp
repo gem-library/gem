@@ -2869,6 +2869,14 @@ SparseGmpEigenMatrix GmpEigenMatrix::kron_fs(const SparseGmpEigenMatrix& b) cons
 {
     SparseGmpEigenMatrix result;
 
+    // There seems to be a bug in Eigen's kronecker product for empty sparse
+    // matrices, so we take care of this case specifically
+    if ((matrixR.rows() == 0) || (matrixR.cols() == 0) || (b.matrixR.rows() == 0) || (b.matrixR.cols() == 0)) {
+        result.matrixR.resize(0,0);
+        result.isComplex = false;
+        return result;
+    }
+
     if (b.isComplex) {
         if (isComplex) {
             result.matrixR = kroneckerProduct(matrixR, b.matrixR);
@@ -2913,6 +2921,14 @@ SparseGmpEigenMatrix GmpEigenMatrix::kron_fs(const SparseGmpEigenMatrix& b) cons
 SparseGmpEigenMatrix& GmpEigenMatrix::kron_fs_new(const SparseGmpEigenMatrix& b) const
 {
     SparseGmpEigenMatrix& result(*(new SparseGmpEigenMatrix));
+
+    // There seems to be a bug in Eigen's kronecker product for empty sparse
+    // matrices, so we take care of this case specifically
+    if ((matrixR.rows() == 0) || (matrixR.cols() == 0) || (b.matrixR.rows() == 0) || (b.matrixR.cols() == 0)) {
+        result.matrixR.resize(0,0);
+        result.isComplex = false;
+        return result;
+    }
 
     if (b.isComplex) {
         if (isComplex) {

@@ -3,7 +3,7 @@ function result = mtimes(this, varargin)
     % This is a function which involves a second instance of a similar object,
     % so we check if this second instance was also provided
     if length(varargin) ~= 1
-        error('Wrong number of arguments in gem::plus');
+        error('Wrong number of arguments in gem::mtimes');
     end
 
     % If the second type is more elaborated than just a number, we let the
@@ -55,7 +55,6 @@ function result = mtimes(this, varargin)
             result = gem('encapsulate', newObjectIdentifier);
         end
     else
-        % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;

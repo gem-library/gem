@@ -8,7 +8,7 @@
 %   Y = max(a,b) : element-wise maximum (either a or b can also be scalars)
 function [Y I] = max(this, varargin)
     % This function can involve up to three arguments
-    if length(varargin) > 2
+        if length(varargin) > 2
         error('Wrong number of arguments in gem::max');
     end
 
@@ -78,7 +78,7 @@ function [Y I] = max(this, varargin)
         % For later, we remember if one of the input is sparse
         oneInputSparse = max(1, issparse(this) + issparse(varargin{1}));
 
-        % Let's we make sure that both object are either full of sparse gems
+        % Let's make sure that both objects are either full of sparse gems
         if ~isequal(class(this), 'gem') && ~isequal(class(this), 'sgem')
             this = gemify(this);
         end
@@ -91,7 +91,7 @@ function [Y I] = max(this, varargin)
 
         % We only implement maximum with a scalar when both the matrix and
         % the scalar are full, or when both are sparse. Maximum between two
-        % matrices is sparse by default.
+        % mixed matrices is sparse by default.
         if (prod(size1) == 1) && (prod(size1) == 1) && ~isequal(class(this), class(varargin{1}))
             this = sparse(this);
             varargin{1} = sparse(varargin{1});
@@ -124,7 +124,7 @@ function [Y I] = max(this, varargin)
                 % keep sparse matrices sparse
                 Y = varargin{1};
                 return;
-            elseif real(this) > 0
+            elseif (real(this) > 0) || ~isreal(this) || ~isreal(varargin{1})
                 % In this case, we compute the minimum of the full matrices
                 this = full(this);
                 varargin{1} = full(varargin{1});
@@ -136,7 +136,7 @@ function [Y I] = max(this, varargin)
                 % keep sparse matrices sparse
                 Y = this;
                 return;
-            elseif real(varargin{1}) > 0
+            elseif (real(varargin{1}) > 0) || ~isreal(this) || ~isreal(varargin{1})
                 % In this case, we compute the minimum of the full matrices
                 this = full(this);
                 varargin{1} = full(varargin{1});
@@ -162,7 +162,7 @@ function [Y I] = max(this, varargin)
         end
 
         % For matlab, max when one object is sparse produces a sparse result
-        if (gemSparseLikeMatlab == 1) && (oneInputSparse == 1) && (issparse(Y) == 0)
+        if (gemSparseLikeMatlab == 1) && (oneInputSparse == 1) && (~issparse(Y))
             Y = sparse(Y);
         end
     end

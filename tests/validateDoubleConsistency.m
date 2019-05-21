@@ -1,4 +1,4 @@
-function validateDoubleConsistency(func, data, epsilon, upToCommonLength)
+function validateDoubleConsistency(func, data, epsilon, upToCommonLength, forceFull)
 % validateDoubleConsistency(func, data, [epsilon])
 %
 % Checks that the action of function 'func' on the provided data is
@@ -17,12 +17,16 @@ if nargin < 4
     upToCommonLength = 0;
 end
 
+if nargin < 5
+    forceFull = 0;
+end
+
 if ~isa(data, 'cell')
     error('data should be provided in a cell array');
 end
 
 xdy = @(x,y) double(x)-double(y); % To circumvent bug in octave 4.4 not present in octave 4.2
-if upToCommonLength
+if upToCommonLength == 1
     commonLength = @(x,y) min(length(x), length(y));
     checkOk = @(x,y) isequal(x,y) || (isempty(x) && isempty(y)) || (max(max(abs(xdy(x(1:commonLength(x,y)), y(1:commonLength(x,y)))))) <= epsilon);
 else
@@ -31,6 +35,10 @@ end
 % To check the value of each test individually, use:
 %   cellfun(@(x) full(max(max(abs(func(x)-func(double(x)))))), data)
 %   cellfun(@(x) full(checkOk(func(x), func(double(x)))), data)
-assert(all(cellfun(@(x) full(checkOk(func(x), func(double(x)))), data)));
+if forceFull == 1
+    assert(all(cellfun(@(x) full(checkOk(func(x), func(double(full(x))))), data)));
+else
+    assert(all(cellfun(@(x) full(checkOk(func(x), func(double(full(x))))), data)));
+end
 
 end

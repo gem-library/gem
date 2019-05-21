@@ -37,6 +37,7 @@ function [Y I] = min(this, varargin)
             error('Element-wise minimum returns only one outcome');
         end
     end
+    
 
     % empty case
     if isempty(this)
@@ -46,7 +47,7 @@ function [Y I] = min(this, varargin)
     end
 
     %% If we reach here, the arguments must be good
-    if length(varargin) ~= 1        
+    if length(varargin) ~= 1
         if (length(varargin) == 2) && isequal(varargin{2}, 'all')
             % maximum over all element
             % We call the procedure

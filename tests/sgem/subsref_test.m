@@ -15,6 +15,8 @@ function test_consistency
     validateDoubleConsistency(@(x) x(1:end), x);
     validateDoubleConsistency(@(x) x(1:end), x);
     validateDoubleConsistency(@(x) x([true false]), x);
+    validateDoubleConsistency(@(x) x(:), x);
+    validateDoubleConsistency(@(x) x(:,:), x);
 
     x = {sparse(gemRand(300,300))};
     validateDoubleConsistency(@(x) x(1:end-1,1:end-1), x);

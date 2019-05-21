@@ -56,6 +56,10 @@ function test_consistency
         y(1, [1 2]) = [1 2];
         z(1, [1 2]) = [1 2];
         assert(abs(max(max(y-z))) <= 1e-6);
+        
+        y(1, [1 2 3 4]) = [1 2 3 4]';
+        z(1, [1 2 3 4]) = [1 2 3 4]';
+        assert(abs(max(max(y-z))) <= 1e-6);
     end
     
     x = sgem([]);

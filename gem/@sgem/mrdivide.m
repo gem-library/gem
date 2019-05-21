@@ -22,5 +22,5 @@ function result = mrdivide(this, varargin)
     end
     
     % We call mldivide
-    result = mldivide(varargin{1}, this);
+    result = mldivide(varargin{1}', this')';
 end

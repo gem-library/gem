@@ -66,8 +66,8 @@ function result = times(this, varargin)
             result = sgem('encapsulate', newObjectIdentifier);
         end
     else
-        % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
+            % A priori we should not arrive here... but just in case
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('times_sf', objId1, objId2);

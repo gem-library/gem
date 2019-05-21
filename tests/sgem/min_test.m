@@ -21,26 +21,26 @@ function test_consistency
     % element-wise minimum between two matrices
     y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
     validateDoubleConsistency2(@(x,y) min(x,y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) min(x,sparse(y)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) min(x,full(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(x,double(y)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) min(x,double(sparse(y))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) min(x,double(full(y))), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(double(x),y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) min(double(sparse(x)),y), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) min(double(full(x)),y), y(1,:), y(2,:));
 
     % min with a scalar
     validateDoubleConsistency2(@(x,y) min(x,y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(x,sparse(y(1))), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) min(x,full(y(1))), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) min(x,double(y(1))), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(x,double(sparse(y(1)))), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) min(x,double(full(y(1)))), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) min(double(x),y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(double(sparse(x)),y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) min(double(full(x)),y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
 
     validateDoubleConsistency2(@(x,y) min(x(1),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(x(1),sparse(y)), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) min(x(1),full(y)), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) min(x(1),double(y)), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(x(1),double(sparse(y))), y(1,:), y(2,:), 1e-12, 0,isOctave);
+    validateDoubleConsistency2(@(x,y) min(x(1),double(full(y))), y(1,:), y(2,:), 1e-12, 0,isOctave);
     validateDoubleConsistency2(@(x,y) min(double(x(1)),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
-    validateDoubleConsistency2(@(x,y) min(double(sparse(x(1))),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) min(double(full(x(1))),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
     
     if isOctave
         for i = 1:length(x)

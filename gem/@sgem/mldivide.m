@@ -26,6 +26,12 @@ function result = mldivide(this, varargin)
         error('Size mismatch in sgem::mldivide');
     end
 
+    % empty case
+    if isempty(this) || isempty(varargin{1})
+        result = sgem([]);
+        return;
+    end
+    
     % We check if the denominator is singular
     if rank(this) < size(this,1)
         error('Matrix is singular in sgem::mldivide');
@@ -58,8 +64,8 @@ function result = mldivide(this, varargin)
         newObjectIdentifier = gem_mex('mldivide', objId1, objId2);
         result = gem('encapsulate', newObjectIdentifier);
     else
-        % A priori we should not arrive here... but just in case
         if isequal(class(varargin{1}), 'gem')
+            % A priori we should not arrive here... but just in case
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('mldivide_sf', objId1, objId2);

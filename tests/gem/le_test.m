@@ -9,14 +9,24 @@ end
 function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
 
+    % Octave bugs if we don't do this
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if isOctave
+        rround = @(x) round(round(x) + 1e-5 + 1e-5i);
+    else
+        rround = @(x) round(x);
+    end
     validateDoubleConsistency(@(x) le(x,x), x);
-    validateDoubleConsistency(@(x) le(round(x),double(round(x))), x);
-    validateDoubleConsistency(@(x) le(round(x),double(sparse(round(x)))), x);
+    validateDoubleConsistency(@(x) le(rround(x),double(rround(x))), x);
+    validateDoubleConsistency(@(x) le(rround(x),double(sparse(rround(x)))), x);
     validateDoubleConsistency(@(x) le(x,sparse(x)), x);
-    validateDoubleConsistency(@(x) le(double(round(x)),round(x)), x);
+    validateDoubleConsistency(@(x) le(double(rround(x)),rround(x)), x);
     
-    validateDoubleConsistency(@(x) le(x,x(1)), x);
-    validateDoubleConsistency(@(x) le(x(1),x), x);
+    % Octave doesn't support comparison with a scalar like matlab
+    if ~isOctave
+        validateDoubleConsistency(@(x) le(x,x(1)), x);
+        validateDoubleConsistency(@(x) le(x(1),x), x);
+    end
 end
 
 function test_sparseLikeMatlab

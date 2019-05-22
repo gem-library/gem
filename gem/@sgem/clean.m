@@ -10,10 +10,12 @@ function result = clean(this, tol)
         tol = 10^(-gemWorkingPrecision);
     end
 
-    % We make sure tol is a single gem number
-    if isequal(class(tol), 'sgem')
-        tol = gem(tol);
+    % We make sure this is a sgem
+    if ~isequal(class(this), 'sgem')
+        this = sgem(this);
     end
+    
+    % We make sure tol is a single gem number
     if ~isequal(class(tol), 'gem')
         if ~isnumeric(tol)
             error('The tolerance should be a number in sgem::clean');

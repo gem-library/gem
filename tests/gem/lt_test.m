@@ -15,8 +15,12 @@ function test_consistency
     validateDoubleConsistency(@(x) lt(x,sparse(x)), x);
     validateDoubleConsistency(@(x) lt(double(round(x)),round(x)), x);
     
-    validateDoubleConsistency(@(x) lt(x,x(1)), x);
-    validateDoubleConsistency(@(x) lt(x(1),x), x);
+    % Octave doesn't support comparison with a scalar like matlab
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        validateDoubleConsistency(@(x) lt(x,x(1)), x);
+        validateDoubleConsistency(@(x) lt(x(1),x), x);
+    end
 end
 
 function test_sparseLikeMatlab

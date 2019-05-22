@@ -11,8 +11,8 @@ function test_consistency
 
     validateDoubleConsistency(@(x) ne(x,x), x);
     validateDoubleConsistency(@(x) ne(round(x),double(round(x))), x);
-    validateDoubleConsistency(@(x) ne(round(x),double(sparse(round(x)))), x);
-    validateDoubleConsistency(@(x) ne(x,sparse(x)), x);
+    validateDoubleConsistency(@(x) ne(round(x),double(full(round(x)))), x);
+    validateDoubleConsistency(@(x) ne(x,full(x)), x);
     validateDoubleConsistency(@(x) ne(double(round(x)),round(x)), x);
     
     validateDoubleConsistency(@(x) ne(x,x(1)), x);

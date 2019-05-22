@@ -36,6 +36,17 @@ function test_empty
     assert(isempty(sgem([])-sgem([])));
 end
 
+function test_sparseLikeMatlab
+    initStatus = gemSparseLikeMatlab;
+    
+    gemSparseLikeMatlab(0);
+    assert(isa(minus(sgem([0 1 2]), sgem(3)), 'gem'));
+    gemSparseLikeMatlab(1);
+    assert(isa(minus(sgem([0 1 2]), sgem(3)), 'sgem'));
+    
+    gemSparseLikeMatlab(initStatus);
+end
+
 function test_inputs
     x = sparse(gemRand(3));
     

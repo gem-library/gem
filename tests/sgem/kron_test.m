@@ -12,11 +12,11 @@ function test_consistency
     for i = 1:numel(x)
         for j = 1:numel(x)
             validateDoubleConsistency2(@(x,y) kron(x,y), x(i), x(j));
-            validateDoubleConsistency2(@(x,y) kron(x,sparse(y)), x(i), x(j));
+            validateDoubleConsistency2(@(x,y) kron(x,full(y)), x(i), x(j));
             validateDoubleConsistency2(@(x,y) kron(x,double(y)), x(i), x(j));
-            validateDoubleConsistency2(@(x,y) kron(x,double(sparse(y))), x(i), x(j));
+            validateDoubleConsistency2(@(x,y) kron(x,double(full(y))), x(i), x(j));
             validateDoubleConsistency2(@(x,y) kron(double(x),y), x(i), x(j));
-            validateDoubleConsistency2(@(x,y) kron(double(sparse(x)),y), x(i), x(j));
+            validateDoubleConsistency2(@(x,y) kron(double(full(x)),y), x(i), x(j));
         end
     end
     

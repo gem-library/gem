@@ -18,8 +18,8 @@ function test_consistency
     end
     validateDoubleConsistency(@(x) le(x,x), x);
     validateDoubleConsistency(@(x) le(rround(x),double(rround(x))), x);
-    validateDoubleConsistency(@(x) le(rround(x),double(sparse(rround(x)))), x);
-    validateDoubleConsistency(@(x) le(x,sparse(x)), x);
+    validateDoubleConsistency(@(x) le(rround(x),double(full(rround(x)))), x);
+    validateDoubleConsistency(@(x) le(x,full(x)), x);
     validateDoubleConsistency(@(x) le(double(rround(x)),rround(x)), x);
     
     % Octave doesn't support comparison with a scalar like matlab

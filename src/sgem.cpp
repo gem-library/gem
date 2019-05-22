@@ -5589,23 +5589,37 @@ SparseMatrix <bool> SparseGmpEigenMatrix::operator<=(const SparseGmpEigenMatrix&
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itRb(b.matrixR,k);
+			IndexType previousNonZero(-1);
 
             while ((itR) || (itRb)) {
                 if ((!itRb) || ((itR) && (itR.row() < itRb.row()))) {
+					for (IndexType i(previousNonZero+1); i < itR.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itR.row();
                     if (itR.value() <= 0)
                         tripletList.push_back(Triplet<bool>(itR.row(), k, true));
                     ++itR;
                 } else if ((itR) && (itRb) && (itR.row() == itRb.row())) {
+					for (IndexType i(previousNonZero+1); i < itR.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itR.row();
                     if (itR.value() <= itRb.value())
                         tripletList.push_back(Triplet<bool>(itR.row(), k, true));
                     ++itRb;
                     ++itR;
                 } else {
+					for (IndexType i(previousNonZero+1); i < itRb.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itRb.row();
                     if (0 <= itRb.value())
                         tripletList.push_back(Triplet<bool>(itRb.row(), k, true));
                     ++itRb;
                 }
             }
+
+			// If there are still zeros
+			for (IndexType i(previousNonZero+1); i < matrixR.rows(); ++i)
+				tripletList.push_back(Triplet<bool>(i, k, true));
         }
 
         // Now we can assign the data to the sparse matrix
@@ -5717,23 +5731,37 @@ SparseMatrix <bool> SparseGmpEigenMatrix::operator>=(const SparseGmpEigenMatrix&
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itRb(b.matrixR,k);
+			IndexType previousNonZero(-1);
 
             while ((itR) || (itRb)) {
                 if ((!itRb) || ((itR) && (itR.row() < itRb.row()))) {
-                    if (itR.value() >= 0)
+					for (IndexType i(previousNonZero+1); i < itR.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itR.row();
+				    if (itR.value() >= 0)
                         tripletList.push_back(Triplet<bool>(itR.row(), k, true));
                     ++itR;
                 } else if ((itR) && (itRb) && (itR.row() == itRb.row())) {
+					for (IndexType i(previousNonZero+1); i < itR.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itR.row();
                     if (itR.value() >= itRb.value())
                         tripletList.push_back(Triplet<bool>(itR.row(), k, true));
                     ++itRb;
                     ++itR;
                 } else {
+					for (IndexType i(previousNonZero+1); i < itRb.row(); ++i)
+						tripletList.push_back(Triplet<bool>(i, k, true));
+					previousNonZero = itRb.row();
                     if (0 >= itRb.value())
                         tripletList.push_back(Triplet<bool>(itRb.row(), k, true));
                     ++itRb;
                 }
             }
+
+			// If there are still zeros
+			for (IndexType i(previousNonZero+1); i < matrixR.rows(); ++i)
+				tripletList.push_back(Triplet<bool>(i, k, true));
         }
 
         // Now we can assign the data to the sparse matrix
@@ -5788,7 +5816,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                 // The matrix is real, but the element to be compared to is complex, so no element in the matrix equals the scalar : the comparison matrix is empty.
                 if (b.matrixI.coeff(0,0) == 0)
                     // We give an error if the above assessement is not correct.
-                    mexErrMsgTxt("Error in SparseGmpEigenMatrix::eq while copmaring to a complex scalar: the complex scalar has null imaginary part.");
+                    mexErrMsgTxt("Error in SparseGmpEigenMatrix::eq while comparing to a complex scalar: the complex scalar has null imaginary part.");
             }
         } else {
             if (isComplex) {
@@ -6139,14 +6167,13 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                             previousNonZero = itR.row();
                             if (itR.value() == itRb.value())
                                 tripletList.push_back(Triplet<bool>(itR.row(), k, true));
-                            ++itRb;
+                            ++itR;
                         } else if ((itR) && (itI) && (itR.row() == itI.row())) {
                             for (IndexType i(previousNonZero+1); i < itR.row(); ++i)
                                 tripletList.push_back(Triplet<bool>(i, k, true));
                             previousNonZero = itR.row();
                             if ((itR.value() == itRb.value()) && (itI.value() == 0))
                                 tripletList.push_back(Triplet<bool>(itR.row(), k, true));
-                            ++itRb;
                             ++itR;
                             ++itI;
                         } else {
@@ -6155,9 +6182,9 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                             previousNonZero = itI.row();
                             if ((0 == itRb.value()) && (itI.value() == 0))
                                 tripletList.push_back(Triplet<bool>(itI.row(), k, true));
-                            ++itRb;
                             ++itI;
                         }
+                        ++itRb;
                     } else {
                         for (IndexType i(previousNonZero+1); i < itRb.row(); ++i)
                             tripletList.push_back(Triplet<bool>(i, k, true));
@@ -6192,6 +6219,7 @@ SparseMatrix <bool> SparseGmpEigenMatrix::eq(const SparseGmpEigenMatrix& b) cons
                         previousNonZero = itR.row();
                         if (itR.value() == itRb.value())
                             tripletList.push_back(Triplet<bool>(itR.row(), k, true));
+                        ++itR;
                         ++itRb;
                     } else {
                         for (IndexType i(previousNonZero+1); i < itRb.row(); ++i)
@@ -6532,19 +6560,18 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                         if ((!itI) || ((itR) && (itR.row() < itI.row()))) {
                             if (itR.value() != itRb.value())
                                 tripletList.push_back(Triplet<bool>(itR.row(), k, true));
-                            ++itRb;
+                            ++itR;
                         } else if ((itR) && (itI) && (itR.row() == itI.row())) {
                             if ((itR.value() != itRb.value()) || (itI.value() != 0))
                                 tripletList.push_back(Triplet<bool>(itR.row(), k, true));
-                            ++itRb;
                             ++itR;
                             ++itI;
                         } else {
                             if ((0 != itRb.value()) || (itI.value() != 0))
                                 tripletList.push_back(Triplet<bool>(itI.row(), k, true));
-                            ++itRb;
                             ++itI;
                         }
+                        ++itRb;
                     } else {
                         if (0 != itRb.value())
                             tripletList.push_back(Triplet<bool>(itRb.row(), k, true));
@@ -6566,7 +6593,8 @@ SparseMatrix <bool> SparseGmpEigenMatrix::ne(const SparseGmpEigenMatrix& b) cons
                     } else if (((itR) && (itRb)) && (itR.row() == itRb.row())) {
                         if (itR.value() != itRb.value())
                             tripletList.push_back(Triplet<bool>(itR.row(), k, true));
-                        ++itRb;
+                        ++itR;
+						++itRb;
                     } else {
                         if (0 != itRb.value())
                             tripletList.push_back(Triplet<bool>(itRb.row(), k, true));

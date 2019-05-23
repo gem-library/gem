@@ -13,11 +13,17 @@ function result = reshape(this, varargin)
         if ~isempty(varargin{1})
             newDim(1) = varargin{1};
         else
+            if mod(numel(this), varargin{2}) ~= 0
+                error('Number of elements not divisible by requested dimension');
+            end
             newDim(1) = numel(this)/varargin{2};
         end
         if ~isempty(varargin{2})
             newDim(2) = varargin{2};
         else
+            if mod(numel(this), newDim(1)) ~= 0
+                error('Number of elements not divisible by requested dimension');
+            end
             newDim(2) = numel(this)/newDim(1);
         end
     else

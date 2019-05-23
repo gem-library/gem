@@ -6,13 +6,14 @@
 function result = issorted(this, option)
     if nargin < 2
         if min(size(this)) > 1
-            error('Input must be a vector, or option ''rows'' ust be used');
+            error('Input must be a vector, or option ''rows'' must be used');
         end
-        result = (this == sort(this));
+        result = isequal(this, sort(this));
     else
-        if ~isequal(option, 'rows')
-            error('Unknown option');
-        end
-        result = (this == sortrows(this));
+        error('matrix sorting currently not supported');
+%         if ~isequal(option, 'rows')
+%             error('Unknown option');
+%         end
+%         result = isequal(this, sortrows(this));
     end
 end

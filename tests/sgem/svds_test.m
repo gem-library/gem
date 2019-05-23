@@ -61,8 +61,8 @@ function test_consistency
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
     vect = gemRand(4,1)*10-5 + (gemRand(4,1)*10-5)*1i;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
-    validateDoubleConsistency(@(x) svds(sparse(x), 1), x);
-    validateDoubleConsistency(@(x) svds(sparse(x), 3), x);
+    validateDoubleConsistency(@(x) svds(sparse(x), 1), x, 1e-10, 1);
+    validateDoubleConsistency(@(x) svds(sparse(x), 3), x, 1e-10, 1);
     if isOctave
         assert( sum(abs(svds(sparse(x{1}), 2, 'smallest') - svds(double(sparse(x{1})), 2, 0))) < 1e-9);
     else

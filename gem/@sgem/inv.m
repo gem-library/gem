@@ -5,6 +5,12 @@ function result = inv(this)
         error('Matrix must be square in sgem::inv');
     end
 
+    % simple case
+    if isempty(this)
+        result = this;
+        return;
+    end
+    
     % We first check whether the rank of the matrix is maximal
     if rank(this) < size(this,1)
         warning('Matrix is singular to working precision');

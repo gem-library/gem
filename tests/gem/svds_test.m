@@ -66,8 +66,8 @@ function test_consistency
     vect = gemRand(14,1)*10-5;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
     
-    validateDoubleConsistency(@(x) svds(x, 1), x);
-    validateDoubleConsistency(@(x) svds(x, 3), x);
+    validateDoubleConsistency(@(x) svds(x, 1), x, 1e-10, 1);
+    validateDoubleConsistency(@(x) svds(x, 3), x, 1e-10, 1);
     if isOctave
         assert( sum(abs(svds(x{1}, 2, 'smallest') - svds(double(x{1}), 2, 0))) < 1e-9);
     else

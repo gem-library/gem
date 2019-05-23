@@ -9,10 +9,6 @@ function result = sprintf(varargin)
         end
     end
 
-    % Now we call matlab's plot function
+    % Now we call the gem sprintf function
     result = sprintf(varargin{:});
-    
-    if nargout == 0
-        clear result;
-    end
 end

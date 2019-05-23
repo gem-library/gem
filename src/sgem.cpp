@@ -10750,7 +10750,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::sort(const int& dim, const int& type,
             for (IndexType i(0); i < indexMap.size(); ++i) {
                 IndexType x(i);
                 if (i >= startBlock)
-                    x = matrixR.innerSize()-indexMap.size()+i;
+                    x = transpo.matrixR.innerSize()-indexMap.size()+i;
 
                 if (isComplex) {
                     if (transpo.matrixR.coeff(indexMap[i],k) != 0)
@@ -10932,7 +10932,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::sort_new(const int& dim, const int& 
             for (IndexType i(0); i < indexMap.size(); ++i) {
                 IndexType x(i);
                 if (i >= startBlock)
-                    x = matrixR.innerSize()-indexMap.size()+i;
+                    x = transpo.matrixR.innerSize()-indexMap.size()+i;
 
                 if (isComplex) {
                     if (transpo.matrixR.coeff(indexMap[i],k) != 0)

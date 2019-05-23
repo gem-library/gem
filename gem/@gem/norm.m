@@ -2,13 +2,24 @@
 % 
 % supported formats :
 %   norm(x)    : norm(x, 2)
-%   norm(x, p) : with p = 1, 2, -Inf, Inf for vector x
-%   norm(x, p) : with p = 1, 2, Inf for matrix x
+%   norm(x, p) : with p = 1, 2, real, -Inf, Inf for vector x
+%   norm(x, p) : with p = 1, 2, 'fro', Inf for matrix x
 function result = norm(this, p)
     % We define the kind of norm we are interested in if this was not
     % specified
     if nargin < 2
         p = 2;
+    end
+    
+    % empty case
+    if isempty(this)
+        result = 0;
+        return;
+    end
+    
+    % p must be a char or a scalar
+    if ~ischar(p) && (numel(p) > 1)
+        error('sgem::norm : unsupported norm');
     end
     
     % Some norms are only supported for vectors
@@ -17,7 +28,7 @@ function result = norm(this, p)
             error('gem::norm : unsupported vector norm');
         end
     else
-        if (~isequal(p, 1)) && (~isequal(p, Inf)) && (~isequal(p,'fro')) && (~isequal(p, 2))
+        if (~isequal(p, 1)) && (~isequal(p, Inf)) && (~isequal(lower(p),'fro')) && (~isequal(p, 2))
             error('gem::norm : unsupported matrix norm');
         end
     end

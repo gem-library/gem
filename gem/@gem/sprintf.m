@@ -1,4 +1,13 @@
 % sprintf - redirects to matlab's sprintf function with double conversion
+%
+% Standard format are supported up to double precision. To be more precise,
+% use the format of the kind %25.20g . This produces a string of width at
+% least 25, with 20 digits of precision (the width is adjusted if needed to
+% fit all digits).
+%
+% Example : sprintf('%42.40g', [gem('pi'); gem('e')])
+%
+% See also toStrings.m
 function result = sprintf(varargin)
 
     if (nargin == 2) && ischar(varargin{1}) ...
@@ -20,7 +29,10 @@ function result = sprintf(varargin)
         end
         for i = 1:numel(txt)
             if length(txt{i}) < width
-                txt{i} = [txt{i}, char(32*ones(1,width-length(txt{i})))];
+                txt{i} = [char(32*ones(1,width-length(txt{i}))), txt{i}];
+%             elseif length(txt{i}) > width
+%                 warning('Truncating the number to fit requested width, is the width large enough for the requested precision?');
+%                 txt{i} = txt{i}(1:width);
             end
         end
         
@@ -40,12 +52,7 @@ function result = sprintf(varargin)
             end
         end
 
-        % Now we call matlab's plot function
+        % Now we call matlab's sprintf function
         result = sprintf(varargin{:});
     end
-
-    if nargout == 0
-        clear result;
-    end
-
 end

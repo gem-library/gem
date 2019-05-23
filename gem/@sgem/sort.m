@@ -14,7 +14,10 @@ function [result I] = sort(this, dim, mode)
         mode = 'ascend';
     end
 
-    if nargin < 2
+    if (nargin < 2) || ischar(dim)
+        if (nargin >=2) && ischar(dim)
+            mode = dim;
+        end
         if size(this,1) ~= 1
             dim = 1;
         else
@@ -22,11 +25,6 @@ function [result I] = sort(this, dim, mode)
         end
     elseif ~isequal(class(dim), 'double')
         dim = double(dim);
-    end
-
-    if ischar(dim)
-        mode = dim;
-        dim = 1;
     end
 
     if ~isequal(mode, 'ascend') && ~isequal(mode, 'descend')
@@ -38,18 +36,20 @@ function [result I] = sort(this, dim, mode)
     end
 
     % If there is nothing to sort
-    if dim >= 3
+    if isempty(this) || (dim >= 3)
         result = this;
         if nargout > 1
-            if size(this,1) ~= 1
-                I = [1:size(this,1)]'*ones(1,size(this,2));
-            else
-                I = [1:size(this,2)];
-            end
+            I = ones(size(this));
         end
         return;
     end
 
+    % we check the type of this and call another procedure if appropriate
+    if isa(this, 'double')
+        [result I] = sort(this, double(dim), mode);
+        return;
+    end
+    
     % Now we call the appropriate sorting method
     objId = this.objectIdentifier;
     [newObjectIdentifier Icell nbNegatives] = sgem_mex('sort', objId, dim-1, double(isequal(mode, 'descend')));

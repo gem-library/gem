@@ -7,5 +7,9 @@ function test_suite = plot_test()
 end
 
 function test_consistency
-    plot(gem([1 2]), gem([1 2]));
+    % Octave may not have a graphic toolkit
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        plot(gem([1 2]), gem([1 2]));
+    end
 end

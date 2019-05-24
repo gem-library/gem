@@ -17,7 +17,7 @@ function test_consistency
             [b c] = sortrows(double(x{i}));
             assert(max(max(abs(a - c))) < 1e-5);
 
-            a = sortrowsc(double(x{i}), -gem(ones(1,size(x{i},2))));
+            a = sortrowsc(double(x{i}), -gem(ones(size(x{i},2),1)));
             [b c] = sortrows(double(x{i}), -[1:size(x{i},2)]);
             assert(max(max(abs(a - c))) < 1e-5);
         end
@@ -36,5 +36,5 @@ function test_inputs
     shouldProduceAnError(@() sortrowsc(gem([1 2 3]), 1));
 
     % first input must be real
-    shouldProduceAnError(@() sortrowsc(gem([1 2 3i]), 1));
+    shouldProduceAnError(@() sortrowsc(gem([1 2 3i]), [1 1 1]));
 end

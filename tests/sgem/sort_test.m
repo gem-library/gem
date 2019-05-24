@@ -19,6 +19,18 @@ function test_consistency
     validateDoubleConsistency(@(x) sort(x, 'ascend'), x);
     validateDoubleConsistency(@(x) sort(x, 'descend'), x);
 
+    for i = 1:length(x)
+        [a I] = sort(x{i}, 1);
+        [aD ID] = sort(double(x{i}), 1);
+        assert(max(max(abs(a - aD))) < 1e-6);
+        assert(max(max(abs(I - ID))) < 1e-6);
+
+        [a I] = sort(x{i}, 2, 'descend');
+        [aD ID] = sort(double(x{i}), 2, 'descend');
+        assert(max(max(abs(a - aD))) < 1e-6);
+        assert(max(max(abs(I - ID))) < 1e-6);
+    end
+    
     % Octave doesn't support sorting a singleton dimension
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     if isOctave

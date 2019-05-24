@@ -14,6 +14,6 @@ function test_consistency
         assert(max(abs(cbrt(x{i}) - double(x{i}).^(1/3)), [], 'all') < 1e-13);
         
         % Also test with purely positive numbers
-        assert(max(abs(cbrt(x{i}+5) - double(x{i}+5).^(1/3)), [], 'all') < 1e-13);
+        assert(max(abs(cbrt(sparse(x{i}+5)) - double(x{i}+5).^(1/3)), [], 'all') < 1e-13);
     end
 end

@@ -7,10 +7,11 @@ function test_suite = toStrings_test()
 end
 
 function test_consistency
-    text = {'3.141592653589793238462643383279502884197169399375101', '2.718281828'};
-    disp(toStrings(gem('pi')));
-    disp(toStrings(gem('e'),10));
-    assert(isequal(toStrings(gem('pi')), text{1}));
+    % warning, we don't check really all digits, because different
+    % implementations can slightly make a difference
+    text = {'3.1415926535897932384626433832795028841971693993', '2.718281828'};
+    fullString = toStrings(gem('pi'));
+    assert(isequal(fullString(1:48), text{1}));
     assert(isequal(toStrings(gem('e'),10), text{2}));
 end
 

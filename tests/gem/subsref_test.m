@@ -70,8 +70,10 @@ function test_inputs
     end
     
     % We cannot access elements beyond the object dimension
+    shouldProduceAnError(@() x(-1));
     shouldProduceAnError(@() x(10));
     shouldProduceAnError(@() x(5,1));
+    shouldProduceAnError(@() x(-1,1));
     shouldProduceAnError(@() x(1,2,3));
 
     % we cannot create an object of more than 2 dimensions

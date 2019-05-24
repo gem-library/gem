@@ -42,6 +42,10 @@ function test_consistency
 
     
     %% Sub-functions
+    tmp = gem(1);
+    delete(tmp);
+    clear tmp;
+    
     gem.workingPrecision(gem(gem.workingPrecision));
     gem.displayPrecision(gem(gem.displayPrecision));
 end
@@ -51,8 +55,12 @@ function test_inputs
     
     shouldProduceAnError(@() gem('-1e5+2'));
 
+    shouldProduceAnError(@() gem('-1e5+2', [1 2]));
+
     shouldProduceAnError(@() gem('F'));
     
+    shouldProduceAnError(@() gem('1+3it',2));
+
     shouldProduceAnError(@() gem({1, {}}));
     
     shouldProduceAnError(@() gem({1, 'F'}));

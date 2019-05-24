@@ -91,6 +91,7 @@ function test_consistency
     j = [j 2];
     s = [s 0];
     assert(sum(sum(abs(sgem(i,j,s,10,10) - sparse(i,j,s,10,10)))) < 1e-9);
+    assert(sum(sum(abs(sgem(i,j,s,gem(10),gem(10)) - sparse(i,j,s,10,10)))) < 1e-9);
     assert(sum(sum(abs(sgem(i,j,s(1),10,10) - sparse(i,j,s(1),10,10)))) < 1e-9);
     s = 0*s;
     assert(nnz(sgem(i,j,s,10,10)) == 0);
@@ -130,6 +131,10 @@ function test_consistency
 
 
     %% Sub-functions
+    tmp = sgem(1);
+    delete(tmp);
+    clear tmp;
+
     sgem.workingPrecision(gem(sgem.workingPrecision));
     sgem.displayPrecision(gem(sgem.displayPrecision));
     slm = sgem.sparseLikeMatlab;
@@ -141,6 +146,8 @@ function test_inputs
     shouldProduceAnError(@() sgem('123.2.4 + 2i'));
     
     shouldProduceAnError(@() sgem('-1e5+2'));
+
+    shouldProduceAnError(@() sgem('-1e5+2', [1 2]));
 
     shouldProduceAnError(@() sgem('F'));
     

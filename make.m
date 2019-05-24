@@ -134,8 +134,8 @@ if useSharedGmpAndMpfr == 1
     if genericBuild == 1
         % We just do a generic build
         cd src
-        flags(1) = eval(['mex -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -lmpfr -lgmp ', parallelizationFlag, ' ', optimizationFlag, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        flags(2) = eval(['mex -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -lmpfr -lgmp ', parallelizationFlag, ' ', optimizationFlag, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        flags(1) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', parallelizationFlag, ' ', optimizationFlag, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        flags(2) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', parallelizationFlag, ' ', optimizationFlag, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
         flags(3) = unix(['mv *.', mexext, ' ../gem']);
         cd ..
     else

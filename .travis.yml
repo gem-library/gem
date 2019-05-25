@@ -27,7 +27,7 @@ before_script:
   - octave -q --eval "ver"
   - rm -f testresults.xml;
   - BUILD_BINARIES="make;"; echo "BUILD_BINARIES| $BUILD_BINARIES";
-  - TEST_COMMAND="exit(~gemRunTests(1));"; echo "TEST_COMMAND| $TEST_COMMAND";
+  - TEST_COMMAND="exit(~run_tests(1));"; echo "TEST_COMMAND| $TEST_COMMAND";
 script:
   - octave -q --eval "$ADDPATH_COMMAND $BUILD_BINARIES $TEST_COMMAND";
 after_script:

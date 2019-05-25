@@ -9,12 +9,12 @@ Here is a list of the functions currently implemented in the GEM library. The fi
 | gem | ✔ | ✔ | gem object constructor |
 | sgem | ✔ | ✔ | sparse gem object constructor |
 | gemify | ✔ | ✔ | converts a matrix to gem or sgem object, preserving its sparsity |
-| gemRand | ✔ | ✗ | generates high precision random numbers |
-| gemRandn | ✔ | ✗ | generates high precision random numbers following a gaussian distribution |
-| gemRng | ✔ | ✗ | gemRand random seed |
-| gemWorkingPrecision | ✔ | ✔ | sets the working precision of the library |
-| gemDisplayPrecision | ✔ | ✔ | sets the precision used when displaying gem and sgem objects |
-| gemSparseLikeMatlab | ✗ | ✔ | sets whether functions not preserving zeros should be allowed to produce sparse matrices |
+| gem.rand | ✔ | ✗ | generates high precision random numbers |
+| gem.randn | ✔ | ✗ | generates high precision random numbers following a gaussian distribution |
+| gem.rng | ✔ | ✗ | gem.rand random seed |
+| gem.workingPrecision | ✔ | ✔ | sets the working precision of the library |
+| gem.displayPrecision | ✔ | ✔ | sets the precision used when displaying gem and sgem objects |
+| gem.sparseLikeMatlab | ✗ | ✔ | sets whether functions not preserving zeros should be allowed to produce sparse matrices |
 | make | ✔ | ✔ | compiles the library |
 
 

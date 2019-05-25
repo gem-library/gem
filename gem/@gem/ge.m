@@ -58,7 +58,7 @@ function result = ge(this, varargin)
     end
 
     % For matlab, ge when one object is sparse produces a sparse result
-    if (gemSparseLikeMatlab == 1) && (convertBackForMatlabStyle == 1)
+    if (sgem.sparseLikeMatlab == 1) && (convertBackForMatlabStyle == 1)
         result = sparse(result);
     end
 end

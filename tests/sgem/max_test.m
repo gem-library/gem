@@ -58,7 +58,7 @@ function test_empty
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % maximum 3 inputs
     shouldProduceAnError(@() max(x, 2, 3, 4));
@@ -84,12 +84,12 @@ function test_inputs
 end
 
 function test_sparseLikeMatlab
-    initStatus = gemSparseLikeMatlab;
+    initStatus = gem.sparseLikeMatlab;
     
-    gemSparseLikeMatlab(0);
+    gem.sparseLikeMatlab(0);
     assert(isa(max(sgem(3), gem([1 2])), 'gem'));
-    gemSparseLikeMatlab(1);
+    gem.sparseLikeMatlab(1);
     assert(isa(max(sgem(3), gem([1 2])), 'sgem'));
     
-    gemSparseLikeMatlab(initStatus);
+    gem.sparseLikeMatlab(initStatus);
 end

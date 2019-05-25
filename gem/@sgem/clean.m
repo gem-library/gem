@@ -3,11 +3,11 @@
 % Supported formats:
 %   y = clean(x, tol)  Removes all components which are smaller than tol
 %                      in absolute value
-%   y = clean(x)       Same as above with tol = 10^(-gemWorkingPrecision)
+%   y = clean(x)       Same as above with tol = 10^(-gem.workingPrecision)
 function result = clean(this, tol)
     if nargin < 2
         % The default tolerance
-        tol = 10^(-gemWorkingPrecision);
+        tol = 10^(-gem.workingPrecision);
     end
 
     % We make sure this is a sgem

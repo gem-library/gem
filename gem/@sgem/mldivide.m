@@ -39,7 +39,7 @@ function result = mldivide(this, varargin)
 
     % We check the conditioning number of the matrix
     rcond = cond(gemify(this));
-    if rcond > 10^(gemWorkingPrecision-3)
+    if rcond > 10^(gem.workingPrecision-3)
         warning(['Matrix is close to singular. Result may be inaccurate. RCOND = ', toStrings(rcond)]);
     end
 

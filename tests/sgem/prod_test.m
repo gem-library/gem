@@ -21,6 +21,6 @@ function test_consistency
 end
 
 function test_inputs
-    shouldProduceAnError(@() prod(sparse(gemRand), 'alll'));
-    shouldProduceAnError(@() prod(sparse(gemRand), -1));
+    shouldProduceAnError(@() prod(sparse(gem.rand), 'alll'));
+    shouldProduceAnError(@() prod(sparse(gem.rand), -1));
 end

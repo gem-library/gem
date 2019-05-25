@@ -7,7 +7,7 @@ function test_suite = reshape_test()
 end
 
 function test_consistency
-    x = {gemRand(1,12)-1/2, (gemRand(1,12)-1/2)*1i, gemRand(1,12)-1/2 + (gemRand(1,12)-1/2)*1i};
+    x = {gem.rand(1,12)-1/2, (gem.rand(1,12)-1/2)*1i, gem.rand(1,12)-1/2 + (gem.rand(1,12)-1/2)*1i};
     validateDoubleConsistency(@(x) reshape(x, 2, 6), x);
     validateDoubleConsistency(@(x) reshape(x, [4 3]), x);
     validateDoubleConsistency(@(x) reshape(x, 1, 12), x);

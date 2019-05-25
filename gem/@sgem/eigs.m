@@ -14,7 +14,7 @@
 %                                   magnitude.
 %
 % Note:
-%  - The precision of the computation performed here is gemWorkingPrecision*2/3
+%  - The precision of the computation performed here is gem.workingPrecision*2/3
 %  - It appears that sometimes the order of two eigenvalues can be
 %    inverted, so if this is crucial information, one should double check
 %    the last eigenvalues by computing a few more eigenvalues than needed.

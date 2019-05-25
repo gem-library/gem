@@ -20,14 +20,14 @@
 %   sgem(i,j,s,precision)      % same if m=max(i) and n=max(j);
 
 % The precision of gem objects is set at construction. Either explicitely,
-% or by using the global function gemWorkingPrecision. The default value
+% or by using the global function gem.workingPrecision. The default value
 % is 50 digits.
 
 % For numbers specified as strings, the precision is always set to be at least
 % large enough to translate all significant digits in the provided string.
 
 % The precision of displayed number can be adjusted through the
-% gemDisplayPrecision function.
+% gem.displayPrecision function.
 
 % Note that the result of some operation may contain more digits than can
 % be truly garanteed... (this is the standard behavior of mpfrc++)
@@ -46,7 +46,7 @@
 %   whatever precision we want the library to work. This default precision
 %   enters at several stages. For instance, when computing log10(x), even
 %   if x has 100 digits, the result is only precise up to the precision
-%   specified throught gemWorkingPrecision.
+%   specified throught gem.workingPrecision.
 
 classdef sgem < handle
     properties (SetAccess = private, Hidden = true)
@@ -445,12 +445,17 @@ classdef sgem < handle
     end
 
 
-    %% Here come the methods which define the class-wide variables
+    %% Here come the methods which define the class-wide variables such as
     % 'workingPrecision' and 'displayPrecision'
     methods (Static)%, Access = private)
-        % This method implements a static variable for the whole class that
-        % defines the default precision of new numbers
         function value = workingPrecision(newValue)
+            % value = sgem.workingPrecision([newValue])
+            %
+            % This method affects both gem and sgem objects.
+            % (see also gem.workingPrecision)
+
+            % This method implements a static variable for the whole class that
+            % defines the default precision of new numbers
             persistent precision;
             if isempty(precision)
                 precision = 50;
@@ -465,15 +470,27 @@ classdef sgem < handle
                     error('The precision need to be larger or equal to 1');
                 end
                 precision = newValue;
+
                 % We call the mex interface to make this the default
                 % working precision
                 sgem_mex('setWorkingPrecision', precision);
+
+                % We also set the precision for full objects
+                if (precision ~= gem.workingPrecision)
+                    gem.workingPrecision(precision);
+                end
             end
             value = precision;
         end
-        % This method implements a static variable for the whole class that
-        % defines the default precision at which numbers are displayed
+        
         function value = displayPrecision(newValue)
+            % value = sgem.displayPrecision([newValue])
+            %
+            % This method affects both gem and sgem objects.
+            % (see also gem.displayPrecision)
+
+            % This method implements a static variable for the whole class that
+            % defines the default precision at which numbers are displayed
             persistent precision;
             if isempty(precision)
                 precision = 20;
@@ -489,13 +506,54 @@ classdef sgem < handle
                     % available
                     precision = -1;
                 end
+                
+                % We also set the precision for fullobjects
+                if (precision ~= gem.displayPrecision)
+                    gem.displayPrecision(precision);
+                end
             end
             value = precision;
         end
-        % This method implements a static variable for the whole class that
-        % defines whether we want the library to behave like matlab
-        % regarding sparse operations.
+        
         function value = sparseLikeMatlab(newValue)
+            % likeMatlab = sgem.sparseLikeMatlab([likeMatlab])
+            % 
+            % Getting and setting whether the library should deal with sparse matrices
+            % the way matlab does.
+            %
+            % Sometimes, operations on sparse matrices can produce non-sparse results.
+            % For some of these operations, matlab produces a full matrix. For instance,
+            %   sparse([0 1 0]) + 2
+            % gives [2 3 2] in full form. It makes sense to produce a full result here
+            % because the null element '0' is never preserved upon addition by a non-zero
+            % number.
+            % 
+            % On the other hand, some operations always preserve the zeros elements. It
+            % then makes sense to encode the result of the operation as a sparse matrix.
+            % Hence, sparse([0 1 0]) * 2, for instance, gives as a result sparse([0 2 0]).
+            %
+            % However, matlab does not always encode results expected to be full in full 
+            % matrices. For instance, exp(sparse([0 1 0])) returns by default a sparse 
+            % result, even though 0 is not preserved by the exponentiation : exp(0) = 1.
+            % This typically results in a full matrix being encoded as a sparse one 
+            % (which is inefficient).
+            %
+            % By default, the gem library keeps the sparse attribute of a matrix after
+            % an operation only if there is a chance that this result is sparse. Since
+            % both behaviors may be interesting, this function allows one to define 
+            % whether we want the gem library to produce sparse or full matrices based 
+            % on whether the applied function preserves the null element, or whether to
+            % choose matrix types the way matlab does.
+            %
+            % To get the current setting, use
+            %   sgem.sparseLikeMatlab
+            % To set the library to behave like Matlab, use
+            %   sgem.sparseLikeMatlab(1)
+
+            % This method implements a static variable for the whole class that
+            % defines whether we want the library to behave like matlab
+            % regarding sparse operations.
+
             persistent likeMatlab;
             if isempty(likeMatlab)
                 likeMatlab = 0;
@@ -511,4 +569,51 @@ classdef sgem < handle
             value = likeMatlab;
         end
     end
+    
+    
+    %% Here come additional methods which are overloads some standard matlab
+    % functions
+    methods (Static)%, Access = public)
+
+        function rng(varargin)
+            % sgem.rng(seed)
+            %
+            % sgem.rng - Setting the seed of the pseudorandom number generator
+            %
+            % Note : This method is redirected to gem.rng.
+            
+            gem.rng(varargin{:})
+        end
+        
+        function result = rand(varargin)
+            % sgem.rand - Uniformly distributed high precision pseudorandom numbers
+            %
+            % Usage :
+            %   sgem.rand         returns one pseudo-random number
+            %   sgem.rand(N)      returns an NxN matrix of pseudo-random numbers
+            %   sgem.rand(N,M)    returns an NxM matrix of pseudo-random numbers
+            %   sgem.rand([N,M])  idem
+            %
+            % Note : This method uses gem.rand.
+            
+            result = sparse(gem.rand(varargin{:}));
+        end
+        
+        function result = randn(varargin)
+            % sgem.randn - high precision pseudorandom numbers distributed according to
+            % the standard normal distribution
+            %
+            % Usage :
+            %   sgem.randn         returns one pseudo-random number
+            %   sgem.randn(N)      returns an NxN matrix of pseudo-random numbers
+            %   sgem.randn(N,M)    returns an NxM matrix of pseudo-random numbers
+            %   sgem.randn([N,M])  idem
+            %
+            % Note : This method uses gem.randn.
+            
+            result = sparse(gem.randn(varargin{:}));
+        end
+        
+    end
+    
 end

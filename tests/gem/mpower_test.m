@@ -10,13 +10,13 @@ function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
 
     % A few scalar cases
-    r = gemRand;
+    r = gem.rand;
     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-    r = -gemRand;
+    r = -gem.rand;
     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-    r = gemRand*1i;
+    r = gem.rand*1i;
     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-    r = -gemRand + gemRand*1i;
+    r = -gem.rand + gem.rand*1i;
     validateDoubleConsistency(@(x) mpower(x(1), r), x);
     
     % We currently also support two cases for square matrices
@@ -32,7 +32,7 @@ function test_empty
 end
 
 function test_inputs
-    x = gemRand(3);
+    x = gem.rand(3);
     
     % minimum and maximum 2 inputs
     shouldProduceAnError(@() mpower(x));

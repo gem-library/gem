@@ -1,5 +1,5 @@
-function result = gemRunTests(withCoverage)
-% function result = gemRunTests([withCoverage])
+function result = run_tests(withCoverage)
+% function result = run_tests([withCoverage])
 %
 % launches automatic tests for the GEM Library
 % Generates code coverage data if the option 'withCoverage' is set to 1.

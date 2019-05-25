@@ -12,12 +12,12 @@ function test_consistency
 end
 
 function test_sparseLikeMatlab
-    initStatus = gemSparseLikeMatlab;
+    initStatus = gem.sparseLikeMatlab;
     
-    gemSparseLikeMatlab(0);
+    gem.sparseLikeMatlab(0);
     assert(isa(acsc(sgem(rand)), 'gem'));
-    gemSparseLikeMatlab(1);
+    gem.sparseLikeMatlab(1);
     assert(isa(acsc(sgem(rand)), 'sgem'));
     
-    gemSparseLikeMatlab(initStatus);
+    gem.sparseLikeMatlab(initStatus);
 end

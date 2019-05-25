@@ -8,6 +8,6 @@ end
 
 function test_consistency
     x = generateMatrices(2, 5, {'A', 'AR', 'AI'});
-    x = cat(2, x, {sparse(gemRand(1,4))});
+    x = cat(2, x, {sparse(gem.rand(1,4))});
     validateDoubleConsistency(@(x) nonzeros(x), x);
 end

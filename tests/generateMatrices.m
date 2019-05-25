@@ -65,11 +65,11 @@ for i = 1:length(type)
 
         % Real only, imaginary only, or none?
         if ~isempty(strfind(type{i}, 'R'))
-            M = gemRand(dim)*10-5;
+            M = gem.rand(dim)*10-5;
         elseif ~isempty(strfind(type{i}, 'I'))
-            M = 1i*(gemRand(dim)*10-5);
+            M = 1i*(gem.rand(dim)*10-5);
         else
-            M = gemRand(dim)*10-5 + 1i*(gemRand(dim)*10-5);
+            M = gem.rand(dim)*10-5 + 1i*(gem.rand(dim)*10-5);
         end
 
         % Symmetric/hermitian only?

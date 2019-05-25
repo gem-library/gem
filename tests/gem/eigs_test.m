@@ -61,13 +61,13 @@ function test_consistency
     validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {gem(zeros(3))}, 1e-9);
 
     % We also check some low-rank matrices
-    vect = gemRand(5,1)*10-5;
+    vect = gem.rand(5,1)*10-5;
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
     if ~isOctave
-        vect = gemRand(5,1)*10-5 + (gemRand(5,1)*10-5)*1i;
+        vect = gem.rand(5,1)*10-5 + (gem.rand(5,1)*10-5)*1i;
         x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
     end
-    vect = gemRand(14,1)*10-5;
+    vect = gem.rand(14,1)*10-5;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
 
     % warning: octave doesn't sort out eigenvalues when all don't
@@ -96,7 +96,7 @@ function test_precision
     if isOctave
         x = {gem(eye(15))};
 
-        targetPrecision = 10^(-(gemWorkingPrecision-10));
+        targetPrecision = 10^(-(gem.workingPrecision-10));
         for i = 1:length(x)
             [V D] = eigs(x{i});
 
@@ -110,7 +110,7 @@ function test_precision
             try
                 x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
 
-                targetPrecision = 10^(-(gemWorkingPrecision-10));
+                targetPrecision = 10^(-(gem.workingPrecision-10));
                 for i = 1:length(x)
                     [V D] = eigs(x{i});
 
@@ -136,37 +136,37 @@ end
 
 function test_inputs
     % maximum 3 input supported
-    shouldProduceAnError(@() eigs(gemRand(2), [], 1, gemRand(1), gemRand(1)));
+    shouldProduceAnError(@() eigs(gem.rand(2), [], 1, gem.rand(1), gem.rand(1)));
     
     % input 2 must be empty
-    shouldProduceAnError(@() eigs(gemRand(2), gemRand(1)));
+    shouldProduceAnError(@() eigs(gem.rand(2), gem.rand(1)));
     
     % input 3 is a single positive number
-    shouldProduceAnError(@() eigs(gemRand(2), [], gemRand(1,2)));
-    shouldProduceAnError(@() eigs(gemRand(2), [], -1));
-    shouldProduceAnError(@() eigs(gemRand(2), [], 4));
-    [V D] = eigs(gemRand(2), [], 0);
+    shouldProduceAnError(@() eigs(gem.rand(2), [], gem.rand(1,2)));
+    shouldProduceAnError(@() eigs(gem.rand(2), [], -1));
+    shouldProduceAnError(@() eigs(gem.rand(2), [], 4));
+    [V D] = eigs(gem.rand(2), [], 0);
     assert(isempty(V));
     assert(isempty(D));
     
     % input 4 cannot be arbitrary
-    shouldProduceAnError(@() eigs(gemRand(2), [], 1, 'small'));
-    shouldProduceAnError(@() eigs(gemRand(2), [], 1, [1 2]));
+    shouldProduceAnError(@() eigs(gem.rand(2), [], 1, 'small'));
+    shouldProduceAnError(@() eigs(gem.rand(2), [], 1, [1 2]));
     
     % maximum 2 outputs supported
-    shouldProduceAnError(@() eigs(gemRand(2)), 3);
+    shouldProduceAnError(@() eigs(gem.rand(2)), 3);
     
     % input matrix must be squares
-    shouldProduceAnError(@() eigs(gemRand(2,3)));
-    shouldProduceAnError(@() eigs(gemRand(20,30)));
+    shouldProduceAnError(@() eigs(gem.rand(2,3)));
+    shouldProduceAnError(@() eigs(gem.rand(20,30)));
     
     % no eigenvectors computed for zero eigenvalues
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(vect*vect', [], 2), 2);
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(vect*vect', [], 1, 'sm'), 2);
 
     % no computation over an existing eigenvalue
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(vect*vect' + (vect+1)*(vect+1)', [], 3, 0));
 end

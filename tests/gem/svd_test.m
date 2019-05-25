@@ -15,7 +15,7 @@ function test_precision
     % NOTE: For now we don't deal (c.f. github issue #3)
     x = generateMatrices(2, 5, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
     
-    targetPrecision = 10^(-(gemWorkingPrecision-10));
+    targetPrecision = 10^(-(gem.workingPrecision-10));
     for i = 1:length(x)
         [U S V] = svd(x{i}, 'econ');
         
@@ -32,11 +32,11 @@ end
 
 function test_inputs
     % maximum 2 input supported
-    shouldProduceAnError(@() svd(gemRand(2), 'econ', gemRand(2)));
+    shouldProduceAnError(@() svd(gem.rand(2), 'econ', gem.rand(2)));
     
     % input 1 cannot be anything
-    shouldProduceAnError(@() svd(gemRand(2), 'economic'));
+    shouldProduceAnError(@() svd(gem.rand(2), 'economic'));
     
     % maximum 2 outputs supported
-    shouldProduceAnError(@() svd(gemRand(2)), 4);
+    shouldProduceAnError(@() svd(gem.rand(2)), 4);
 end

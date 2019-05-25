@@ -54,7 +54,7 @@ function result = power(this, varargin)
         result = this.^varargin{1};
 
         % For matlab, power of a sparse matrix is always sparse
-        if gemSparseLikeMatlab == 1
+        if sgem.sparseLikeMatlab == 1
             result = sparse(result);
         end
     end

@@ -8,7 +8,7 @@ function result = csc(this)
     result = csc(full(this));
 
     % for matlab, cos of a sparse matrix is a sparse matrix
-    if gemSparseLikeMatlab == 1
+    if sgem.sparseLikeMatlab == 1
         result = sparse(result);
     end
 end

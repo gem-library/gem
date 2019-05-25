@@ -19,19 +19,19 @@ function test_consistency
 end
 
 function test_precision
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
-    previousPrecision = gemWorkingPrecision;
-    gemWorkingPrecision(10);
+    previousPrecision = gem.workingPrecision;
+    gem.workingPrecision(10);
     x2 = sgem(double(x));
     
     assert(~isequaln(x,x2));
     
-    gemWorkingPrecision(previousPrecision);
+    gem.workingPrecision(previousPrecision);
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % minimum 2 inputs
     shouldProduceAnError(@() isequaln(x));

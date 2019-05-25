@@ -78,7 +78,7 @@ function test_consistency
 end
 
 function test_inputs
-    x = gemRand(3);
+    x = gem.rand(3);
     
     % maximum 2 dimensions
     try

@@ -120,6 +120,7 @@ The following function can be applied to gem/sgem objects directly.
 | round | ✔ | ✔ |  |
 | saveobj | ✔ | ✔ |  |
 | sec | ✔ | ✔ |  |
+| sign | ✔ | ✔ |  |
 | sin | ✔ | ✔ |  |
 | size | ✔ | ✔ |  |
 | sort | ✔ | ✔ |  |

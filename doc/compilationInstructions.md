@@ -14,7 +14,7 @@ The following steps work equally well for MATLAB and GNU Octave.
 1. Download the latest library repository with the following command: `git clone https://www.github.com/jdbancal/gem`. This creates a folder called `gem`.
 2. Inside this folder, download the submodules with the command `git submodule update --init`.
 3. Install the gmp, mpfr and mpfrc++ libraries with the command
-`sudo apt-get install libmpfrc++-dev libgmp-dev`
+`sudo apt install libmpfrc++-dev libgmp-dev`
 4. Start MATLAB or GNU Octave and go to the gem folder.
 5. Type `make`. This will launch the compilation of the library. If everything goes fine, the program will conclude with 'Compilation successful'. Otherwise, a message should inform you about what is missing.
 6. Add the gem folder to your MATLAB/GNU Octave path. You can now perform your favorite computation in high precision!
@@ -82,3 +82,7 @@ Tentative roadmap:
 These additional links may help
  - Instructions to be able to run `mex -setup` : http://www.mathworks.com/matlabcentral/answers/246507-why-can-t-mex-find-a-supported-compiler-in-matlab-r2015b-after-i-upgraded-to-xcode-7-0#comment_392485
 
+Failsafe mode
+----------------
+
+Because every system installation is different... When calling the command `make` from within MATLAB/GNU Octave, setting the third option `genericBuild` to `1` triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. However, this compilation procedure is slower. Moreover, since MATLAB/GNU Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).

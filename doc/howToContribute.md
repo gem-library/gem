@@ -51,6 +51,8 @@ Here is a partial list of features/functions that would be nice to add to the li
  - Parallelize the for loops appearing in simple functions such as `sin`.
  - `triu`, `tril`
  - Beta special functions: `beta`, `betainv`, `betainc`, `betaincinv`
+ - Systematically check for behavior of functions on `NaN`, `-Inf`, `Inf`
+ - Define a strategy for empty matrices of various sizes, i.e. difference between 0x0, 1x0, 10x0, 0x1, ... empty matrices. Implement, check behavior of all functions on these objects and test it.
  - For more ways to contribute, check if there is anything more [here](http://github.com/jdbancal/gem/issues)
 
 

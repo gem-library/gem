@@ -7,11 +7,11 @@ function test_suite = sparse_test()
 end
 
 function test_precision
-    x = gemRand(3);
+    x = gem.rand(3);
     [I J V] = find(x);
     s = size(x);
     
-    targetPrecision = 10.^(-gemWorkingPrecision+10);
+    targetPrecision = 10.^(-gem.workingPrecision+10);
     
     I = sgem(I);
     assert(max(max(abs(sparse(I,J,V) - x))) < targetPrecision);

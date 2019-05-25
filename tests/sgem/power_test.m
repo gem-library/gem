@@ -49,7 +49,7 @@ function test_empty
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % minimum and maximum 2 inputs
     shouldProduceAnError(@() power(x));

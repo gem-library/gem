@@ -10,7 +10,7 @@ function test_precision
     % Octave doesn't support saving classdef object (https://savannah.gnu.org/bugs/?45833)
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     
-    targetPrecision = 10.^(-gemWorkingPrecision+10);
+    targetPrecision = 10.^(-gem.workingPrecision+10);
     if ~isOctave
         x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
         y = x;
@@ -23,7 +23,7 @@ function test_precision
             assert(max(max(abs(x{i}-y{i}))) < targetPrecision);
         end
     else
-        x = gemRand(3);
+        x = gem.rand(3);
         y = x;
         
         stru = saveobj(x);

@@ -8,14 +8,14 @@
 %   c = a+b
 
 % The precision of gem objects is set at construction. Either explicitely,
-% or by using the global function gemWorkingPrecision. The default value
+% or by using the global function gem.workingPrecision. The default value
 % is 50 digits.
 
 % For numbers specified as strings, the precision is always set to be at least
 % large enough to translate all significant digits in the provided string.
 
 % The precision of displayed number can be adjusted through the
-% gemDisplayPrecision function.
+% gem.displayPrecision function.
 
 % Note that the result of some operation may contain more digits than can
 % be truly garanteed... (this is the standard behavior of mpfrc++)
@@ -34,7 +34,7 @@
 %   whatever precision we want the library to work. This default precision
 %   enters at several stages. For instance, when computing log10(x), even
 %   if x has 100 digits, the result is only precise up to the precision
-%   specified throught gemWorkingPrecision.
+%   specified throught gem.workingPrecision.
 
 % Constants : The following special calls return mathematical constants
 %   - gem('log2')    % log2 = 0.693...
@@ -226,7 +226,7 @@ classdef gem < handle
                     % first we check that the caller is the current file
                     % (i.e. gem.m)
                     [ST I] = dbstack('-completenames');
-                    if (length(ST) < 2) || (isempty(strfind(ST(2).file,'/@gem/')) && isempty(strfind(ST(2).file,'\@gem\')) && isempty(strfind(ST(2).file,'/@sgem/'))&& isempty(strfind(ST(2).file,'\@sgem\')) && isempty(strfind(ST(2).name,'gemRand')))
+                    if (length(ST) < 2) || (isempty(strfind(ST(2).file,'/@gem/')) && isempty(strfind(ST(2).file,'\@gem\')) && isempty(strfind(ST(2).file,'/@sgem/')) && isempty(strfind(ST(2).file,'\@sgem\')))
                         error('Only gem.m and sgem.m is allowed to encapsulate an integer into a new gem object.');
                     end
 
@@ -326,12 +326,49 @@ classdef gem < handle
     end
 
 
-    %% Here come the methods which define the class-wide variables
+    %% Here come the methods which define the class-wide variables such as
     % 'workingPrecision' and 'displayPrecision'
     methods (Static)%, Access = private)
-        % This method implements a static variable for the whole class that
-        % defines the default precision of new numbers
+        
         function value = workingPrecision(newValue)
+            % precision = gem.workingPrecision([precision])
+            % 
+            % Getting and setting the working precision for all gem and sgem objects.
+            %
+            % To get the current working precision, use
+            %   precision = gem.workingPrecision
+            % To set the default precision for all newly created gem object to 100, use
+            %   gem.workingPrecision(100)
+            %
+            % The working precision is the precision at which new gem object are 
+            % created. This precision applies to objects created from matlab, but also 
+            % to all result of operations performed by the gem library. Therefore, you 
+            % should always start your work by calling this function with the level of
+            % precision with which you want computations to be performed. Failure to
+            % call this function will result in a default precision of 50 digits being
+            % used by the library.
+            %
+            % Example : calling gem.workingPrecision(10) yields the following behavior:
+            %   gem(3.1,3)*gem(2,3)  ->  6.203125000
+            % Here, additional digits have been added to the result.
+            % These digits are zeros if both numbers in the product are integers:
+            %   gem(312,3)*gem(223,3)  ->  69576
+            % Zeros after the decimal points are not printed for integer numbers, so
+            % we can't see them here. To make sure there are 10 digits in total, we
+            % can display it with a fractional number :
+            %   [1.1 gem(312,3)*gem(223,3)] ->  1.100000000  69576.00000
+            % this shows that the result of the multiplication finishes with exactly
+            % 5 zeros.
+            %
+            % The working precision also puts an upper bound on the number of digits 
+            % kept after an operation. Therefore
+            %   gem(1.23456789012345,15)*gem(1.23456789012345,15)
+            % only returns 10 digits : 1.524157875
+            %
+            % This method affects both gem and sgem objects.
+            
+            % This method implements a static variable for the whole class that
+            % defines the default precision of new numbers
             persistent precision;
             if isempty(precision)
                 precision = 50;
@@ -346,15 +383,33 @@ classdef gem < handle
                     error('The precision need to be larger or equal to 1');
                 end
                 precision = newValue;
+
                 % We call the mex interface to make this the default
                 % working precision
                 gem_mex('setWorkingPrecision', precision);
+                
+                % We also set the precision for sparse objects
+                if (precision ~= sgem.workingPrecision)
+                    sgem.workingPrecision(precision);
+                end
             end
             value = precision;
         end
-        % This method implements a static variable for the whole class that
-        % defines the default precision at which numbers are displayed
+        
         function value = displayPrecision(newValue)
+            % precision = gem.displayPrecision([precision])
+            % 
+            % Getting and setting the display precision for all gem and sgem objects.
+            %
+            % To get the current precision used when displaying gem objects, use
+            %   precision = gem.displayPrecision
+            % To display all gem objects with 30 digits, use
+            %   gem.displayPrecision(30)
+            %
+            % This method affects both gem and sgem objects.
+            
+            % This method implements a static variable for the whole class that
+            % defines the default precision at which numbers are displayed
             persistent precision;
             if isempty(precision)
                 precision = 20;
@@ -370,12 +425,172 @@ classdef gem < handle
                     % available
                     precision = -1;
                 end
+                
+                % We also set the precision for sparse objects
+                if (precision ~= sgem.displayPrecision)
+                    sgem.displayPrecision(precision);
+                end
             end
             value = precision;
         end
+        
+        function value = sparseLikeMatlab(varargin)
+            % likeMatlab = gem.sparseLikeMatlab([likeMatlab])
+            %
+            % Note : This method is redirected to sgem.sparseLikeMatlab.
+            
+            value = sgem.sparseLikeMatlab(varargin{:});
+        end
+        
     end
 
+    
+    %% Here come additional methods which are overloads some standard matlab
+    % functions
+    methods (Static)%, Access = public)
 
+        function rng(seed)
+            % gem.rng(seed)
+            %
+            % gem.rng - Setting the seed of the pseudorandom number generator gem.rand
+            %
+            % Usage :
+            %   gem.rng        uses a random seed
+            %   gem.rng(seed)  uses seed 1+round(abs(seed))
+            %
+            % Note : The values produced by the gem.rand function depend on the seed 
+            % used here, as well as on the gem.workingPrecision.
+        
+            % We check the input
+            if nargin == 0
+                seed = randi(2^32,1,1,'uint32');
+            elseif ~isequal(class(seed),'double')
+                seed = double(seed);
+            end
+
+            if (nargin > 1) || ~isnumeric(seed) || (numel(seed) ~= 1)
+                error('Unexpected argument in gem.rng')
+            end
+
+            % We call the initialization procedure
+            gem_mex('randInit', 1+round(abs(seed)));
+        end
+        
+        function result = rand(varargin)
+            % gem.rand - Uniformly distributed high precision pseudorandom numbers
+            %
+            % Usage :
+            %   gem.rand         returns one pseudo-random number
+            %   gem.rand(N)      returns an NxN matrix of pseudo-random numbers
+            %   gem.rand(N,M)    returns an NxM matrix of pseudo-random numbers
+            %   gem.rand([N,M])  idem
+            %
+            % Note : The values produced by this function depend on the seed (which can
+            % be set by the function gem.rng), as well as on the gem.workingPrecision.
+
+            % Let's check the input's validity
+            if nargin == 0
+                size = [1, 1];
+            elseif nargin == 1
+                if numel(varargin{1}) == 1
+                    size = varargin{1}*[1 1];
+                elseif numel(varargin{1}) == 2
+                    size = [varargin{1}(1) varargin{1}(2)];
+                else
+                    error('Unexpected argument in gem.rand');
+                end
+            elseif nargin == 2
+                if (numel(varargin{1}) ~= 1) || (numel(varargin{2}) ~= 1) || ~isnumeric(varargin{1}) || ~isnumeric(varargin{2})
+                    error('Unexpected arguments in gem.rand');
+                else
+                    size = [round(varargin{1}), round(varargin{2})];
+                end
+            else
+                error('Unexpected arguments in gem.rand');
+            end
+
+            % We make sure the default working precision has been set
+            gem.workingPrecision;
+
+            % We call the rand procedure. Since the function creates a
+            % new object with the result, we keep the corresponding handle...
+            newObjectIdentifier = gem_mex('rand', size);
+
+            % ...  and create a new matlab object to keep this handle
+            result = gem('encapsulate', newObjectIdentifier);
+        end
+        
+        function result = randn(varargin)
+            % gem.randn - high precision pseudorandom numbers distributed according to
+            % the standard normal distribution
+            %
+            % Usage :
+            %   gem.randn         returns one pseudo-random number
+            %   gem.randn(N)      returns an NxN matrix of pseudo-random numbers
+            %   gem.randn(N,M)    returns an NxM matrix of pseudo-random numbers
+            %   gem.randn([N,M])  idem
+            %
+            % Note : The values produced by this function depend on the seed (which can
+            % be set by the function gem.rng), as well as on the gem.workingPrecision.
+
+            % Let's check the input's validity
+            if nargin == 0
+                size = [1, 1];
+            elseif nargin == 1
+                if numel(varargin{1}) == 1
+                    size = varargin{1}*[1 1];
+                elseif numel(varargin{1}) == 2
+                    size = [varargin{1}(1) varargin{1}(2)];
+                else
+                    error('Unexpected argument in gem.randn');
+                end
+            elseif nargin == 2
+                if (numel(varargin{1}) ~= 1) || (numel(varargin{2}) ~= 1) || ~isnumeric(varargin{1}) || ~isnumeric(varargin{2})
+                    error('Unexpected arguments in gem.randn');
+                else
+                    size = [round(varargin{1}), round(varargin{2})];
+                end
+            else
+                error('Unexpected arguments in gem.randn');
+            end
+            nbElements = prod(size);
+
+            % We use Marsaglia's polar method (adapted and corrected from https://www.projectrhea.org/rhea/index.php/The_principle_for_how_to_generate_random_samples_from_a_Gaussian_distribution )
+
+            % We first get uniformly random numbers
+            sel = [];
+            while (length(sel)*2 < nbElements)
+%                if (~isempty(sel))
+%                    disp('trying again');
+%                end
+                w1 = 2*gem.rand(1, ceil(nbElements*0.7)) - 1;
+                w2 = 2*gem.rand(1, ceil(nbElements*0.7)) - 1;
+                r = w1.^2 + w2.^2;
+                sel = find(r < 1);
+            end
+
+            % We only use the minimum number of elements
+            sel = sel(1:ceil(nbElements/2));
+            sub.type = '()';
+            sub.subs = {sel};
+            w1 = subsref(w1, sub);
+            w2 = subsref(w2, sub);
+            r = subsref(r, sub);
+
+            % Now we obtain the random numbers
+            r = sqrt(-2*log(r)./r);
+            result = [w1.*r, w2.*r];
+
+            % And format them in the desired way
+            sub.type = '()';
+            sub.subs = {[1:nbElements]};
+            result = subsref(result, sub);
+            result = reshape(result, size);
+        end
+        
+    end
+
+    
     %% The following methods are needed in the class, they are implemented as
     % methods rather than functions, because octave doesn't support declaration
     % of functions into a class file
@@ -544,7 +759,7 @@ classdef gem < handle
                 % checking whether the c++ library was compiled. If not, we
                 % suggest to download the binaries.
                 if (exist(['gem_mex.', mexext], 'file') ~= 3)
-                    warning('The library binaries were not found. You may wish to download them online at https://www.github.com/jdbancal/gem/releases .');
+                    warning('The library binaries were not found. You may wish to download them online at https://www.github.com/gem-library/gem/releases .');
                     binariesOk = 0;
                 else
                     binariesOk = 1;

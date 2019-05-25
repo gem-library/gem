@@ -26,15 +26,15 @@ function test_consistency
         validateDoubleConsistency(@(x) clean(double(x)/250, sgem(0.01)), x);
     end
     
-    previousPrecision = gemWorkingPrecision;
-    gemWorkingPrecision(2);
+    previousPrecision = gem.workingPrecision;
+    gem.workingPrecision(2);
     assert(isequal(clean(sgem([0.005 0.015 0.03])), [0 0.015 0.03]));
-    gemWorkingPrecision(previousPrecision);
+    gem.workingPrecision(previousPrecision);
 end
 
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % tolerance must be a single positive number
     shouldProduceAnError(@() clean(x, '0.1'));

@@ -21,7 +21,7 @@ function test_consistency
 end
 
 function test_inputs
-    shouldProduceAnError(@() prod(gemRand, 'alll'));
+    shouldProduceAnError(@() prod(gem.rand, 'alll'));
 
-    shouldProduceAnError(@() prod(gemRand, -1));
+    shouldProduceAnError(@() prod(gem.rand, -1));
 end

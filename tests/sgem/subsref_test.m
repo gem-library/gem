@@ -18,16 +18,16 @@ function test_consistency
     validateDoubleConsistency(@(x) x(:), x);
     validateDoubleConsistency(@(x) x(:,:), x);
 
-    x = {sparse(gemRand(300,300))};
+    x = {sparse(gem.rand(300,300))};
     validateDoubleConsistency(@(x) x(1:end-1,1:end-1), x);
-    x = {sparse(gemRand(50010,1))};
+    x = {sparse(gem.rand(50010,1))};
     validateDoubleConsistency(@(x) x(1:end-1,:), x);
-    x = {sparse(gemRand(1,50010))};
+    x = {sparse(gem.rand(1,50010))};
     validateDoubleConsistency(@(x) x(:,1:end-1), x);
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % maximum 2 dimensions
     shouldProduceAnError(@() x(1,2,3));

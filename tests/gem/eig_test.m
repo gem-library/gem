@@ -14,7 +14,7 @@ end
 function test_precision
     x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
     
-    targetPrecision = 10^(-(gemWorkingPrecision-10));
+    targetPrecision = 10^(-(gem.workingPrecision-10));
     for i = 1:length(x)
         [V D] = eig(x{i});
         
@@ -31,11 +31,11 @@ end
 
 function test_inputs
     % maximum 1 input supported
-    shouldProduceAnError(@() eig(gemRand(2), gemRand(2)));
+    shouldProduceAnError(@() eig(gem.rand(2), gem.rand(2)));
     
     % maximum 2 outputs supported
-    shouldProduceAnError(@() eig(gemRand(2)), 3);
+    shouldProduceAnError(@() eig(gem.rand(2)), 3);
     
     % input matrix must be squares
-    shouldProduceAnError(@() eig(gemRand(2,3)));
+    shouldProduceAnError(@() eig(gem.rand(2,3)));
 end

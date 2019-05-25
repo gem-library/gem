@@ -57,13 +57,13 @@ function test_consistency
     validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {sgem(zeros(3))}, 1e-9);
 
     % We also check some low-rank matrices
-    vect = gemRand(5,1)*10-5;
+    vect = gem.rand(5,1)*10-5;
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
     if ~isOctave
-        vect = gemRand(5,1)*10-5 + (gemRand(5,1)*10-5)*1i;
+        vect = gem.rand(5,1)*10-5 + (gem.rand(5,1)*10-5)*1i;
         x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
     end
-    vect = gemRand(14,1)*10-5;
+    vect = gem.rand(14,1)*10-5;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
 
     % warning: octave doesn't sort out eigenvalues when all don't
@@ -101,7 +101,7 @@ function test_precision
     if isOctave
         x = {sgem(eye(15))};
 
-        targetPrecision = 10^(-(gemWorkingPrecision-10));
+        targetPrecision = 10^(-(gem.workingPrecision-10));
         for i = 1:length(x)
             [V D] = eigs(x{i});
 
@@ -117,7 +117,7 @@ function test_precision
 
                 % Spectra sometimes stops at a precision of ~1e-15! So we don't check
                 % this for now unfortunately with a very high precision,,,
-                %targetPrecision = 10^(-(gemWorkingPrecision-10));
+                %targetPrecision = 10^(-(gem.workingPrecision-10));
                 targetPrecision = 1e-9;
                 for i = 1:length(x)
                     if size(x{i},1) >= 8
@@ -145,7 +145,7 @@ function test_empty
 end
 
 function test_inputs
-    x = sparse(gemRand(2));
+    x = sparse(gem.rand(2));
     
     % maximum 4 input supported
     shouldProduceAnError(@() eigs(x, [], 1, 2, 2));
@@ -169,16 +169,16 @@ function test_inputs
     shouldProduceAnError(@() eigs(x), 3);
     
     % input matrix must be squares
-    shouldProduceAnError(@() eigs(sparse(gemRand(2,3))));
-    shouldProduceAnError(@() eigs(sparse(gemRand(20,30))));
+    shouldProduceAnError(@() eigs(sparse(gem.rand(2,3))));
+    shouldProduceAnError(@() eigs(sparse(gem.rand(20,30))));
     
     % no eigenvectors computed for zero eigenvalues
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 2), 2);
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 1, 'sm'), 2);
     
     % no computation over an existing eigenvalue
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0));
 end

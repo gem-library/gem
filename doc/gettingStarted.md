@@ -19,7 +19,7 @@ High precision objects can also be constructed by specifying all digits in a str
 
     creates a 1x1 matrix (i.e. a scalar) with 20 non-trivial digits. The remaining digits are set to zeros.
 
-When creating a number from a string which contains more digits than the precision defined by `gemWorkingPrecision`, the precision of the created number is automatically adjusted to hold all specified digits.
+When creating a number from a string which contains more digits than the precision defined by `gem.workingPrecision`, the precision of the created number is automatically adjusted to hold all specified digits.
 
 All elements of a matrix can be individually initialized to an arbitrary precision by calling the constructor `gem` with a cell array containing the corresponding strings:
  - `gem({'1.321321123123321123' '456.4566544566544564'; '0.789987987789987789' '369.639369366963936'})`
@@ -56,7 +56,7 @@ The GEM library works with high precision numbers. The precision of these number
 
         ~1e-50
 
-The precision at which the GEM library works can be adjusted throught the function `gemWorkingPrecision`. Alternatively, it can be passed as a parameter when creating a gem object:
+The precision at which the GEM library works can be adjusted throught the function `gem.workingPrecision`. Alternatively, it can be passed as a parameter when creating a gem object:
  - `gem(3.141592654,3)` yields just 
 
         3.14
@@ -89,7 +89,7 @@ The `precision` function can be used to determine how many digits are used to de
 
 ### Display precision
 
-When displaying a high precision number, only part of the number is usually printed out. This is the default behavior, because long string of digits can quickly become cumbersome. Even though all significant digits are not systematically printed, they are indeed kept in memory and used in the computations. The function `gemDisplayPrecision` can be used to adjust the number of displayed digits. Alternatively, the display precision can also be directly specified as a second argument of the `disp` or `display` functions:
+When displaying a high precision number, only part of the number is usually printed out. This is the default behavior, because long string of digits can quickly become cumbersome. Even though all significant digits are not systematically printed, they are indeed kept in memory and used in the computations. The function `gem.displayPrecision` can be used to adjust the number of displayed digits. Alternatively, the display precision can also be directly specified as a second argument of the `disp` or `display` functions:
  - `disp(gem('pi'),50)` prints 50 digits:
 
         3.1415926535897932384626433832795028841971693993751
@@ -104,7 +104,7 @@ A *negative* display precision prints out all digits in memory:
 
 A list of the functions that can be applied to gem and sgem objects is available [here](functions.md). In general, these functions take the same arguments as their MATLAB/GNU Octave counterparts, and behave in the same way. For instance, the `max` function applied to a vector containing two complex numbers returns the complex number with largest magnitude, or the one with largest angle if both magnitudes are equal.
 
-For some functions, all possible behaviors are not yet implemented. For instance, `mpower` currently only supports powers of +1 and -1. Anyone wishing to have a specific feature is invited to open an [issue](https://github.com/jdbancal/gem/issues) and eventually consider contributing to this open source project by implementing the missing behaviors and submitting a push request (see also [this page](howToContribute.md) for more ways to get involved).
+For some functions, all possible behaviors are not yet implemented. For instance, `mpower` currently only supports powers of +1 and -1. Anyone wishing to have a specific feature is invited to open an [issue](https://github.com/gem-library/gem/issues) and eventually consider contributing to this open source project by implementing the missing behaviors and submitting a push request (see also [this page](howToContribute.md) for more ways to get involved).
 
-Note that the default behavior of some GEM functions does differ from MATLAB's implementation. This is the case for example for functions which don't preserve the sparsity when applied to sparse objects. This point is explained in the `gemSparseLikeMatlab.m` file. This default MATLAB behavior is easily restored by calling `gemSparseLikeMatlab(1)`.
+Note that the default behavior of some GEM functions does differ from MATLAB's implementation. This is the case for example for functions which don't preserve the sparsity when applied to sparse objects. This point is explained in the `gem.sparseLikeMatlab.m` file. This default MATLAB behavior is easily restored by calling `gem.sparseLikeMatlab(1)`.
 

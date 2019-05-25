@@ -30,18 +30,18 @@ function test_consistency
 end
 
 function test_sparseLikeMatlab
-    initStatus = gemSparseLikeMatlab;
+    initStatus = gem.sparseLikeMatlab;
     
-    gemSparseLikeMatlab(0);
+    gem.sparseLikeMatlab(0);
     assert(~issparse(le(sgem([1 2]), gem(0))));
-    gemSparseLikeMatlab(1);
+    gem.sparseLikeMatlab(1);
     assert(issparse(le(sgem([1 2]), gem(0))));
     
-    gemSparseLikeMatlab(initStatus);
+    gem.sparseLikeMatlab(initStatus);
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % minimum and maximum 2 inputs
     shouldProduceAnError(@() le(x));

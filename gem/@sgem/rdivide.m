@@ -46,7 +46,7 @@ function result = rdivide(this, varargin)
         result = rdivide(full(this), full(varargin{1}));
 
         % For matlab, division of a sparse matrix is always a sparse matrix
-        if gemSparseLikeMatlab == 1
+        if sgem.sparseLikeMatlab == 1
             result = sparse(result);
         end
     end

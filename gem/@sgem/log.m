@@ -8,7 +8,7 @@ function result = log(this)
     result = log(full(this));
 
     % for matlab, log of a sparse matrix is a sparse matrix
-    if gemSparseLikeMatlab == 1
+    if sgem.sparseLikeMatlab == 1
         result = sparse(result);
     end
 end

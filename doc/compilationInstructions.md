@@ -11,7 +11,7 @@ Steps to compile the GEM library on *Ubuntu* :
 
 The following steps work equally well for MATLAB and GNU Octave.
 
-1. Download the latest library repository with the following command: `git clone https://www.github.com/jdbancal/gem`. This creates a folder called `gem`.
+1. Download the latest library repository with the following command: `git clone https://www.github.com/gem-library/gem`. This creates a folder called `gem`.
 2. Inside this folder, download the submodules with the command `git submodule update --init`.
 3. Install the gmp, mpfr and mpfrc++ libraries with the command
 `sudo apt install libmpfrc++-dev libgmp-dev`
@@ -25,7 +25,7 @@ Steps to compile the GEM library on *Windows* (64 bits) :
 
 The following was only tested on MATLAB.
 
-1. Download the latest library repository either with git (see the first Ubuntu instruction above) of from the [release page](https://github.com/jdbancal/gem/releases).
+1. Download the latest library repository either with git (see the first Ubuntu instruction above) of from the [release page](https://github.com/gem-library/gem/releases).
 2. Install msys on your system from [http://mingw.org/wiki/msys](http://mingw.org/wiki/msys)
 3. Launch the MinGW Installation Manager and install packages `mingw-developer-toolkit` and `msys-base` 
 4. Download GMP from [https://gmplib.org/#DOWNLOAD](https://gmplib.org/#DOWNLOAD) and place it into gem's 'external' folder
@@ -56,7 +56,7 @@ Steps to compile the GEM library on *macOS* (tested on el capitain 10.11.6) :
 ### Instructions for GNU Octave
 These instructions were tested for a version of GNU Octave installed as an [App Bundle](https://octave-app.org/Download.html).
 
-1. Download the latest library repository with the following command: `git clone https://www.github.com/jdbancal/gem`. This creates a folder called `gem`.
+1. Download the latest library repository with the following command: `git clone https://www.github.com/gem-library/gem`. This creates a folder called `gem`.
 2. Inside this folder, download the submodules with the command `git submodule update --init`.
 3. Download GMP from [https://gmplib.org/#DOWNLOAD](https://gmplib.org/#DOWNLOAD) and place it into gem's 'external' folder
 4. Download MPFR from [http://www.mpfr.org/mpfr-current/#download](http://www.mpfr.org/mpfr-current/#download) and place it into gem's 'external' folder

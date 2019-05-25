@@ -37,7 +37,7 @@ function test_empty
 end
 
 function test_inputs
-    x = gemRand(3);
+    x = gem.rand(3);
     
     % minimum and maximum 2 inputs
     shouldProduceAnError(@() plus(x));

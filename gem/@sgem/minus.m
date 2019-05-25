@@ -44,7 +44,7 @@ function result = minus(this, varargin)
     end
 
     % For matlab, substration between two sparse matrices is always sparse (even when adding a matrix with a scalar)
-    if (gemSparseLikeMatlab == 1) && (issparse(this)) && (issparse(varargin{1})) && (~issparse(result))
+    if (sgem.sparseLikeMatlab == 1) && (issparse(this)) && (issparse(varargin{1})) && (~issparse(result))
         result = sparse(result);
     end
 end

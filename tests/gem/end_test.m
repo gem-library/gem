@@ -14,6 +14,6 @@ function test_consistency
 end
 
 function test_inputs
-    x = gemRand(2,3);
+    x = gem.rand(2,3);
     shouldProduceAnError(@() x(1,1,end));
 end

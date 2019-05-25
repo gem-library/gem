@@ -56,7 +56,7 @@ function result = eq(this, varargin)
     end
 
     % For matlab, eq when one object is sparse produces a sparse result
-    if (gemSparseLikeMatlab == 1) && (convertBackForMatlabStyle == 1)
+    if (sgem.sparseLikeMatlab == 1) && (convertBackForMatlabStyle == 1)
         result = sparse(result);
     end
 end

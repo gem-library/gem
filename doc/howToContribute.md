@@ -23,7 +23,7 @@ Assuming you want to implement a particular function and already forked a versio
 Design considerations
 ---------------------
 
-- By default, truly sparse operations are implemented only if there is a chance that the result of the operation applied to a sparse matrix produces a sparse result. This diverges from matlab's default behavior. However, matlab's default behavior can be restored through the function 'gemSparseLikeMatlab'.
+- By default, truly sparse operations are implemented only if there is a chance that the result of the operation applied to a sparse matrix produces a sparse result. This diverges from matlab's default behavior. However, matlab's default behavior can be restored through the function 'gem.sparseLikeMatlab'.
 
 This means that `sin(x)` has a sparse implementation, but not `cos(x)` (`sin(0) = 0`, but `cos(0)` is not `0`). The implementation of the cosine function for sparse objects thus starts by a casting of the input into a full matrix, before calling the full implementation of the cosine function (see `@sgem/cos.m` for an example). Also the matrix inverse function `inv(X)` admits a sparse implementation, even though the inverse of most sparse matrices is not sparse. This is because there exist sparse matrices X whose inverse is also sparse (e.g. `X = eye(d)`).
 
@@ -53,6 +53,6 @@ Here is a partial list of features/functions that would be nice to add to the li
  - Beta special functions: `beta`, `betainv`, `betainc`, `betaincinv`
  - Systematically check for behavior of functions on `NaN`, `-Inf`, `Inf`
  - Define a strategy for empty matrices of various sizes, i.e. difference between 0x0, 1x0, 10x0, 0x1, ... empty matrices. Implement, check behavior of all functions on these objects and test it.
- - For more ways to contribute, check if there is anything more [here](http://github.com/jdbancal/gem/issues)
+ - For more ways to contribute, check if there is anything more [here](http://github.com/gem-library/gem/issues)
 
 

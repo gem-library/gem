@@ -21,21 +21,21 @@ function test_consistency
 end
 
 function test_inputs
-    shouldProduceAnError(@() sum(sparse(gemRand), 'alll'));
-    shouldProduceAnError(@() sum(sparse(gemRand), -1));
+    shouldProduceAnError(@() sum(sparse(gem.rand), 'alll'));
+    shouldProduceAnError(@() sum(sparse(gem.rand), -1));
 end
 
 function test_type
-    assert(isa(sum(gemRand(2)), 'gem'));
-    assert(isa(sum(gemRand(2), 1, 'native'), 'gem'));
-    assert(isa(sum(gemRand(2), 1, 'default'), 'gem'));
-    assert(isa(sum(gemRand(2), 1, 'double'), 'double'));
-    assert(isa(sum(gemRand(2), 2), 'gem'));
-    assert(isa(sum(gemRand(2), 2, 'native'), 'gem'));
-    assert(isa(sum(gemRand(2), 2, 'default'), 'gem'));
-    assert(isa(sum(gemRand(2), 2, 'double'), 'double'));
-    assert(isa(sum(gemRand(2), 'all'), 'gem'));
-    assert(isa(sum(gemRand(2), 'all', 'native'), 'gem'));
-    assert(isa(sum(gemRand(2), 'all', 'default'), 'gem'));
-    assert(isa(sum(gemRand(2), 'all', 'double'), 'double'));
+    assert(isa(sum(gem.rand(2)), 'gem'));
+    assert(isa(sum(gem.rand(2), 1, 'native'), 'gem'));
+    assert(isa(sum(gem.rand(2), 1, 'default'), 'gem'));
+    assert(isa(sum(gem.rand(2), 1, 'double'), 'double'));
+    assert(isa(sum(gem.rand(2), 2), 'gem'));
+    assert(isa(sum(gem.rand(2), 2, 'native'), 'gem'));
+    assert(isa(sum(gem.rand(2), 2, 'default'), 'gem'));
+    assert(isa(sum(gem.rand(2), 2, 'double'), 'double'));
+    assert(isa(sum(gem.rand(2), 'all'), 'gem'));
+    assert(isa(sum(gem.rand(2), 'all', 'native'), 'gem'));
+    assert(isa(sum(gem.rand(2), 'all', 'default'), 'gem'));
+    assert(isa(sum(gem.rand(2), 'all', 'double'), 'double'));
 end

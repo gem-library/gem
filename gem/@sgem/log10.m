@@ -8,7 +8,7 @@ function result = log10(this)
     result = log10(full(this));
 
     % for matlab, log of a sparse matrix is a sparse matrix
-    if gemSparseLikeMatlab == 1
+    if sgem.sparseLikeMatlab == 1
         result = sparse(result);
     end
 end

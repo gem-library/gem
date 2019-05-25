@@ -142,7 +142,7 @@ function [Y I] = min(this, varargin)
         end
 
         % For matlab, min when one object is sparse produces a sparse result
-        if (gemSparseLikeMatlab == 1) && (oneInputSparse == 1) && (issparse(Y) == 0)
+        if (sgem.sparseLikeMatlab == 1) && (oneInputSparse == 1) && (issparse(Y) == 0)
             Y = sparse(Y);
         end
     end

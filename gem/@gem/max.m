@@ -162,7 +162,7 @@ function [Y I] = max(this, varargin)
         end
 
         % For matlab, max when one object is sparse produces a sparse result
-        if (gemSparseLikeMatlab == 1) && (oneInputSparse == 1) && (~issparse(Y))
+        if (sgem.sparseLikeMatlab == 1) && (oneInputSparse == 1) && (~issparse(Y))
             Y = sparse(Y);
         end
     end

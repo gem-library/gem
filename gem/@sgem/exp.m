@@ -8,7 +8,7 @@ function result = exp(this)
     result = exp(full(this));
 
     % for matlab, exp of a sparse matrix is a sparse matrix
-    if gemSparseLikeMatlab == 1
+    if sgem.sparseLikeMatlab == 1
         result = sparse(result);
     end
 end

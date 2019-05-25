@@ -57,9 +57,9 @@ function test_consistency
     end
 
     % We also check some low-rank matrices
-    vect = gemRand(4,1)*10-5;
+    vect = gem.rand(4,1)*10-5;
     x = {vect*vect', vect*vect' + (vect+1)*(vect+1)'};
-    vect = gemRand(4,1)*10-5 + (gemRand(4,1)*10-5)*1i;
+    vect = gem.rand(4,1)*10-5 + (gem.rand(4,1)*10-5)*1i;
     x = cat(2, x, {vect*vect', vect*vect' + (vect+1)*(vect+1)'});
     validateDoubleConsistency(@(x) svds(sparse(x), 1), x, 1e-10, 1);
     validateDoubleConsistency(@(x) svds(sparse(x), 3), x, 1e-10, 1);
@@ -77,7 +77,7 @@ function test_precision
     if isOctave
         x = {sgem(eye(15))};
 
-        targetPrecision = 10^(-(gemWorkingPrecision-10));
+        targetPrecision = 10^(-(gem.workingPrecision-10));
         for i = 1:length(x)
             S = svds(x{i});
 
@@ -91,7 +91,7 @@ function test_precision
             try
                 x = generateMatrices(2, 15, {'PQR', 'PQR', 'PQI', 'PS', 'PSR', 'PSI'});
 
-                targetPrecision = 10^(-(gemWorkingPrecision-10));
+                targetPrecision = 10^(-(gem.workingPrecision-10));
                 for i = 1:length(x)
                     [U1 S1] = svds(x{i});
                     [U S V] = svds(x{i});
@@ -121,7 +121,7 @@ function test_empty
 end
 
 function test_inputs
-    x = sparse(gemRand(2));
+    x = sparse(gem.rand(2));
     
     % maximum 3 input supported
     shouldProduceAnError(@() svds(x, 1, 2, 2));
@@ -143,13 +143,13 @@ function test_inputs
     shouldProduceAnError(@() svds(x), 4);
     
     % no eigenvectors computed for zero eigenvalues
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() svds(sparse(vect*vect'), 2), 4);
     
     % no computation over an existing eigenvalue
-    vect = gemRand(4,1);
+    vect = gem.rand(4,1);
     shouldProduceAnError(@() svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest'));
 
     % don't ask for all values if the matrix is too large
-    shouldProduceAnError(@() svds(sparse(gemRand(30)), 29));
+    shouldProduceAnError(@() svds(sparse(gem.rand(30)), 29));
 end

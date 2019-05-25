@@ -78,7 +78,7 @@ function test_consistency
 end
 
 function test_inputs
-    x = sparse(gemRand(3));
+    x = sparse(gem.rand(3));
     
     % maximum 2 dimensions
     try

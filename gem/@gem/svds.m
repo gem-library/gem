@@ -148,7 +148,7 @@ function [U S V] = svds(this, varargin)
         S = sqrt(valsU);
         
         % We check that the same singular values were found on both sides
-        if max(abs(valsU-valsV)) > 10^(-gemWorkingPrecision*2/3 + 2)
+        if max(abs(valsU-valsV)) > 10^(-gem.workingPrecision*2/3 + 2)
             warning('The left and right singular values don''t match in gem::svds')
         end
         

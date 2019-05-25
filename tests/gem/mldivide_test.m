@@ -17,8 +17,6 @@ function test_consistency
 end
 
 function test_precision
-    % NOTE : Due to issue #5, we don't test sparse matrices yet
-    
     % matrix division between two matrices
     y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
     for i = 1:numel(y)
@@ -27,20 +25,20 @@ function test_precision
                 z = mldivide(y{i}, y{j});
                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
 
-%                 z = mldivide(y{i}, sparse(y{j}));
-%                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+                z = mldivide(y{i}, sparse(y{j}));
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
 
                 z = mldivide(y{i}, double(y{j}));
                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
 
-%                 z = mldivide(y{i}, double(sparse(y{j})));
-%                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+                z = mldivide(y{i}, double(sparse(y{j})));
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
 
                 z = mldivide(double(y{i}), y{j});
                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
 
-%                 z = mldivide(double(sparse(y{i})), y{j});
-%                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+                z = mldivide(double(sparse(y{i})), y{j});
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
             end
         end
     end

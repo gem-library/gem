@@ -72,7 +72,7 @@ function result = times(this, varargin)
             newObjectIdentifier = sgem_mex('times_sf', objId1, objId2);
             result = sgem('encapsulate', newObjectIdentifier);
         else
-            % A priori we should not arrive here... but just in case
+            % A priori we should not arrive here...
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('times', objId1, objId2);

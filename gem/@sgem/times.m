@@ -55,6 +55,7 @@ function result = times(this, varargin)
     % result in the adequate object.
     if isequal(class(this), 'gem')
         if isequal(class(varargin{1}), 'gem')
+            % A priori we should not arrive here...
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = gem_mex('times', objId1, objId2);
@@ -67,7 +68,6 @@ function result = times(this, varargin)
         end
     else
         if isequal(class(varargin{1}), 'gem')
-            % A priori we should not arrive here... but just in case
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('times_sf', objId1, objId2);

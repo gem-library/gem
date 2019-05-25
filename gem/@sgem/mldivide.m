@@ -65,7 +65,7 @@ function result = mldivide(this, varargin)
         result = gem('encapsulate', newObjectIdentifier);
     else
         if isequal(class(varargin{1}), 'gem')
-            % A priori we should not arrive here... but just in case
+            % A priori we should not arrive here...
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('mldivide_sf', objId1, objId2);

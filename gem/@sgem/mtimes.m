@@ -44,6 +44,7 @@ function result = mtimes(this, varargin)
     % result in the adequate object.
     if isequal(class(this), 'gem')
         if isequal(class(varargin{1}), 'gem')
+            % This should never happen...
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = gem_mex('mtimes', objId1, objId2);

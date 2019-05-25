@@ -516,10 +516,14 @@ public:
 
     /* This function transforms complex matrices into twice as big real matrices */
     GmpEigenMatrix complexIsometry() const;
+    /* This function stacks the real and minus the imaginary parts of a m x n matrix into a 2m x n one */
+    GmpEigenMatrix complexHalfIsometry() const;
     /* This function restores the complex matrix corresponding to a big real
        matrix created with the complexIsometry function. */
     GmpEigenMatrix complexIsometryInverse() const;
-
+    /* This function recomposes the complex matrix corresponding to a big real
+       matrix created with the complexHalfIsometry function. */
+    GmpEigenMatrix complexHalfIsometryInverse() const;
 
 
 

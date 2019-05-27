@@ -8,7 +8,12 @@ end
 
 function test_consistency
     % element-wise division between two matrices
-    y = generateDoubleMatrices(2, 5, {'A', 'AR', 'AI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'A', 'AR', 'AI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'A'});
+    end
     validateDoubleConsistency2(@(x,y) ldivide(x,y), y(1,:), y(2,:), 1e-5);
     validateDoubleConsistency2(@(x,y) ldivide(x,full(y)), y(1,:), y(2,:), 1e-5);
     validateDoubleConsistency2(@(x,y) ldivide(x,double(y)), y(1,:), y(2,:), 1e-5);

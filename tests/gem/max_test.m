@@ -7,14 +7,23 @@ function test_suite = max_test()
 end
 
 function test_consistency
-    x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
+    else
+        x = generateMatrices(1, 5, {'F'});
+    end
     
     validateDoubleConsistency(@(x) max(x), x);
     validateDoubleConsistency(@(x) max(x, [], 1), x);
     validateDoubleConsistency(@(x) max(x, [], 2), x);
 
     % element-wise maximum between two matrices
-    y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'P'});
+    end
     validateDoubleConsistency2(@(x,y) max(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,sparse(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,double(y)), y(1,:), y(2,:));

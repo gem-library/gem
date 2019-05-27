@@ -12,14 +12,23 @@ function test_consistency
     % objects
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     
-    x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
+    else
+        x = generateMatrices(1, 5, {'F'});
+    end
     
     validateDoubleConsistency(@(x) min(x), x);
     validateDoubleConsistency(@(x) min(x, [], 1), x);
     validateDoubleConsistency(@(x) min(x, [], 2), x);
 
     % element-wise minimum between two matrices
-    y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'F'});
+    end
     validateDoubleConsistency2(@(x,y) min(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(x,sparse(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(x,double(y)), y(1,:), y(2,:));

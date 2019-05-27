@@ -7,7 +7,12 @@ function test_suite = power_test()
 end
 
 function test_consistency
-    y = generateDoubleMatrices(2, 5, {'A', 'AR', 'AI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'A', 'AR', 'AI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'A'});
+    end
 
     % NOTE: Due to issue #4 we only check powers for positive numbers
     % So we make sure the numbers are positive and not too big

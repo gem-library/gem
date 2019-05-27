@@ -8,7 +8,12 @@ end
 
 function test_consistency
     % element-wise substraction between two matrices
-    y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'F'});
+    end
     validateDoubleConsistency2(@(x,y) minus(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) minus(x,sparse(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) minus(x,double(y)), y(1,:), y(2,:));

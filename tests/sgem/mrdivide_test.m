@@ -8,7 +8,12 @@ end
 
 function test_precision
     % matrix division between two matrices
-    y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
+    else
+        y = generateDoubleMatrices(1, 5, {'P'});
+    end
     for i = 1:numel(y)
         for j = setdiff(1:numel(y),i)
             if (size(y{i},2) == size(y{j},2)) && (rank(y{j}) >= size(y{j},2))

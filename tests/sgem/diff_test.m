@@ -11,7 +11,12 @@ function test_consistency
     % allow us to perform all checks
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
-    x = generateMatrices(2, 5, {'A', 'AR', 'AI', 'P', 'PR', 'PI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        x = generateMatrices(2, 5, {'A', 'AR', 'AI', 'P', 'PR', 'PI'});
+    else
+        x = generateMatrices(1, 5, {'P'});
+    end
 
     validateDoubleConsistency(@(x) diff(x), x);
     validateDoubleConsistency(@(x) diff(x,1), x);

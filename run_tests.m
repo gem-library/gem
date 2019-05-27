@@ -1,5 +1,5 @@
-function result = run_tests(withCoverage)
-% function result = run_tests([withCoverage])
+function result = run_tests(withCoverage, fastCheck)
+% function result = run_tests([withCoverage], [fastCheck])
 %
 % launches automatic tests for the GEM Library
 % Generates code coverage data if the option 'withCoverage' is set to 1.
@@ -8,6 +8,18 @@ function result = run_tests(withCoverage)
 if nargin < 1
     withCoverage = 0;
 end
+
+if nargin < 2
+    fastCheck = 0;
+end
+
+global fastTests
+if fastCheck == 1
+    fastTests = 1;
+else
+    fastTests = 0;
+end
+
 
 % First, we make sure we are in the good folder
 initialPath = pwd;

@@ -17,18 +17,36 @@ function test_consistency
 end
 
 function test_precision
-    % NOTE : Due to issue #5, there is nothing to test here at the moment
-    
-%     % matrix division between two matrices
-%     y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
-%     for i = 1:numel(y)
-%         for j = setdiff(1:numel(y),i)
-%             if (size(y{i},1) == size(y{j},1)) && (rank(y{i}) >= size(y{i},1))
-%                 z = mldivide(y{i}, y{j});
-%                 assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
-%             end
-%         end
-%     end
+    % matrix division between two matrices
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(2, 5, {'P', 'PR', 'PI'}, 2);
+    else
+        y = generateMatrices(1, 5, {'P'}, 2);
+    end
+    for i = 1:numel(y)
+        for j = setdiff(1:numel(y),i)
+            if (size(y{i},1) == size(y{j},1)) && (rank(y{i}) >= size(y{i},1))
+                z = mldivide(y{i}, y{j});
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+
+                z = mldivide(y{i}, full(y{j}));
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+
+                z = mldivide(y{i}, double(y{j}));
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+
+                z = mldivide(y{i}, double(full(y{j})));
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+
+                z = mldivide(double(y{i}), y{j});
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+
+                z = mldivide(double(full(y{i})), y{j});
+                assert(max(max(abs(y{i}*z - y{j}))) < 1e-5);
+            end
+        end
+    end
 end
 
 function test_empty

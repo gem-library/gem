@@ -11,6 +11,6 @@ function test_consistency
     validateDoubleConsistency(@(x) and(x, x), x);
     
     % We generate another set of matrices with identical dimensions
-    y = generateDoubleMatrices(2, 5, {'PR'});
+    y = generateMatrices(2, 5, {'PR'}, 2);
     validateDoubleConsistency2(@(x,y) and(x,y), y(1,:), y(2,:));
 end

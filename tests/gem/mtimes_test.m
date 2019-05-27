@@ -7,7 +7,12 @@ function test_suite = mtimes_test()
 end
 
 function test_consistency
-    y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
+    else
+        y = generateMatrices(1, 5, {'FQ'}, 2);
+    end
     for i = 1:numel(y)
         for j = setdiff(1:numel(y),i)
             if size(y{i},2) == size(y{j},1)

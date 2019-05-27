@@ -61,6 +61,7 @@ function result = mtimes(this, varargin)
             newObjectIdentifier = sgem_mex('mtimes_sf', objId1, objId2);
             result = gem('encapsulate', newObjectIdentifier);
         else
+
             objId1 = this.objectIdentifier;
             objId2 = varargin{1}.objectIdentifier;
             newObjectIdentifier = sgem_mex('mtimes', objId1, objId2);

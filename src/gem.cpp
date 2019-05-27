@@ -3536,7 +3536,7 @@ GmpEigenMatrix GmpEigenMatrix::mldivide(const GmpEigenMatrix& b) const
     GmpEigenMatrix result;
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         result.isComplex = false;
         result.matrixR = matrixR.colPivHouseholderQr().solve(b.matrixR);
@@ -3552,7 +3552,7 @@ GmpEigenMatrix& GmpEigenMatrix::mldivide_new(const GmpEigenMatrix& b) const
     GmpEigenMatrix& result(*(new GmpEigenMatrix));
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         result.isComplex = false;
         result.matrixR = matrixR.colPivHouseholderQr().solve(b.matrixR);
@@ -6101,6 +6101,21 @@ GmpEigenMatrix GmpEigenMatrix::complexIsometry() const
     return result;
 }
 
+/* This function stacks the real and minus the imaginary parts of a m x n matrix into a 2m x n one */
+GmpEigenMatrix GmpEigenMatrix::complexHalfIsometry() const
+{
+    GmpEigenMatrix result(*this);
+
+    result.matrixR.conservativeResize(2*matrixR.rows(), matrixR.cols());
+    if (isComplex) {
+        result.matrixI.resize(0,0);
+        result.isComplex = false;
+        result.matrixR.block(matrixR.rows(), 0, matrixR.rows(), matrixR.cols()) = -matrixI;
+    }
+
+    return result;
+}
+
 /* This function restores the complex matrix corresponding to a big real
    matrix created with the complexIsometry function. */
 GmpEigenMatrix GmpEigenMatrix::complexIsometryInverse() const
@@ -6117,6 +6132,25 @@ GmpEigenMatrix GmpEigenMatrix::complexIsometryInverse() const
 
     return result;
 }
+
+/* This function recomposes the complex matrix corresponding to a big real
+   matrix created with the complexHalfIsometry function. */
+GmpEigenMatrix GmpEigenMatrix::complexHalfIsometryInverse() const
+{
+    GmpEigenMatrix result;
+
+    if (isComplex) {
+        mexErrMsgTxt("Error in complexHalfIsometryInverse : the provided matrix is not real.");
+    }
+
+    result.matrixR = matrixR.block(0, 0, matrixR.rows()/2, matrixR.cols());
+    result.matrixI = -matrixR.block(matrixR.rows()/2, 0, matrixR.rows()/2, matrixR.cols());
+    result.checkComplexity();
+
+    return result;
+}
+
+
 
 
 

@@ -7,7 +7,12 @@ function test_suite = horzcat_test()
 end
 
 function test_consistency
-    y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
+    else
+        y = generateMatrices(1, 4, {'A'}, 3);
+    end
 
     % cat with nothing
     validateDoubleConsistency(@(x,y) horzcat(x, []), y);

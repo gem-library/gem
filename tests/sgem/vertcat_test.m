@@ -7,13 +7,23 @@ function test_suite = vertcat_test()
 end
 
 function test_consistency
-    y = generateMatrices(15, 20, {'A', 'AR', 'AI'});
-    
-    % We also want to have at least one 'large' matrix
-    y2 = generateMatrices(10, 20, {'A'});
-    y2 = y2(find(cellfun(@(x) (size(x,1)>10)&&(size(x,2)>10), y2), 1, 'first'));
-    y = cat(2, y, y2, y2);
-    
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(15, 20, {'A', 'AR', 'AI'});
+
+        % We also want to have at least one 'large' matrix
+        y2 = generateMatrices(10, 20, {'A'});
+        y2 = y2(find(cellfun(@(x) (size(x,1)>10)&&(size(x,2)>10), y2), 1, 'first'));
+        y = cat(2, y, y2, y2);
+    else
+        y = generateMatrices(1, 20, {'A'}, 3);
+        
+        % We also want to have at least one 'large' matrix
+        y2 = generateMatrices(10, 20, {'A'});
+        y2 = y2(find(cellfun(@(x) (size(x,1)>10)&&(size(x,2)>10), y2), 1, 'first'));
+        y = cat(2, y', y2, y2);
+    end
+        
     % cat with nothing
     validateDoubleConsistency(@(x,y) vertcat(x, []), y);
     validateDoubleConsistency(@(x,y) vertcat([], x), y);

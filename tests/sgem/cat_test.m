@@ -7,7 +7,13 @@ function test_suite = cat_test()
 end
 
 function test_consistency
-    y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(5, 4, {'A', 'AR', 'AI'});
+    else
+        y = generateMatrices(1, 4, {'A'}, 3);
+    end
+    
     for i = 1:numel(y)-1
         for j = i+1:numel(y)
             if size(y{i}, 2) == size(y{j}, 2)

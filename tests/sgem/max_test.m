@@ -12,14 +12,23 @@ function test_consistency
     % objects
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
-    x = generateMatrices(2, 5, {'P', 'PR', 'PI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        x = generateMatrices(2, 5, {'P', 'PR', 'PI'});
+    else
+        x = generateMatrices(1, 5, {'P'});
+    end
     
     validateDoubleConsistency(@(x) max(x), x);
     validateDoubleConsistency(@(x) max(x, [], 1), x);
     validateDoubleConsistency(@(x) max(x, [], 2), x);
 
     % element-wise maximum between two matrices
-    y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(2, 5, {'P', 'PR', 'PI'}, 2);
+    else
+        y = generateMatrices(1, 5, {'P'}, 2);
+    end
     validateDoubleConsistency2(@(x,y) max(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,full(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,double(y)), y(1,:), y(2,:));
@@ -29,6 +38,7 @@ function test_consistency
 
     % max with a scalar
     validateDoubleConsistency2(@(x,y) max(x,y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) max(x,0*y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x,full(y(1))), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x,double(y(1))), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x,double(full(y(1)))), y(1,:), y(2,:), 1e-12, 0, isOctave);
@@ -36,6 +46,7 @@ function test_consistency
     validateDoubleConsistency2(@(x,y) max(double(full(x)),y(1)), y(1,:), y(2,:), 1e-12, 0, isOctave);
 
     validateDoubleConsistency2(@(x,y) max(x(1),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
+    validateDoubleConsistency2(@(x,y) max(0*x(1),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x(1),full(y)), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x(1),double(y)), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(x(1),double(full(y))), y(1,:), y(2,:), 1e-12, 0, isOctave);

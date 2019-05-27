@@ -8,7 +8,12 @@ end
 
 function test_consistency
     % element-wise addition between two matrices
-    y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
+    else
+        y = generateMatrices(1, 5, {'F'}, 2);
+    end
     validateDoubleConsistency2(@(x,y) plus(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) plus(x,sparse(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) plus(x,double(y)), y(1,:), y(2,:));

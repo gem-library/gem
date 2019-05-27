@@ -4856,7 +4856,7 @@ GmpEigenMatrix SparseGmpEigenMatrix::mldivide_sf(const GmpEigenMatrix& b) const
     GmpEigenMatrix result;
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide_sf(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide_sf(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         SparseQR< SparseMatrix<mpreal, ColMajor>, COLAMDOrdering<int> > solver(matrixR);
 
@@ -4874,7 +4874,7 @@ GmpEigenMatrix& SparseGmpEigenMatrix::mldivide_sf_new(const GmpEigenMatrix& b) c
     GmpEigenMatrix& result(*(new GmpEigenMatrix));
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide_sf(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide_sf(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         SparseQR< SparseMatrix<mpreal, ColMajor>, COLAMDOrdering<int> > solver(matrixR);
 
@@ -4892,7 +4892,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::mldivide(const SparseGmpEigenMatrix& 
     SparseGmpEigenMatrix result;
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         SparseQR< SparseMatrix<mpreal, ColMajor>, COLAMDOrdering<int> > solver;
 
@@ -4903,7 +4903,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::mldivide(const SparseGmpEigenMatrix& 
         result.matrixI.resize(0,0);
 
         // We solve for each column iteratively
-        result.matrixR.resize(b.matrixR.rows(), b.matrixR.cols());
+        result.matrixR.resize(matrixR.cols(), b.matrixR.cols());
         result.matrixR.reserve(b.matrixR.nonZeros()*2);
         for (IndexType i(0); i < b.matrixR.cols(); ++i) {
             Matrix<mpreal, Dynamic, 1> colb(b.matrixR.col(i));
@@ -4927,7 +4927,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::mldivide_new(const SparseGmpEigenMat
     SparseGmpEigenMatrix& result(*(new SparseGmpEigenMatrix));
 
     if ((isComplex) || (b.isComplex)) {
-        result = complexIsometry().mldivide(b.complexIsometry()).complexIsometryInverse();
+        result = complexIsometry().mldivide(b.complexHalfIsometry()).complexHalfIsometryInverse();
     } else {
         SparseQR< SparseMatrix<mpreal, ColMajor>, COLAMDOrdering<int> > solver;
 
@@ -4938,7 +4938,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::mldivide_new(const SparseGmpEigenMat
         result.matrixI.resize(0,0);
 
         // We solve for each column iteratively
-        result.matrixR.resize(b.matrixR.rows(), b.matrixR.cols());
+        result.matrixR.resize(matrixR.cols(), b.matrixR.cols());
         result.matrixR.reserve(b.matrixR.nonZeros()*2);
         for (IndexType i(0); i < b.matrixR.cols(); ++i) {
             Matrix<mpreal, Dynamic, 1> colb(b.matrixR.col(i));
@@ -10973,6 +10973,24 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::complexIsometry() const
     return result;
 }
 
+/* This function stacks the real and minus the imaginary parts of a m x n matrix into a 2m x n one */
+SparseGmpEigenMatrix SparseGmpEigenMatrix::complexHalfIsometry() const
+{
+    SparseGmpEigenMatrix result;
+    SparseGmpEigenMatrix tmpR;
+    SparseGmpEigenMatrix tmpI;
+
+    tmpR.matrixR = matrixR;
+    if (isComplex)
+        tmpI.matrixR = matrixI;
+    else
+        tmpI.matrixR.resize(matrixR.rows(),matrixR.cols());
+
+    result = tmpR.vertcat(-tmpI);
+
+    return result;
+}
+
 /* This function restores the complex matrix corresponding to a big real
    matrix created with the complexIsometry function. */
 SparseGmpEigenMatrix SparseGmpEigenMatrix::complexIsometryInverse() const
@@ -10985,6 +11003,23 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::complexIsometryInverse() const
 
     result.matrixR = matrixR.block(0, 0, matrixR.rows()/2, matrixR.cols()/2);
     result.matrixI = matrixR.block(0, matrixR.cols()/2, matrixR.rows()/2, matrixR.cols()/2);
+    result.checkComplexity();
+
+    return result;
+}
+
+/* This function recomposes the complex matrix corresponding to a big real
+   matrix created with the complexHalfIsometry function. */
+SparseGmpEigenMatrix SparseGmpEigenMatrix::complexHalfIsometryInverse() const
+{
+    SparseGmpEigenMatrix result;
+
+    if (isComplex) {
+        mexErrMsgTxt("Error in complexHalfIsometryInverse : the provided matrix is not real.");
+    }
+
+    result.matrixR = matrixR.block(0, 0, matrixR.rows()/2, matrixR.cols());
+    result.matrixI = -matrixR.block(matrixR.rows()/2, 0, matrixR.rows()/2, matrixR.cols());
     result.checkComplexity();
 
     return result;

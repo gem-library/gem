@@ -7,7 +7,13 @@ function test_suite = sum_test()
 end
 
 function test_consistency
-    x = generateMatrices(10, 5, {'F', 'FR', 'FI', 'P'});
+    global fastTests
+    if isempty(fastTests) || (fastTests == 0)
+        x = generateMatrices(10, 5, {'F', 'FR', 'FI', 'P'});
+    else
+        x = generateMatrices(1, 5, {'F'});
+    end
+    
     validateDoubleConsistency(@(x) sum(full(x)), x);
     
     validateDoubleConsistency(@(x) sum(full(x), 1), x);

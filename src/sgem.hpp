@@ -465,9 +465,14 @@ public:
 
     /* This function transforms complex matrices into twice as big real matrices */
     SparseGmpEigenMatrix complexIsometry() const;
+    /* This function stacks the real and minus the imaginary parts of a m x n matrix into a 2m x n one */
+    SparseGmpEigenMatrix complexHalfIsometry() const;
     /* This function restores the complex matrix corresponding to a big real
        matrix created with the complexIsometry function. */
     SparseGmpEigenMatrix complexIsometryInverse() const;
+    /* This function recomposes the complex matrix corresponding to a big real
+       matrix created with the complexHalfIsometry function. */
+    SparseGmpEigenMatrix complexHalfIsometryInverse() const;
 
 
     /* ------------------------

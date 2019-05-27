@@ -27,8 +27,8 @@ Here are a few simple examples of GEM library usage.
 
 Once a high precision matrix is created, it can be manipulated by calling usual MATLAB/GNU Octave functions.
 
- - `eig(gemRand(100,100))` : computes the eigenvalues of a random 100x100 matrix
- - `eigs(gemRand(100,100),1)` : computes the largest eigenvalue of a random 100x100 matrix
+ - `eig(gem.rand(100,100))` : computes the eigenvalues of a random 100x100 matrix
+ - `eigs(gem.rand(100,100),1)` : computes the largest eigenvalue of a random 100x100 matrix
  - `sum(gem([1:100000]).^8)-5e39-2e24` gives 111111111177777777771111111111333333333330000 (all digits can be displayed with the help of the function `gemDisplayPrecision`)
  - `notAnInteger = exp(sqrt(gem(163))*gem('pi')); display(notAnInteger, -1)` gives 262537412640768743.9999999999992500725971981856889 (the number of digits displayed can also be specified on a case by case fashion as a parameter to the display fuction; a precision of -1 displays all available digits)
  - `sgem(speye(3))` creates a high precision sparse representation of the 3x3 identity matrix

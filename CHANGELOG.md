@@ -1,10 +1,11 @@
 ##
-- Support for GNU Octave
-- Set up test framework with first batch of tests
+- Support for GNU Octave 4.2
+- Set up test framework with a full batch of tests
 - Set up continuous integration framework
 - Included Eigen and Spectra as submodules
 - Updated to latest Eigen and Spectra libraries
-- Added gemRandn and sign functions
+- General properties such as gemWorkingPrecision and gemRand are now static methods accessible as gem.workingPrecision and gem.rand
+- Added gem.randn and sign functions
 - Additional options supported for min and max functions
 - Bug fixes
 

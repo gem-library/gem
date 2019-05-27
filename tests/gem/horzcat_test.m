@@ -11,7 +11,7 @@ function test_consistency
     if isempty(fastTests) || (fastTests == 0)
         y = generateMatrices(5, 4, {'F', 'FR', 'FI'});
     else
-        y = generateMultipleMatrices(1, 4, {'F'}, 3);
+        y = generateMatrices(1, 4, {'F'}, 3);
     end
 
     % cat with nothing

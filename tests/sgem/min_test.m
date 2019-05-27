@@ -25,9 +25,9 @@ function test_consistency
 
     % element-wise minimum between two matrices
     if isempty(fastTests) || (fastTests == 0)
-        y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
+        y = generateMatrices(2, 5, {'P', 'PR', 'PI'}, 2);
     else
-        y = generateDoubleMatrices(1, 5, {'P'});
+        y = generateMatrices(1, 5, {'P'}, 2);
     end
     validateDoubleConsistency2(@(x,y) min(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(x,full(y)), y(1,:), y(2,:));

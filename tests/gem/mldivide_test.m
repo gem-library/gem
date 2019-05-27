@@ -20,9 +20,9 @@ function test_precision
     % matrix division between two matrices
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
-        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+        y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
     else
-        y = generateDoubleMatrices(1, 5, {'F'});
+        y = generateMatrices(1, 5, {'F'}, 2);
     end
     for i = 1:numel(y)
         for j = setdiff(1:numel(y),i)

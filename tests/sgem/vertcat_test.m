@@ -16,7 +16,7 @@ function test_consistency
         y2 = y2(find(cellfun(@(x) (size(x,1)>10)&&(size(x,2)>10), y2), 1, 'first'));
         y = cat(2, y, y2, y2);
     else
-        y = generateMultipleMatrices(1, 20, {'A'}, 3);
+        y = generateMatrices(1, 20, {'A'}, 3);
         
         % We also want to have at least one 'large' matrix
         y2 = generateMatrices(10, 20, {'A'});

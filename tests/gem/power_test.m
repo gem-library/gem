@@ -10,9 +10,9 @@ function test_consistency
     % element-wise power between two matrices
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
-        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+        y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
     else
-        y = generateDoubleMatrices(1, 5, {'F'});
+        y = generateMatrices(1, 5, {'F'}, 2);
     end
     validateDoubleConsistency2(@(x,y) power(x,y), y(1,:), y(2,:), 1e-3);
     validateDoubleConsistency2(@(x,y) power(x,sparse(y)), y(1,:), y(2,:), 1e-3);

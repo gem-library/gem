@@ -8,7 +8,7 @@ end
 
 function test_consistency
     % element-wise multiplication between two matrices
-    y = generateDoubleMatrices(2, 5, {'P', 'PR', 'PI'});
+    y = generateMatrices(2, 5, {'P', 'PR', 'PI'}, 2);
     validateDoubleConsistency2(@(x,y) times(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) times(x,full(y)), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) times(x,double(y)), y(1,:), y(2,:));

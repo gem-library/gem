@@ -20,9 +20,9 @@ function test_consistency
 
     % element-wise maximum between two matrices
     if isempty(fastTests) || (fastTests == 0)
-        y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
+        y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
     else
-        y = generateDoubleMatrices(1, 5, {'F'});
+        y = generateMatrices(1, 5, {'F'}, 2);
     end
     validateDoubleConsistency2(@(x,y) max(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,sparse(y)), y(1,:), y(2,:));

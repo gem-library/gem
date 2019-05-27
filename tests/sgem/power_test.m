@@ -9,9 +9,9 @@ end
 function test_consistency
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
-        y = generateDoubleMatrices(2, 5, {'A', 'AR', 'AI'});
+        y = generateMatrices(2, 5, {'A', 'AR', 'AI'}, 2);
     else
-        y = generateDoubleMatrices(1, 5, {'A'});
+        y = generateMatrices(1, 5, {'A'}, 2);
     end
 
     % NOTE: Due to issue #4 we only check powers for positive numbers

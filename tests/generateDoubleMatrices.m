@@ -47,17 +47,51 @@ end
 
 %% Now we create the matrices
 
-% First we generate one set of matrices
-Ms = generateMatrices(n, maxDim, type);
+Ms = cell(2, n*length(type));
 
-% We generate another set of matrices with identical dimensions
-found = zeros(1, size(Ms, 2));
-while ~all(found)
-    y = generateMatrices(n, maxDim, type);
-    for i = 1:length(y)
-        if ~found(i) && isequal(size(Ms{1,i}), size(y{i}))
-            Ms{2,i} = y{i};
-            found(i) = 1;
+co = 0;
+for i = 1:length(type)
+    for j = 1:n
+        co = co + 1;
+        
+        % We make sure that 10% of the sampled matrices are square
+        forceSquare = (rand < 0.1);
+        
+        % Square only?
+        if ~isempty(strfind(type{i}, 'Q')) || ~isempty(strfind(type{i}, 'S')) || forceSquare
+            dim = ceil(rand*min(maxDim))*[1 1];
+        else
+            dim = ceil(rand(1,2).*maxDim);
+        end
+
+        for k = 1:2
+            % Real only, imaginary only, or none?
+            if ~isempty(strfind(type{i}, 'R'))
+                M = gem.rand(dim)*10-5;
+            elseif ~isempty(strfind(type{i}, 'I'))
+                M = 1i*(gem.rand(dim)*10-5);
+            else
+                M = gem.rand(dim)*10-5 + 1i*(gem.rand(dim)*10-5);
+            end
+
+            % Symmetric/hermitian only?
+            if ~isempty(strfind(type{i}, 'S'))
+                M = (M + M')/2;
+            end
+
+            % Full only, sparse only or both?
+            if ~isempty(strfind(type{i}, 'F'))
+            elseif ~isempty(strfind(type{i}, 'A'))
+                % sparse object full of nonzero numbers
+                M = sparse(M);
+            elseif ~isempty(strfind(type{i}, 'P')) || (rand > 1/2)
+                % We remove 90% of the terms
+                sparsity = 1-(1^2./min(dim)).^(1/2);
+                M = M.*(rand(dim) < 1-sparsity);
+                M = sparse(M);
+            end
+
+            Ms{k, co} = M;
         end
     end
 end

@@ -46,7 +46,7 @@ end
 
 
 %% Now we create the matrices
-Ms = cell(1, 1000);
+Ms = cell(1, n*length(type));
 
 co = 0;
 for i = 1:length(type)
@@ -92,7 +92,5 @@ for i = 1:length(type)
         Ms{co} = M;
     end
 end
-
-Ms = Ms(1:co);
 
 end

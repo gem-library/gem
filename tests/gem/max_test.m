@@ -22,7 +22,7 @@ function test_consistency
     if isempty(fastTests) || (fastTests == 0)
         y = generateDoubleMatrices(2, 5, {'F', 'FR', 'FI'});
     else
-        y = generateDoubleMatrices(1, 5, {'P'});
+        y = generateDoubleMatrices(1, 5, {'F'});
     end
     validateDoubleConsistency2(@(x,y) max(x,y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(x,sparse(y)), y(1,:), y(2,:));

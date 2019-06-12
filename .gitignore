@@ -13,4 +13,5 @@ coverage_html
 testresults.xml
 octave-workspace
 tmp*
+*.mat
 

@@ -12,7 +12,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg3274"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    width="603.17139"
    height="694.86975"
    viewBox="0 0 603.1714 694.86976"
@@ -28,7 +28,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -354,13 +354,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="714"
+     inkscape:window-width="1680"
+     inkscape:window-height="999"
      id="namedview3276"
      showgrid="false"
-     inkscape:zoom="0.24536974"
-     inkscape:cx="-211.20076"
-     inkscape:cy="-274.02297"
+     inkscape:zoom="0.69401043"
+     inkscape:cx="420.37172"
+     inkscape:cy="190.28354"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
@@ -369,6 +369,16 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0" />
+  <rect
+     id="rect117"
+     width="340.30276"
+     height="340.30276"
+     x="144.67963"
+     y="184.41563"
+     style="stroke-width:0.99999994;fill:none;stroke:#000000"
+     inkscape:export-filename="/home/bancal/Desktop/Matlab_pour_lrs/libraries/gem/docs/img/favicon16x16.png"
+     inkscape:export-xdpi="4.513628"
+     inkscape:export-ydpi="4.513628" />
   <image
      width="576"
      height="384"
@@ -624,6 +634,11 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
   </g>
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 306.3457,191.3457 -7.82422,17.54492 -0.0371,-0.14843 -0.10157,0.15234 z m 0,0 -12.96875,12.96875 -58.33203,73.45703 -0.0371,-0.041 -5.03125,209.54101 8.97266,9.14258 -9.0293,-9.1914 11.58203,21.10742 0.002,0.0137 82.13281,7.20508 60.51758,-7.92578 7.45312,-14.23438 0.4707,-0.084 -0.42187,0.01 -14.25586,-210.4707 -53.04492,4.32227 -0.0176,-0.0215 52.58594,-4.29492 0.0254,-8.65234 -38.9043,-64.11915 z m -42.70703,69.8711 -13.7832,20.75586 h -0.0156 l 0.006,-0.006 z m 49.85156,9.13672 1.48633,6.00781 -0.0234,0.002 z m -72.94531,13.35742 3.02539,3.23633 -0.01,0.008 v 0.0137 z m 68.21094,0.22461 0.0762,0.002 -0.0254,0.0293 -0.008,-0.0117 -0.0312,-0.002 z m 12.04297,17.81836 2.94726,168.62695 -2.98632,-168.4668 z"
+     id="path119" />
   <path
      sodipodi:nodetypes="ccccccc"
      style="fill:url(#linearGradient3837);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"

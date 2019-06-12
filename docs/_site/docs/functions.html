@@ -1,0 +1,812 @@
+<html><head><title>GEM Library: Available functions</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jean-Daniel Bancal" /><meta name="description" content="Gmp Eigen Matrix Library" /><meta name="og:image" content="http://localhost:4000/gem/img/poster.png" /><meta name="og:title" content="GEM Library: Available functions" /><meta name="og:site_name" content="GEM Library" /><meta name="og:url" content="http://gem-library.github.io/gem" /><meta name="og:type" content="website" /><meta name="og:description" content="Gmp Eigen Matrix Library" /><link rel="icon" type="image/png" href="http://localhost:4000/gem/img/favicon.png" /><meta name="twitter:title" content="GEM Library: Available functions" /><meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" /><meta name="twitter:description" content="Gmp Eigen Matrix Library" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="http://localhost:4000/gem/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="http://localhost:4000/gem/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="http://localhost:4000/gem/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="http://localhost:4000/gem/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="http://localhost:4000/gem/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="http://localhost:4000/gem/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="http://localhost:4000/gem/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="http://localhost:4000/gem/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="http://localhost:4000/gem/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="http://localhost:4000/gem/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="http://localhost:4000/gem/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="http://localhost:4000/gem/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="http://localhost:4000/gem/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="http://localhost:4000/gem/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="http://localhost:4000/gem/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="http://localhost:4000/gem/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="http://localhost:4000/gem/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="http://localhost:4000/gem/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="http://localhost:4000/gem/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="http://localhost:4000/gem/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="http://localhost:4000/gem/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/gem/css/style.css" /><link rel="stylesheet" href="/gem/css/palette.css" /><link rel="stylesheet" href="/gem/css/codemirror.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/gem/" class="brand"><div class="brand-wrapper"><span>GEM Library</span></div></a></li> <li><a href="/gem/docs/installation.html" class="">Installation</a></li> <li><a href="/gem/docs/gettingStarted.html" class="">Getting started</a></li> <li><a href="/gem/docs/publish/examples.html" class="">Examples</a></li> <li><a href="/gem/docs/functions.html" class=" active ">Available functions</a></li> <li><a href="/gem/docs/howToContribute.html" class="">How to contribute</a></li> <li><a href="/gem/docs/compilationInstructions.html" class="">Compilation instructions</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('GEM Library');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('GEM Library');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="gem-library" data-github-repo="gem"><div class="content-wrapper"><section><h1 id="available-functions">Available functions</h1>
+
+<p>Here is a list of the functions currently implemented in the <strong>GEM Library</strong>. The first table shows functions which can be called without reference to a gem/sgem object (to create a high precision matrix for instance, or to adjust some library parameters).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>function</th>
+      <th>full support</th>
+      <th>sparse support</th>
+      <th>remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gem</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>gem object constructor</td>
+    </tr>
+    <tr>
+      <td>sgem</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>sparse gem object constructor</td>
+    </tr>
+    <tr>
+      <td>gemify</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>converts a matrix to gem or sgem object, preserving its sparsity</td>
+    </tr>
+    <tr>
+      <td>gem.rand</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td>generates high precision random numbers</td>
+    </tr>
+    <tr>
+      <td>gem.randn</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td>generates high precision random numbers following a gaussian distribution</td>
+    </tr>
+    <tr>
+      <td>gem.rng</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td>gem.rand random seed</td>
+    </tr>
+    <tr>
+      <td>gem.workingPrecision</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>sets the working precision of the library</td>
+    </tr>
+    <tr>
+      <td>gem.displayPrecision</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>sets the precision used when displaying gem and sgem objects</td>
+    </tr>
+    <tr>
+      <td>gem.sparseLikeMatlab</td>
+      <td>✗</td>
+      <td>✔</td>
+      <td>sets whether functions not preserving zeros should be allowed to produce sparse matrices</td>
+    </tr>
+    <tr>
+      <td>make</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>compiles the library</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="list-of-methods">List of methods:</h2>
+
+<p>The following function can be applied to gem/sgem objects directly.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>methods</th>
+      <th>full support</th>
+      <th>sparse support</th>
+      <th>remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>abs</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>all</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>and</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>any</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>acos</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>acot</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>acsc</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>and</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>angle</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>asec</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>asin</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>atan</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cat</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cbrt</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>clean</td>
+      <td>✗</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ceil</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>colon</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>complex</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cond</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>conj</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cos</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>cot</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>csc</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ctranspose</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>diag</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>disp</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>display</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>diff</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>double</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>eig</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>eigs</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>end</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>eq</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>exp</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>find</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>fix</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>floor</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>full</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ge</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>gt</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>horzcat</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>imag</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>inv</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isempty</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isequal</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isequaln</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isfinite</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isfloat</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ishermitian</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isinf</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isinteger</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isnan</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isnumeric</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isreal</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>issorted</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>issparse</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>issymmetric</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>kron</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>supports more than 2 inputs, as in kron(A,B,C) or kron({A,B,C})</td>
+    </tr>
+    <tr>
+      <td>ldivide</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>le</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>length</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>loadobj</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>log</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>log10</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>log2</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>logical</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>lt</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>max</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>min</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>minus</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>mldivide</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>mod</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>mpower</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>supports two scalars, or matrices with +/-1 exponent</td>
+    </tr>
+    <tr>
+      <td>mrdivide</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>mtimes</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ne</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>nnz</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>nonzeros</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>norm</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>not</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>numel</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>num2str</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>through matlab’s implementation and sprintf</td>
+    </tr>
+    <tr>
+      <td>or</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>plot</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>plus</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>power</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>precision</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>prod</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>rank</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>rdivide</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>real</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>reshape</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>round</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>saveobj</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sec</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sign</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sin</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>size</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sort</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sortrows</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>through matlab’s implementation</td>
+    </tr>
+    <tr>
+      <td>sortrowsc</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sparse</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sprintf</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>currently only supports a few digits of precision; use toStrings to extract the full precision in string format</td>
+    </tr>
+    <tr>
+      <td>sqrt</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>subsasgn</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>subsref</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>sum</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>svd</td>
+      <td>✔</td>
+      <td>✗</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>svds</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>tan</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>times</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>toStrings</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>transpose</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>uminus</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>unique</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td>through matlab’s implementation</td>
+    </tr>
+    <tr>
+      <td>uplus</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>vertcat</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>xor</td>
+      <td>✔</td>
+      <td>✔</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="http://localhost:4000/gem/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['matlab']
+});
+      $(document).ready(function() {
+      $('pre.codeoutput').each(function(i, block) {
+      hljs.highlightBlock(block);
+      });
+      });
+    </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'gem-library/gem'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/gem/js/main.js"></script></body></html>

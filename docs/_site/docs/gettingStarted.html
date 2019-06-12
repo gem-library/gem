@@ -1,0 +1,175 @@
+<html><head><title>GEM Library: Getting started</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jean-Daniel Bancal" /><meta name="description" content="Gmp Eigen Matrix Library" /><meta name="og:image" content="http://localhost:4000/gem/img/poster.png" /><meta name="og:title" content="GEM Library: Getting started" /><meta name="og:site_name" content="GEM Library" /><meta name="og:url" content="http://gem-library.github.io/gem" /><meta name="og:type" content="website" /><meta name="og:description" content="Gmp Eigen Matrix Library" /><link rel="icon" type="image/png" href="http://localhost:4000/gem/img/favicon.png" /><meta name="twitter:title" content="GEM Library: Getting started" /><meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" /><meta name="twitter:description" content="Gmp Eigen Matrix Library" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="http://localhost:4000/gem/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="http://localhost:4000/gem/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="http://localhost:4000/gem/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="http://localhost:4000/gem/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="http://localhost:4000/gem/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="http://localhost:4000/gem/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="http://localhost:4000/gem/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="http://localhost:4000/gem/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="http://localhost:4000/gem/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="http://localhost:4000/gem/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="http://localhost:4000/gem/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="http://localhost:4000/gem/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="http://localhost:4000/gem/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="http://localhost:4000/gem/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="http://localhost:4000/gem/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="http://localhost:4000/gem/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="http://localhost:4000/gem/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="http://localhost:4000/gem/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="http://localhost:4000/gem/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="http://localhost:4000/gem/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="http://localhost:4000/gem/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/gem/css/style.css" /><link rel="stylesheet" href="/gem/css/palette.css" /><link rel="stylesheet" href="/gem/css/codemirror.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/gem/" class="brand"><div class="brand-wrapper"><span>GEM Library</span></div></a></li> <li><a href="/gem/docs/installation.html" class="">Installation</a></li> <li><a href="/gem/docs/gettingStarted.html" class=" active ">Getting started</a></li> <li><a href="/gem/docs/publish/examples.html" class="">Examples</a></li> <li><a href="/gem/docs/functions.html" class="">Available functions</a></li> <li><a href="/gem/docs/howToContribute.html" class="">How to contribute</a></li> <li><a href="/gem/docs/compilationInstructions.html" class="">Compilation instructions</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('GEM Library');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('GEM Library');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="gem-library" data-github-repo="gem"><div class="content-wrapper"><section><h1 id="getting-started">Getting started</h1>
+
+<p>Here is a short introduction to the usage of <strong>GEM Library</strong>. This introduction assumes that the gem subfolder is already present in Matlab/Octave’s path (see <a href="installation.html"><strong>installation instructions</strong></a> for more details).</p>
+
+<h2 id="creating-high-precision-matrices">Creating High Precision Matrices</h2>
+
+<h3 id="dense-matrices">Dense matrices</h3>
+
+<p>A matrix for high precision computation can be created from any Matlab/Octave matrix by calling the <code class="highlighter-rouge">gem</code> constructor.</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">a = gem([1 2; 3 4+5i])</code> is a 2x2 gem object</p>
+
+    <p>This matrix can be manipulated like a conventional matrix. For instance, <code class="highlighter-rouge">a(2,2)</code> extracts the (2,2) element of the matrix: <code class="highlighter-rouge">4+5i</code>.</p>
+  </li>
+</ul>
+
+<p>When constructing a gem object from a double-precision matrix, the first 15 digits of each component are taken into account and completed by trailing zeros (up to the precision of the gem object). This garantees that all numbers are transfered in a predictable manner, and that integers remain integers after conversion.</p>
+
+<p>High precision objects can also be constructed by specifying all digits in a string. This allows to define numbers with more than 15 digits precision, as in the following example:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">gem('1.93754981629874513245725542343')</code></p>
+
+    <p>creates a 1x1 matrix (i.e. a scalar) with 30 non-trivial digits, the remaining digits being set to zeros.</p>
+  </li>
+</ul>
+
+<p>When creating a number from a string which contains more digits than the default working precision defined by <code class="highlighter-rouge">gem.workingPrecision</code>, the precision of the created number is automatically adjusted to hold all specified digits. Therefore, <code class="highlighter-rouge">precision(gem('1249087124971234.43728901872387540876540921694461877239047122'))</code> is <code class="highlighter-rouge">60</code> even if the current working precision is <code class="highlighter-rouge">50</code>.</p>
+
+<p>All elements of a matrix can be individually initialized to an arbitrary precision by calling the constructor <code class="highlighter-rouge">gem</code> with a cell array containing the corresponding strings:</p>
+<ul>
+  <li><code class="highlighter-rouge">gem({'1.321321123123321123' '456.4566544566544564'; '0.789987987789987789' '369.639369366963936'})</code></li>
+</ul>
+
+<h3 id="sparse-matrices">Sparse matrices</h3>
+
+<p>Just like in the case of dense matrices, sparse Matlab/Octave matrix are easily transfered to sparse gem object by calling the <code class="highlighter-rouge">sgem</code> constructor:</p>
+<ul>
+  <li><code class="highlighter-rouge">sgem(speye(3))</code> is a sparse 3x3 identity matrix</li>
+</ul>
+
+<p>Sgem object can also be constructed by calling the <code class="highlighter-rouge">sparse(i,j,s,m,n)</code> function with a gem vector <code class="highlighter-rouge">s</code>:</p>
+<ul>
+  <li><code class="highlighter-rouge">sparse([1 2], [1 3], gem({'123.45678901234567890' '987.653210987654321'}), 3, 3)</code> is a sparse matrix with two high precision components</li>
+</ul>
+
+<p>… or by directly calling the constructor <code class="highlighter-rouge">sgem</code> in the same way:</p>
+<ul>
+  <li><code class="highlighter-rouge">sgem([1 2], [1 3], [123 987]}), 3, 3)</code> is a sparse matrix with two high precision integer components</li>
+</ul>
+
+<p>More generally, high precision objects can be constructed from either a full or sparse Matlab/Octave matrix by calling the <code class="highlighter-rouge">gemify</code> function. This will create a gem object when given a full matrix, and an sgem object when given a sparse one.</p>
+
+<h3 id="special-values">Special values</h3>
+
+<p>The following mathematical constants can be constructed explicitely</p>
+<ul>
+  <li><code class="highlighter-rouge">gem('pi')</code> is 3.14159265…</li>
+  <li><code class="highlighter-rouge">gem('e')</code> is 2.7182818…</li>
+  <li><code class="highlighter-rouge">gem('log2')</code> is 0.69314718…</li>
+  <li><code class="highlighter-rouge">gem('euler')</code> is 0.57721566…</li>
+  <li><code class="highlighter-rouge">gem('catalan')</code> is 0.91596559…</li>
+</ul>
+
+<h2 id="precision">Precision</h2>
+
+<h3 id="working-precision">Working precision</h3>
+
+<p>The <strong>GEM Library</strong> works with high precision numbers. The precision of these numbers is defined by the number of digits that are used to describe them (in basis 10). By default, the library takes into account 50 digits. This means that it can distinguish between numbers that differ at the 50th decimal place:</p>
+<ul>
+  <li>
+    <p>In double precision <code class="highlighter-rouge">(pi/10) - (pi/10 - 1e-17)</code> yields</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 0
+</code></pre></div>    </div>
+
+    <p>but <code class="highlighter-rouge">(gem('pi')/10) - (gem('pi')/10 - 1e-50)</code> is</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1e-50 *
+
+  1.0691058840368782585
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>The precision at which the <strong>GEM Library</strong> works can be adjusted throught the function <code class="highlighter-rouge">gem.workingPrecision</code>. Alternatively, it can be passed as a parameter when creating a gem object:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">gem(3.141592654,3)</code> yields just</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 3.14
+</code></pre></div>    </div>
+
+    <p>(the remaining digits are ignored)</p>
+  </li>
+</ul>
+
+<p>When creating a gem object from a double, at most 15 digits are taken into account. When using strings of digits to specify a number, the precision is automatically adjusted to guarantee that all provided digits are taken into account, unless explicitely stated:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">gem('123456789012345678901234567890123456789012345678901234567891') - gem('123456789012345678901234567890123456789012345678901234567890')</code> produces the result</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1
+</code></pre></div>    </div>
+
+    <p>even though the relative difference, of the order of 1e-60, is smaller than the default working precision. The precision used here for the difference included all provided digits.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">gem('1234567890',3) - gem('1234567891',3)</code> produces</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 0
+</code></pre></div>    </div>
+
+    <p>because the three first digits of both numbers are equal.</p>
+  </li>
+</ul>
+
+<p>Note that the accuracy of the result of an operation is not only determined by the number of decimals used to define numbers, but it may also depend on the <a href="https://en.wikipedia.org/wiki/Numerical_error">number of elementary manipulations</a> used to produce the result.</p>
+
+<p>The <code class="highlighter-rouge">precision</code> function can be used to determine how many digits are used to describe a particular number. For instance,</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">precision(gem('3.2'))</code> is</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 50
+</code></pre></div>    </div>
+
+    <p><code class="highlighter-rouge">precision(gem('123456789012345678901234567890123456789012345678901234567891'))</code> is</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 60
+</code></pre></div>    </div>
+
+    <p>and <code class="highlighter-rouge">precision(gem('e',5))</code> is</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 5
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="display-precision">Display precision</h3>
+
+<p>When displaying a high precision number, only part of the number is usually printed out. This is the default behavior, because long string of digits can quickly become cumbersome. Even though all significant digits are not systematically printed, they are indeed kept in memory and used in the computations. The function <code class="highlighter-rouge">gem.displayPrecision</code> can be used to adjust the number of displayed digits. Alternatively, the display precision can also be directly specified as a second argument of the <code class="highlighter-rouge">disp</code> or <code class="highlighter-rouge">display</code> functions:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">disp(gem('pi'),50)</code> prints 50 digits:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 3.1415926535897932384626433832795028841971693993751
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>A <em>negative</em> display precision prints out all digits in memory:</p>
+<ul>
+  <li><code class="highlighter-rouge">disp(gem('pi'),-1)</code> prints the same 50 digits as above.</li>
+</ul>
+
+<h2 id="functions">Functions</h2>
+
+<p>A list of the functions that can be applied to gem and sgem objects is available <a href="functions.html"><strong>here</strong></a>. In general, these functions take the same arguments as their Matlab/Octave counterparts, and behave in the same way. For instance, the <code class="highlighter-rouge">max</code> function applied to a vector containing two complex numbers returns the complex number with largest magnitude, or the one with largest angle if both magnitudes are equal.</p>
+
+<p>For some functions, all possible behaviors are not yet implemented. For instance, <code class="highlighter-rouge">mpower</code> currently only supports powers of +1 and -1. Anyone interested in a specific feature is invited to open an <a href="https://github.com/gem-library/gem/issues"><strong>issue</strong></a> and eventually consider contributing to this open source project by implementing some missing functionality and submitting a push request (please refer to <a href="howToContribute.html"><strong>this page</strong></a> for more ways to get involved).</p>
+
+<p>Note that the default behavior of some GEM functions does differ from Matlab’s implementation. This is the case for example for functions which don’t preserve the sparsity when applied to sparse objects. This point is explained in the file <code class="highlighter-rouge">@gem/sparseLikeMatlab.m</code> file. The default Matlab behavior is easily restored by calling <code class="highlighter-rouge">gem.sparseLikeMatlab(1)</code>.</p>
+
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="http://localhost:4000/gem/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['matlab']
+});
+      $(document).ready(function() {
+      $('pre.codeoutput').each(function(i, block) {
+      hljs.highlightBlock(block);
+      });
+      });
+    </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'gem-library/gem'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/gem/js/main.js"></script></body></html>

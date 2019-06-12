@@ -1,0 +1,7 @@
+name: GEM Library
+baseurl: /gem
+description: Gmp Eigen Matrix Library - an Open source high precision matrix library for Matlab and GNU/Octave
+highlighter: rouge
+docs: true
+markdown: kramdown
+gemVersion: 1.1.0-SNAPSHOT

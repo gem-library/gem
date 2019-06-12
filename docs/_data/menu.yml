@@ -1,0 +1,19 @@
+options:
+
+  - title: Installation
+    url: docs/installation.html
+
+  - title: Getting started
+    url: docs/gettingStarted.html
+
+  - title: Examples
+    url: docs/publish/examples.html
+
+  - title: Available functions
+    url: docs/functions.html
+
+  - title: How to contribute
+    url: docs/howToContribute.html
+
+  - title: Compilation instructions
+    url: docs/compilationInstructions.html

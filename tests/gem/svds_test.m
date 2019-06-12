@@ -81,7 +81,7 @@ function test_precision
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     
     if isOctave
-        % NOTE: Due to bug #3, we only check whether the singular values
+        % NOTE: Due to issue #3, we only check whether the singular values
         %       are identical for a matrix with degenerate eigenvalues
         x = {gem(eye(15))};
 
@@ -97,7 +97,7 @@ function test_precision
         testRun = false;
         while ~testRun
             try
-                % NOTE: Due to bug #3 we don't check imaginary symmetric
+                % NOTE: Due to issue #3 we don't check imaginary symmetric
                 %       matrices
                 x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
 

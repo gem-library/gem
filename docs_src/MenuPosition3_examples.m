@@ -47,7 +47,7 @@ display(f, -1)
 
 %%
 % * The power of two irrationals can be rational
-% (<http://www.numericana.com/answer/irrational.htm>)
+% (see also <http://www.numericana.com/answer/irrational.htm>)
 x = log2(gem(9))
 y = gem(2)^0.5
 disp(y^x, -1)

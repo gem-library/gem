@@ -41,12 +41,12 @@ Sgem object can also be constructed by calling the `sparse(i,j,s,m,n)` function 
  ... or by directly calling the constructor `sgem` in the same way:
  - `sgem([1 2], [1 3], [123 987]}), 3, 3)` is a sparse matrix with two high precision integer components
  
-More generally, high precision objects can be constructed from either a full or sparse Matlab/Octave matrix by calling the `gemify` function. This will create a gem object when given a full matrix, and an sgem object when given a sparse one.
+More generally, high precision objects can be constructed from either full or sparse Matlab/Octave matrices by calling the `gemify` function. When provided a full matrix, this function creates a gem object, when provided a sparse argument, it produces an sgem object.
 
 
 ### Special values
 
-The following mathematical constants can be constructed explicitely
+The following mathematical constants can be constructed explicitly
  - `gem('pi')` is 3.14159265...
  - `gem('e')` is 2.7182818...
  - `gem('log2')` is 0.69314718...
@@ -107,7 +107,7 @@ The `precision` function can be used to determine how many digits are used to de
 
 ### Display precision
 
-When displaying a high precision number, only part of the number is usually printed out. This is the default behavior, because long string of digits can quickly become cumbersome. Even though all significant digits are not systematically printed, they are indeed kept in memory and used in the computations. The function `gem.displayPrecision` can be used to adjust the number of displayed digits. Alternatively, the display precision can also be directly specified as a second argument of the `disp` or `display` functions:
+Printing long strings of digits can quickly become cumbersome. Therefore, only part of a high precision number is displayed by default. Even though all significant digits are not systematically printed, they are indeed kept in memory and used in the computations. The function `gem.displayPrecision` can be used to adjust the number of digits to be displayed by default. Alternatively, the display precision can also be directly specified as a second argument of the `disp` or `display` functions:
  - `disp(gem('pi'),50)` prints 50 digits:
 
         3.1415926535897932384626433832795028841971693993751
@@ -123,5 +123,5 @@ A list of the functions that can be applied to gem and sgem objects is available
 
 For some functions, all possible behaviors are not yet implemented. For instance, `mpower` currently only supports powers of +1 and -1. Anyone interested in a specific feature is invited to open an [**issue**](https://github.com/gem-library/gem/issues) and eventually consider contributing to this open source project by implementing some missing functionality and submitting a push request (please refer to [**this page**](howToContribute.html) for more ways to get involved).
 
-Note that the default behavior of some GEM functions does differ from Matlab's implementation. This is the case for example for functions which don't preserve the sparsity when applied to sparse objects. This point is explained in the file `@gem/sparseLikeMatlab.m` file. The default Matlab behavior is easily restored by calling `gem.sparseLikeMatlab(1)`.
+Note that the default behavior of some gem functions does differ from Matlab's implementation. This is the case for example for functions which don't preserve the sparsity when applied to sparse objects. This point is explained in the file `@gem/sparseLikeMatlab.m`. The default Matlab behavior is easily restored by calling `gem.sparseLikeMatlab(1)`.
 

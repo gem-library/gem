@@ -6,11 +6,11 @@ position: 1
 
 # {{page.title}}
 
-This chapter explains the basics to get working with the **GEM Library**. We start with the standard method. A step by step method to do everything by hand is also described [below](#Alternate-method).
+This page presents how to get going with the **GEM Library**. Most users would consider installing the library from the binary release. The release contains binaries for most version of Matlab on Linux, Windows and MacOS, as well as Linux binaries for Octave 4.2. The first section explains how to do this. A full step by step procedure is [then](#installing-from-source) also described to install the full library from the source code.
 
-## Standard method
+## Installing a release
 
-After downloading the [**latest**](https://github.com/gem-library/gem/releases) version of the library, uncompress it in a `desired_folder`. This created the folder `desired_folder/gem`. The release contains binaries for most version of Matlab on Linux, Windows and MacOS, as well as Linux binaries for Octave 4.2.
+After downloading the [**latest**](https://github.com/gem-library/gem/releases) version of the library, uncompress it in a `desired_folder`. This created the folder `desired_folder/gem`.
 
 ### Setting up the path
 
@@ -25,7 +25,7 @@ You can then follow the [**tutorial**](gettingStarted.html).
 
 ## Installing from source
 
-You can also install the **GEM library** from the source code. This is useful for development purpose. For this:
+You can also install the **GEM library** from the source code. This can be useful for development purpose. For this:
 
 - Clone the library from GitHub using the following commands:
 
@@ -35,7 +35,7 @@ cd gem
 git submodules update --init
 ```
 
-This will create a folder **gem** with most of the necessary code (including Eigen, Spectra, MOxUnit and MOcov). To compile the library, follow the detailed instructions given [here](compilationInstructions.html). Once the library is compiled, you can try the following
+This creates a folder **gem** with most of the necessary code (including Eigen, Spectra, MOxUnit and MOcov). To compile the library, follow the [**detailed instructions**](compilationInstructions.html). Once the library is compiled, proceed with the following steps.
 
 
 ### Setting up the path
@@ -61,3 +61,13 @@ The documentation can be compiled with the command
 ```
 compile_doc
 ```
+
+### Running the documentation locally
+
+The documentation website can be run on a local machine thanks to the Jekyll. For this, install `jekyll` and `bundle` as explained on the [**Jekyll website**](https://jekyllrb.com). Then run
+
+```
+bundle exec jekyll serve
+```
+
+from within the `docs` subfolder. This command should provide you an IP address on which you can consult the website.

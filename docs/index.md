@@ -36,15 +36,15 @@ Related open source libraries include:
 
 ## What does it look like?
 
-- On Matlab/Octave, the command `sin(pi)` returns **~1e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns by **~1e-50**, a value compatible with the default working precision of 50 digits.
+- On Matlab/Octave, the command `sin(pi)` returns **1.2246e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns by **4.3348e-51**, a value compatible with the default working precision of 50 digits.
 
-- Matrices eigenvalues are computed straightforwardly. For instance, `eig(gem([1 1; 1 -1]))` computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of `sqrt(2)`.
+- Matrix operations such as eigenvalue decompositions are computed straightforwardly. For instance, `eig(gem([1 1; 1 -1]))` computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of $$\sqrt{2}$$.
 
-See the [**example page**](docs/examples.html) for some usage illustrations.
+See the [**example page**](docs/publish/examples.html) for some usage illustrations.
 
 ## How to start using the GEM Library
 
-See the [**Installation guide**](docs/installation.html).
+See the [**installation guide**](docs/installation.html).
 
 
 ## Documentation
@@ -61,11 +61,11 @@ The library currently relies on:
  - [Eigen](http://eigen.tuxfamily.org/), and [Spectra](http://yixuan.cos.name/spectra/) by Yixuan Qiu for matrix manipulations
  - [MOxUnit](https://github.com/MOxUnit/MOxUnit) and [MOcov](https://github.com/MOcov/MOcov) by Nikolaas N. Oosterhof for testing and code coverage monitoring
 
-Feedback an suggestions are welcome. Contributions are also welcome through the [**github page**](https://github.com/gem-library/gem) (see also [**how to contribute**](doc/howToContribute.md)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
+Feedback an suggestions are welcome. Contributions are als welcome through the [**github page**](https://github.com/gem-library/gem) (see [**how to contribute**](doc/howToContribute.md)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
 
 ## License
 
-The **GEM Library** is an open source project. It can be use freely, including for academic use and proprietary applications (with some obligations). The source code is distributed under a [MPL2 license](https://github.com/gem-library/gem/blob/master/COPYING.md). It comes with no guarantee.
+The **GEM Library** is an open source project. It can be use freely, including for academic use and proprietary applications (with some obligations). The source code is distributed under the MPL2 license ([**more details**](https://github.com/gem-library/gem/blob/master/COPYING.md)). It comes with no guarantee.
 
 
 ---

@@ -14,8 +14,8 @@
   <li>Install the gmp, mpfr and mpfrc++ libraries with the command
 <code class="highlighter-rouge">sudo apt install libmpfrc++-dev libgmp-dev</code></li>
   <li>Start Matlab or Octave and go to the gem folder.</li>
-  <li>Type <code class="highlighter-rouge">make</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with ‘Compilation successful’. Otherwise, a message should inform you about what is missing.</li>
-  <li>Add the gem folder to your Matlab/Octave path. You can now perform your favorite computation in high precision!</li>
+  <li>Type <code class="highlighter-rouge">make</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message ‘<strong>Compilation successful</strong>’. Otherwise, a message should inform you about what is missing.</li>
+  <li>Add the gem subfolder to your Matlab/Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
 </ol>
 
 <h2 id="steps-to-compile-the-gem-library-on-windows-64-bits-">Steps to compile the GEM Library on <em>Windows</em> (64 bits) :</h2>
@@ -50,7 +50,8 @@
   <li>Download the latest Eigen source code on <a href="http://eigen.tuxfamily.org">eigen.tuxfamily.org</a> and place it into gem’s ‘external’ folder.</li>
   <li>Download the latest version of Spectra on <a href="http://yixuan.cos.name/spectra/download.html">http://yixuan.cos.name/spectra/download.html</a> and place it into gem’s ‘external’ folder.</li>
   <li>In Matlab, go the the gem folder and type <code class="highlighter-rouge">make(1,0)</code> to compile the library.</li>
-  <li>Note: the compiled require the <code class="highlighter-rouge">libgomp</code> library, located in <code class="highlighter-rouge">C:\TDM-GCC-64\bin\libgomp_64-1.dll</code>. To make your compilation portable, copy this file into the <code class="highlighter-rouge">gem</code> folder.</li>
+  <li>Note: the objects compiled in this way require the <code class="highlighter-rouge">libgomp</code> library, located in <code class="highlighter-rouge">C:\TDM-GCC-64\bin\libgomp_64-1.dll</code>. To make your compilation portable, copy this file into the gem subfolder.</li>
+  <li>Add the gem subfolder to your Matlab/Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
 </ol>
 
 <h2 id="steps-to-compile-the-gem-library-on-macos-tested-on-el-capitain-10116-">Steps to compile the GEM Library on <em>macOS</em> (tested on el capitain 10.11.6) :</h2>
@@ -65,8 +66,8 @@
   <li>Download MPFR from <a href="http://www.mpfr.org/mpfr-current/#download">http://www.mpfr.org/mpfr-current/#download</a> and place it into gem’s ‘external’ folder</li>
   <li>Download MPFR-C++ from <a href="http://www.holoborodko.com/pavel/mpfr/">http://www.holoborodko.com/pavel/mpfr/</a> and place it into gem’s ‘external’ folder</li>
   <li>Start Octave and go to the gem folder.</li>
-  <li>Type <code class="highlighter-rouge">make(1,0)</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with ‘Compilation successful’. Otherwise, a message should inform you about what is missing.</li>
-  <li>Add the gem folder to your Octave path. You can now perform your favorite computation in high precision!</li>
+  <li>Type <code class="highlighter-rouge">make(1,0)</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message ‘<strong>Compilation successful</strong>’. Otherwise, a message should inform you about what is missing.</li>
+  <li>Add the gem subfolder to your Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
 </ol>
 
 <h3 id="instructions-for-matlab">Instructions for Matlab</h3>
@@ -76,11 +77,11 @@
   <li>Install Xcode</li>
   <li>Install homebrew and most of the packages mentioned in https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/</li>
   <li>Install gcc throught homebrew with <code class="highlighter-rouge">brew install gcc --without-muiltilib</code> (or maybe without the option…)</li>
-  <li>Install maybe also <code class="highlighter-rouge">gmp</code> <code class="highlighter-rouge">mpfr</code> and <code class="highlighter-rouge">libmpc</code> with brew…</li>
-  <li>In /usr/local/bin, add reference to gcc and g++ with <code class="highlighter-rouge">ln -s gcc-7 gcc</code> and <code class="highlighter-rouge">ln -s g++-7 g++</code></li>
+  <li>Install maybe also <code class="highlighter-rouge">gmp</code>, <code class="highlighter-rouge">mpfr</code> and <code class="highlighter-rouge">libmpc</code> with brew…</li>
+  <li>Add reference to gcc and g++ in the folder /usr/local/bin with <code class="highlighter-rouge">ln -s gcc-7 gcc</code> and <code class="highlighter-rouge">ln -s g++-7 g++</code></li>
   <li>Launch Matlab from the terminal, so that /usr/local/bin is the first folder looked for when running <code class="highlighter-rouge">unix(‘which g++’)</code> in Matlab</li>
   <li>Type <code class="highlighter-rouge">make</code> from  within the gem folder and follow the instructions</li>
-  <li>Add the gem folder to your Matlab path.</li>
+  <li>Add the gem subfolder to your Matlab path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
 </ol>
 
 <p>These additional links may help</p>
@@ -90,7 +91,7 @@
 
 <h2 id="failsafe-mode">Failsafe mode</h2>
 
-<p>Because every system installation is different… When calling the command <code class="highlighter-rouge">make</code> from within Matlab/Octave, setting the third option <code class="highlighter-rouge">genericBuild</code> to <code class="highlighter-rouge">1</code> triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. However, this compilation procedure is slower. Moreover, since Matlab/Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).</p>
+<p>Because every system installation is different… When calling the command <code class="highlighter-rouge">make</code> from within Matlab/Octave, setting the third option <code class="highlighter-rouge">genericBuild</code> to <code class="highlighter-rouge">1</code> triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. This compilation procedure is slower. Moreover, since Matlab/Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).</p>
 </section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="http://localhost:4000/gem/highlight/highlight.pack.js"></script><script>hljs.configure({
 languages:['matlab']
 });

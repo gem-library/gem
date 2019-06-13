@@ -34,18 +34,18 @@
 
 <ul>
   <li>
-    <p>On Matlab/Octave, the command <code class="highlighter-rouge">sin(pi)</code> returns <strong>~1e-16</strong> because computations are limited to machine precision. With the <strong>GEM Library</strong>, <code class="highlighter-rouge">sin(gem('pi'))</code> returns by <strong>~1e-50</strong>, a value compatible with the default working precision of 50 digits.</p>
+    <p>On Matlab/Octave, the command <code class="highlighter-rouge">sin(pi)</code> returns <strong>1.2246e-16</strong> because computations are limited to machine precision. With the <strong>GEM Library</strong>, <code class="highlighter-rouge">sin(gem('pi'))</code> returns by <strong>4.3348e-51</strong>, a value compatible with the default working precision of 50 digits.</p>
   </li>
   <li>
-    <p>Matrices eigenvalues are computed straightforwardly. For instance, <code class="highlighter-rouge">eig(gem([1 1; 1 -1]))</code> computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of <code class="highlighter-rouge">sqrt(2)</code>.</p>
+    <p>Matrix operations such as eigenvalue decompositions are computed straightforwardly. For instance, <code class="highlighter-rouge">eig(gem([1 1; 1 -1]))</code> computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of <script type="math/tex">\sqrt{2}</script>.</p>
   </li>
 </ul>
 
-<p>See the <a href="docs/examples.html"><strong>example page</strong></a> for some usage illustrations.</p>
+<p>See the <a href="/gem/docs/publish/examples.html"><strong>example page</strong></a> for some usage illustrations.</p>
 
 <h2 id="how-to-start-using-the-gem-library">How to start using the GEM Library</h2>
 
-<p>See the <a href="docs/installation.html"><strong>Installation guide</strong></a>.</p>
+<p>See the <a href="docs/installation.html"><strong>installation guide</strong></a>.</p>
 
 <h2 id="documentation">Documentation</h2>
 
@@ -62,11 +62,11 @@
   <li><a href="https://github.com/MOxUnit/MOxUnit">MOxUnit</a> and <a href="https://github.com/MOcov/MOcov">MOcov</a> by Nikolaas N. Oosterhof for testing and code coverage monitoring</li>
 </ul>
 
-<p>Feedback an suggestions are welcome. Contributions are also welcome through the <a href="https://github.com/gem-library/gem"><strong>github page</strong></a> (see also <a href="doc/howToContribute.md"><strong>how to contribute</strong></a>). We ask participants to follow the guidelines of the <a href="https://typelevel.org/conduct.html">Typelevel Code of Conduct</a>.</p>
+<p>Feedback an suggestions are welcome. Contributions are als welcome through the <a href="https://github.com/gem-library/gem"><strong>github page</strong></a> (see <a href="doc/howToContribute.md"><strong>how to contribute</strong></a>). We ask participants to follow the guidelines of the <a href="https://typelevel.org/conduct.html">Typelevel Code of Conduct</a>.</p>
 
 <h2 id="license">License</h2>
 
-<p>The <strong>GEM Library</strong> is an open source project. It can be use freely, including for academic use and proprietary applications (with some obligations). The source code is distributed under a <a href="https://github.com/gem-library/gem/blob/master/COPYING.md">MPL2 license</a>. It comes with no guarantee.</p>
+<p>The <strong>GEM Library</strong> is an open source project. It can be use freely, including for academic use and proprietary applications (with some obligations). The source code is distributed under the MPL2 license (<a href="https://github.com/gem-library/gem/blob/master/COPYING.md"><strong>more details</strong></a>). It comes with no guarantee.</p>
 
 <hr />
 

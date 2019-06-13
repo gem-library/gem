@@ -50,12 +50,12 @@ ans =
 </pre><pre class="codeoutput"> 
 ans = 
  
-   49.890111803913929738                         
-    2.533201921584779147 +  1.778133120617955289i
-    2.533201921584779147 -  1.778133120617955289i
-   -1.520813544282878741 -  2.503009438756645663i
-   -1.520813544282878741 +  2.503009438756645663i
-   -1.633002573434424313 +  2.328697393855964856i
+   50.014602329052006292                         
+    2.571604942679769881 +  1.793496454642912459i
+    2.571604942679769881 -  1.793496454642912459i
+    2.822970427181927583 +  1.086910816521541304i
+    2.822970427181927583 -  1.086910816521541304i
+    0.865281014650892532 +  2.814822878487305859i
  
 </pre><div><ul><li>Summing 8th powers: <img src="examples_eq09059867271993556214.png" alt="$\sum_{i=1}^{100000} i^8$"></li></ul></div><pre class="codeinput">e = sum(gem([1:100000]).^8);
 disp(e,-1)
@@ -68,7 +68,7 @@ f =
  
   262537412640768743.9999999999992500725971981856888974
  
-</pre><div><ul><li>The power of two irrationals can be rational (<a href="http://www.numericana.com/answer/irrational.htm#irrational">http://www.numericana.com/answer/irrational.htm#irrational</a>)</li></ul></div><pre class="codeinput">x = log2(gem(9))
+</pre><div><ul><li>The power of two irrationals can be rational (see also <a href="http://www.numericana.com/answer/irrational.htm">http://www.numericana.com/answer/irrational.htm</a>)</li></ul></div><pre class="codeinput">x = log2(gem(9))
 y = gem(2)^0.5
 disp(y^x, -1)
 </pre><pre class="codeoutput"> 
@@ -83,7 +83,7 @@ y =
  
   3.000000000000000000000000000000000000000000000000043
  
-</pre><p>Here errors were accumulated in the last two digits.</p><div><ul><li>A sparse identity</li></ul></div><pre class="codeinput">sgem(speye(3))
+</pre><p>(here numerical errors were accumulated up to the last two digits)</p><div><ul><li>A sparse identity</li></ul></div><pre class="codeinput">sgem(speye(3))
 </pre><pre class="codeoutput"> 
 ans = 
  
@@ -278,12 +278,12 @@ display(f, -1)
 
 %%
 % * The power of two irrationals can be rational
-% (<http://www.numericana.com/answer/irrational.htm#irrational>)
+% (see also <http://www.numericana.com/answer/irrational.htm>)
 x = log2(gem(9))
 y = gem(2)^0.5
 disp(y^x, -1)
 %%
-% Here errors were accumulated in the last two digits.
+% (here numerical errors were accumulated up to the last two digits)
 
 
 %%

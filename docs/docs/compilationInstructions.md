@@ -22,8 +22,8 @@ The following steps work equally well for Matlab and Octave.
 3. Install the gmp, mpfr and mpfrc++ libraries with the command
 `sudo apt install libmpfrc++-dev libgmp-dev`
 4. Start Matlab or Octave and go to the gem folder.
-5. Type `make`. This will launch the compilation of the library. If everything goes fine, the program will conclude with 'Compilation successful'. Otherwise, a message should inform you about what is missing.
-6. Add the gem folder to your Matlab/Octave path. You can now perform your favorite computation in high precision!
+5. Type `make`. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message '**Compilation successful**'. Otherwise, a message should inform you about what is missing.
+6. Add the gem subfolder to your Matlab/Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
 
 Steps to compile the GEM Library on *Windows* (64 bits) :
@@ -53,7 +53,8 @@ The following was only tested on Matlab.
 11. Download the latest Eigen source code on [eigen.tuxfamily.org](http://eigen.tuxfamily.org) and place it into gem's 'external' folder.
 12. Download the latest version of Spectra on [http://yixuan.cos.name/spectra/download.html](http://yixuan.cos.name/spectra/download.html) and place it into gem's 'external' folder.
 13. In Matlab, go the the gem folder and type `make(1,0)` to compile the library.
-14. Note: the compiled require the `libgomp` library, located in `C:\TDM-GCC-64\bin\libgomp_64-1.dll`. To make your compilation portable, copy this file into the `gem` folder.
+14. Note: the objects compiled in this way require the `libgomp` library, located in `C:\TDM-GCC-64\bin\libgomp_64-1.dll`. To make your compilation portable, copy this file into the gem subfolder.
+15. Add the gem subfolder to your Matlab/Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
 
 Steps to compile the GEM Library on *macOS* (tested on el capitain 10.11.6) :
@@ -69,8 +70,8 @@ These instructions were tested for a version of Octave installed as an [App Bund
 5. Download MPFR-C++ from [http://www.holoborodko.com/pavel/mpfr/](http://www.holoborodko.com/pavel/mpfr/
 ) and place it into gem's 'external' folder
 6. Start Octave and go to the gem folder.
-7. Type `make(1,0)`. This will launch the compilation of the library. If everything goes fine, the program will conclude with 'Compilation successful'. Otherwise, a message should inform you about what is missing.
-8. Add the gem folder to your Octave path. You can now perform your favorite computation in high precision!
+7. Type `make(1,0)`. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message '**Compilation successful**'. Otherwise, a message should inform you about what is missing.
+8. Add the gem subfolder to your Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
 
 ### Instructions for Matlab
@@ -79,11 +80,11 @@ Tentative roadmap:
 1. Install Xcode
 2. Install homebrew and most of the packages mentioned in https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
 3. Install gcc throught homebrew with `brew install gcc --without-muiltilib` (or maybe without the option...)
-4. Install maybe also `gmp` `mpfr` and `libmpc` with brew...
-4. In /usr/local/bin, add reference to gcc and g++ with `ln -s gcc-7 gcc` and `ln -s g++-7 g++`
-5. Launch Matlab from the terminal, so that /usr/local/bin is the first folder looked for when running `unix(‘which g++’)` in Matlab
-6. Type `make` from  within the gem folder and follow the instructions
-7. Add the gem folder to your Matlab path.
+4. Install maybe also `gmp`, `mpfr` and `libmpc` with brew...
+5. Add reference to gcc and g++ in the folder /usr/local/bin with `ln -s gcc-7 gcc` and `ln -s g++-7 g++`
+6. Launch Matlab from the terminal, so that /usr/local/bin is the first folder looked for when running `unix(‘which g++’)` in Matlab
+7. Type `make` from  within the gem folder and follow the instructions
+9. Add the gem subfolder to your Matlab path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
 These additional links may help
  - Instructions to be able to run `mex -setup` : http://www.mathworks.com/matlabcentral/answers/246507-why-can-t-mex-find-a-supported-compiler-in-matlab-r2015b-after-i-upgraded-to-xcode-7-0#comment_392485
@@ -91,4 +92,4 @@ These additional links may help
 Failsafe mode
 ----------------
 
-Because every system installation is different... When calling the command `make` from within Matlab/Octave, setting the third option `genericBuild` to `1` triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. However, this compilation procedure is slower. Moreover, since Matlab/Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).
+Because every system installation is different... When calling the command `make` from within Matlab/Octave, setting the third option `genericBuild` to `1` triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. This compilation procedure is slower. Moreover, since Matlab/Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).

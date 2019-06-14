@@ -1,0 +1,104 @@
+<html><head><title>GEM Library: Compilation instructions</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Jean-Daniel Bancal" /><meta name="description" content="Gmp Eigen Matrix Library" /><meta name="og:image" content="http://localhost:4000/gem/img/poster.png" /><meta name="og:title" content="GEM Library: Compilation instructions" /><meta name="og:site_name" content="GEM Library" /><meta name="og:url" content="http://gem-library.github.io/gem" /><meta name="og:type" content="website" /><meta name="og:description" content="Gmp Eigen Matrix Library" /><link rel="icon" type="image/png" href="http://localhost:4000/gem/img/favicon.png" /><meta name="twitter:title" content="GEM Library: Compilation instructions" /><meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" /><meta name="twitter:description" content="Gmp Eigen Matrix Library" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="http://localhost:4000/gem/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="http://localhost:4000/gem/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="http://localhost:4000/gem/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="http://localhost:4000/gem/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="http://localhost:4000/gem/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="http://localhost:4000/gem/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="http://localhost:4000/gem/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="http://localhost:4000/gem/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="http://localhost:4000/gem/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="http://localhost:4000/gem/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="http://localhost:4000/gem/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="http://localhost:4000/gem/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="http://localhost:4000/gem/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="http://localhost:4000/gem/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="http://localhost:4000/gem/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="http://localhost:4000/gem/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="http://localhost:4000/gem/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="http://localhost:4000/gem/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="http://localhost:4000/gem/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="http://localhost:4000/gem/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="http://localhost:4000/gem/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/gem/css/style.css" /><link rel="stylesheet" href="/gem/css/palette.css" /><link rel="stylesheet" href="/gem/css/codemirror.css" /></head><body class="docs"><div id="wrapper"><div id="sidebar-wrapper"><ul id="sidebar" class="sidebar-nav"><li class="sidebar-brand"><a href="/gem/" class="brand"><div class="brand-wrapper"><span>GEM Library</span></div></a></li> <li><a href="/gem/docs/installation.html" class="">Installation</a></li> <li><a href="/gem/docs/gettingStarted.html" class="">Getting started</a></li> <li><a href="/gem/docs/publish/examples.html" class="">Examples</a></li> <li><a href="/gem/docs/functions.html" class="">Available functions</a></li> <li><a href="/gem/docs/howToContribute.html" class="">How to contribute</a></li> <li><a href="/gem/docs/compilationInstructions.html" class=" active ">Compilation instructions</a></li></ul></div><div id="page-content-wrapper"><div class="nav"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="action-menu pull-left clearfix"><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a></div><ul class="pull-right"><li id="gh-eyes-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-eye"></i><span>WATCH<span id="eyes" class="label label-default">--</span></span></a></li><li id="gh-stars-item" class="hidden-xs"><a href="https://github.com/gem-library/gem"><i class="fa fa-star-o"></i><span>STARS<span id="stars" class="label label-default">--</span></span></a></li><li><a href="#" onclick="shareSiteTwitter('GEM Library');"><i class="fa fa-twitter"></i></a></li><li><a href="#" onclick="shareSiteFacebook('GEM Library');"><i class="fa fa-facebook"></i></a></li><li><a href="#" onclick="shareSiteGoogle();"><i class="fa fa-google-plus"></i></a></li></ul></div></div></div></div><div id="content" data-github-owner="gem-library" data-github-repo="gem"><div class="content-wrapper"><section><h1 id="how-to-compile-the-gem-library">How to compile the GEM Library</h1>
+
+<p>This document describes steps which lead to a successful compilation of the <strong>GEM Library</strong> on various platforms.</p>
+
+<p>Here we assume that the target environment is Matlab, but the same instructions also apply to Octave.</p>
+
+<h2 id="steps-to-compile-the-gem-library-on-ubuntu-">Steps to compile the GEM Library on <em>Ubuntu</em> :</h2>
+
+<p>The following steps work equally well for Matlab and Octave.</p>
+
+<ol>
+  <li>Download the latest library repository with the following command: <code class="highlighter-rouge">git clone https://www.github.com/gem-library/gem</code>. This creates a folder called <code class="highlighter-rouge">gem</code>.</li>
+  <li>Inside this folder, download the submodules with the command <code class="highlighter-rouge">git submodule update --init</code>.</li>
+  <li>Install the gmp, mpfr and mpfrc++ libraries with the command
+<code class="highlighter-rouge">sudo apt install libmpfrc++-dev libgmp-dev</code></li>
+  <li>Start Matlab or Octave and go to the gem folder.</li>
+  <li>Type <code class="highlighter-rouge">make</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message ‘<strong>Compilation successful</strong>’. Otherwise, a message should inform you about what is missing.</li>
+  <li>Add the gem subfolder to your Matlab/Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
+</ol>
+
+<h2 id="steps-to-compile-the-gem-library-on-windows-64-bits-">Steps to compile the GEM Library on <em>Windows</em> (64 bits) :</h2>
+
+<p>The following was only tested on Matlab.</p>
+
+<ol>
+  <li>Download the latest library repository either with git (see the first Ubuntu instruction above) of from the <a href="https://github.com/gem-library/gem/releases"><strong>release page</strong></a>.</li>
+  <li>Install msys on your system from <a href="http://mingw.org/wiki/msys">http://mingw.org/wiki/msys</a></li>
+  <li>Launch the MinGW Installation Manager and install packages <code class="highlighter-rouge">mingw-developer-toolkit</code> and <code class="highlighter-rouge">msys-base</code></li>
+  <li>Download GMP from <a href="https://gmplib.org/#DOWNLOAD">https://gmplib.org/#DOWNLOAD</a> and place it into gem’s ‘external’ folder</li>
+  <li>Download MPFR from <a href="http://www.mpfr.org/mpfr-current/#download">http://www.mpfr.org/mpfr-current/#download</a> and place it into gem’s ‘external’ folder</li>
+  <li>Download MPFR-C++ from <a href="http://www.holoborodko.com/pavel/mpfr/">http://www.holoborodko.com/pavel/mpfr/</a> and place it into gem’s ‘external’ folder</li>
+  <li>Create the folder ‘external/staticLibraries’</li>
+  <li>From within msys (launch C:\MinGW\msys\1.0\msys.bat), go into the external/gmp folder and run the following commands:
+    <ul>
+      <li><code class="highlighter-rouge">./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries</code></li>
+      <li><code class="highlighter-rouge">make</code></li>
+      <li><code class="highlighter-rouge">make check</code></li>
+      <li><code class="highlighter-rouge">make install</code></li>
+    </ul>
+  </li>
+  <li>From within msys, go into the external/mpfr folder and run the following commands:
+    <ul>
+      <li><code class="highlighter-rouge">./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries</code></li>
+      <li><code class="highlighter-rouge">make</code></li>
+      <li><code class="highlighter-rouge">make check</code></li>
+      <li><code class="highlighter-rouge">make install</code></li>
+    </ul>
+  </li>
+  <li>Install the TDM64-GCC compiler from <a href="http://tdm-gcc.tdragon.net/download">http://tdm-gcc.tdragon.net/download</a>, making sure you include the component <code class="highlighter-rouge">Components/gcc/openmp</code> in the TDM-GCC Setup. Configure it for Matlab by typing <code class="highlighter-rouge">setenv('MW_MINGW64_LOC','C:\TDM-GCC-64')</code> and <code class="highlighter-rouge">mex -setup cpp</code> in Matlab (see <a href="https://fr.mathworks.com/help/matlab/matlab_external/compiling-c-mex-files-with-mingw.html"><strong>here</strong></a> for more details).</li>
+  <li>Download the latest Eigen source code on <a href="http://eigen.tuxfamily.org">eigen.tuxfamily.org</a> and place it into gem’s ‘external’ folder.</li>
+  <li>Download the latest version of Spectra on <a href="http://yixuan.cos.name/spectra/download.html">http://yixuan.cos.name/spectra/download.html</a> and place it into gem’s ‘external’ folder.</li>
+  <li>In Matlab, go the the gem folder and type <code class="highlighter-rouge">make(1,0)</code> to compile the library.</li>
+  <li>Note: the objects compiled in this way require the <code class="highlighter-rouge">libgomp</code> library, located in <code class="highlighter-rouge">C:\TDM-GCC-64\bin\libgomp_64-1.dll</code>. To make your compilation portable, copy this file into the gem subfolder.</li>
+  <li>Add the gem subfolder to your Matlab/Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
+</ol>
+
+<h2 id="steps-to-compile-the-gem-library-on-macos-tested-on-el-capitain-10116-">Steps to compile the GEM Library on <em>macOS</em> (tested on el capitain 10.11.6) :</h2>
+
+<h3 id="instructions-for-octave">Instructions for Octave</h3>
+<p>These instructions were tested for a version of Octave installed as an <a href="https://octave-app.org/Download.html">App Bundle</a>.</p>
+
+<ol>
+  <li>Download the latest library repository with the following command: <code class="highlighter-rouge">git clone https://www.github.com/gem-library/gem</code>. This creates a folder called <code class="highlighter-rouge">gem</code>.</li>
+  <li>Inside this folder, download the submodules with the command <code class="highlighter-rouge">git submodule update --init</code>.</li>
+  <li>Download GMP from <a href="https://gmplib.org/#DOWNLOAD">https://gmplib.org/#DOWNLOAD</a> and place it into gem’s ‘external’ folder</li>
+  <li>Download MPFR from <a href="http://www.mpfr.org/mpfr-current/#download">http://www.mpfr.org/mpfr-current/#download</a> and place it into gem’s ‘external’ folder</li>
+  <li>Download MPFR-C++ from <a href="http://www.holoborodko.com/pavel/mpfr/">http://www.holoborodko.com/pavel/mpfr/</a> and place it into gem’s ‘external’ folder</li>
+  <li>Start Octave and go to the gem folder.</li>
+  <li>Type <code class="highlighter-rouge">make(1,0)</code>. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message ‘<strong>Compilation successful</strong>’. Otherwise, a message should inform you about what is missing.</li>
+  <li>Add the gem subfolder to your Octave path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
+</ol>
+
+<h3 id="instructions-for-matlab">Instructions for Matlab</h3>
+
+<p>Tentative roadmap:</p>
+<ol>
+  <li>Install Xcode</li>
+  <li>Install homebrew and most of the packages mentioned in https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/</li>
+  <li>Install gcc throught homebrew with <code class="highlighter-rouge">brew install gcc --without-muiltilib</code> (or maybe without the option…)</li>
+  <li>Install maybe also <code class="highlighter-rouge">gmp</code>, <code class="highlighter-rouge">mpfr</code> and <code class="highlighter-rouge">libmpc</code> with brew…</li>
+  <li>Add reference to gcc and g++ in the folder /usr/local/bin with <code class="highlighter-rouge">ln -s gcc-7 gcc</code> and <code class="highlighter-rouge">ln -s g++-7 g++</code></li>
+  <li>Launch Matlab from the terminal, so that /usr/local/bin is the first folder looked for when running <code class="highlighter-rouge">unix(‘which g++’)</code> in Matlab</li>
+  <li>Type <code class="highlighter-rouge">make</code> from  within the gem folder and follow the instructions</li>
+  <li>Add the gem subfolder to your Matlab path as described <a href="installation.html"><strong>here</strong></a>. You can now perform your favorite computation in high precision!</li>
+</ol>
+
+<p>These additional links may help</p>
+<ul>
+  <li>Instructions to be able to run <code class="highlighter-rouge">mex -setup</code> : http://www.mathworks.com/matlabcentral/answers/246507-why-can-t-mex-find-a-supported-compiler-in-matlab-r2015b-after-i-upgraded-to-xcode-7-0#comment_392485</li>
+</ul>
+
+<h2 id="failsafe-mode">Failsafe mode</h2>
+
+<p>Because every system installation is different… When calling the command <code class="highlighter-rouge">make</code> from within Matlab/Octave, setting the third option <code class="highlighter-rouge">genericBuild</code> to <code class="highlighter-rouge">1</code> triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. This compilation procedure is slower. Moreover, since Matlab/Octave chooses the compilation options in this case, it can create unexpected results such as ~100Mb output files (!).</p>
+</section></div></div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="http://localhost:4000/gem/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['matlab']
+});
+      $(document).ready(function() {
+      $('pre.codeoutput').each(function(i, block) {
+      hljs.highlightBlock(block);
+      });
+      });
+    </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'gem-library/gem'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script><script src="/gem/js/main.js"></script></body></html>

@@ -38,7 +38,7 @@ Related open source libraries include:
 
 - On Matlab/Octave, the command `sin(pi)` returns **1.2246e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns by **4.3348e-51**, a value compatible with the default working precision of 50 digits.
 
-- Matrix operations such as eigenvalue decompositions are computed straightforwardly. For instance, `eig(gem([1 1; 1 -1]))` computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of $$\sqrt{2}$$.
+- Matrix operations such as eigenvalue decompositions are computed straightforwardly. For instance, `eig(gem([1 1; 1 -1]))` computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of `sqrt(2)`.
 
 See the [**example page**](docs/publish/examples.html) for some usage illustrations.
 

@@ -3,6 +3,7 @@
 - New website
 - Set up the continuous integration framework
 - Set up a test framework and implemented a full batch of tests
+- Set up gitter community chat room
 - Included Eigen and Spectra as submodules
 - Updated to latest Eigen and Spectra libraries
 - General properties and functions such as gemWorkingPrecision and gemRand are now static methods accessible as gem.workingPrecision and gem.rand

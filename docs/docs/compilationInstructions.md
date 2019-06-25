@@ -7,7 +7,7 @@ position: 5
 How to compile the GEM Library
 ==============================
 
-This document describes steps which lead to a successful compilation of the **GEM Library** on various platforms.
+The **GEM Library** can be downloaded an installed without compilation on most platforms, as described in the [**installation**](installation.html) section. It is however also possible to compile the library from scratch. This document describes steps which lead to a successful compilation of the **GEM Library** on various platforms.
 
 Here we assume that the target environment is Matlab, but the same instructions also apply to Octave.
 

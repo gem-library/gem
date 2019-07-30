@@ -3400,93 +3400,136 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::log_new() const
 
 
 /* The element-wise power c = a.^b */
-// Here, b is real ans b>0
+// Here, b is real and b>0
 SparseGmpEigenMatrix SparseGmpEigenMatrix::power(const GmpEigenMatrix& b) const
 {
     SparseGmpEigenMatrix result(*this);
 
     if (isComplex) {
-        if (b.numel() == 1) {
-            for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
-                SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
-                SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+            SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                IndexType row, col;
-                while ((itR) || (itI)) {
-                    if ((itR) && (itI)) {
-                        if (itR.row() < itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                        } else if (itR.row() == itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                            ++itI;
-                        } else {
-                            row = itI.row();
-                            col = itI.col();
-                            ++itI;
-                        }
-                    } else if (itR) {
+            IndexType row, col;
+            while ((itR) || (itI)) {
+                if ((itR) && (itI)) {
+                    if (itR.row() < itI.row()) {
                         row = itR.row();
                         col = itR.col();
                         ++itR;
+                    } else if (itR.row() == itI.row()) {
+                        row = itR.row();
+                        col = itR.col();
+                        ++itR;
+                        ++itI;
                     } else {
                         row = itI.row();
                         col = itI.col();
                         ++itI;
                     }
-                    // We extract the element of interest and compute its power
-                    SparseGmpEigenMatrix tmp(block(row, col, 1, 1));
-                    tmp = tmp.log().times_sf(b).exp();
-                    result.matrixR.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
-                    if (tmp.isComplex)
-                        result.matrixI.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
-                    else
-                        result.matrixI.coeffRef(row,col) = 0;
+                } else if (itR) {
+                    row = itR.row();
+                    col = itR.col();
+                    ++itR;
+                } else {
+                    row = itI.row();
+                    col = itI.col();
+                    ++itI;
                 }
+
+                // We extract the element of interest and compute its power
+                SparseGmpEigenMatrix a(block(row, col, 1, 1)), bb, tmp;
+                if (b.numel() == 1)
+                    bb = b;
+                else
+                    bb = b.block(row, col, 1, 1);
+                tmp = a.log().times_sf(bb).exp();
+
+                // Since this formula give 0^x = NaN, we need to enforce by hand that 0^0 = 1, 0^(-2) = Inf, 0^1i = NaN, and 0^3 = 0
+                if ((a.matrixR.coeff(0,0) == 0) && ((!a.isComplex) || ((a.isComplex) && (a.matrixI.coeff(0,0) == 0)))) {
+                    if (bb.matrixR.coeff(0,0) == 0) {
+                        tmp.matrixR.coeffRef(0,0) = 1;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) < 0) {
+                        tmp.matrixR.coeffRef(0,0) = mpreal("Inf");
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) > 0) {
+                        tmp.matrixR.coeffRef(0,0) = 0;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    }
+                }
+
+                // We assign the value
+                result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
+                if (tmp.isComplex)
+                    result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
+                else
+                    result.matrixI.coeffRef(row,col) = 0;
             }
-        } else {
-            for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
-                SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
-                SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+        }
+        result.matrixR.prune(0, 0);
+        result.matrixR.makeCompressed();
+        result.matrixI.prune(0, 0);
+        result.matrixI.makeCompressed();
+        result.checkComplexity();
+    } else if (!b.isInt()) {
+        // Result could be potentially complex
+        result.matrixI.resize(matrixR.rows(),matrixR.cols());
+        result.matrixI.reserve(result.matrixR.nonZeros());
 
-                IndexType row, col;
-                while ((itR) || (itI)) {
-                    if ((itR) && (itI)) {
-                        if (itR.row() < itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                        } else if (itR.row() == itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                            ++itI;
-                        } else {
-                            row = itI.row();
-                            col = itI.col();
-                            ++itI;
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+
+            IndexType row, col;
+            while (itR) {
+                row = itR.row();
+                col = itR.col();
+                ++itR;
+
+                // We extract the element of interest and compute its power
+                SparseGmpEigenMatrix a(block(row, col, 1, 1)), bb, tmp;
+                if (b.numel() == 1)
+                    bb = b;
+                else
+                    bb = b.block(row, col, 1, 1);
+                tmp = a.log().times_sf(bb).exp();
+
+                // Since this formula give 0^x = NaN, we need to enforce by hand that 0^0 = 1, 0^(-2) = Inf, 0^1i = NaN, and 0^3 = 0
+                if ((a.matrixR.coeff(0,0) == 0) && ((!a.isComplex) || ((a.isComplex) && (a.matrixI.coeff(0,0) == 0)))) {
+                    if (bb.matrixR.coeff(0,0) == 0) {
+                        tmp.matrixR.coeffRef(0,0) = 1;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
                         }
-                    } else if (itR) {
-                        row = itR.row();
-                        col = itR.col();
-                        ++itR;
-                    } else {
-                        row = itI.row();
-                        col = itI.col();
-                        ++itI;
+                    } else if (bb.matrixR.coeff(0,0) < 0) {
+                        tmp.matrixR.coeffRef(0,0) = mpreal("Inf");
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) > 0) {
+                        tmp.matrixR.coeffRef(0,0) = 0;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
                     }
-                    // We extract the element of interest and compute its power
-                    SparseGmpEigenMatrix tmp(block(row, col, 1, 1));
-                    tmp = tmp.log().times_sf(b.block(row,col,1,1)).exp();
-                    result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
-                    if (tmp.isComplex)
-                        result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
-                    else
-                        result.matrixI.coeffRef(row,col) = 0;
                 }
+
+                // We assign the value
+                result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
+                if (tmp.isComplex)
+                    result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
             }
         }
         result.matrixR.prune(0, 0);
@@ -3495,7 +3538,6 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::power(const GmpEigenMatrix& b) const
         result.matrixI.makeCompressed();
         result.checkComplexity();
     } else {
-        result.isComplex = false;
         if (b.numel() == 1) {
             for (IndexType k = 0; k < matrixR.outerSize(); ++k)
                 for (SparseMatrix<mpreal>::InnerIterator it(matrixR,k); it; ++it)
@@ -3518,87 +3560,130 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::power_new(const GmpEigenMatrix& b) c
     SparseGmpEigenMatrix& result(*(new SparseGmpEigenMatrix(*this)));
 
     if (isComplex) {
-        if (b.numel() == 1) {
-            for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
-                SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
-                SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+            SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
 
-                IndexType row, col;
-                while ((itR) || (itI)) {
-                    if ((itR) && (itI)) {
-                        if (itR.row() < itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                        } else if (itR.row() == itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                            ++itI;
-                        } else {
-                            row = itI.row();
-                            col = itI.col();
-                            ++itI;
-                        }
-                    } else if (itR) {
+            IndexType row, col;
+            while ((itR) || (itI)) {
+                if ((itR) && (itI)) {
+                    if (itR.row() < itI.row()) {
                         row = itR.row();
                         col = itR.col();
                         ++itR;
+                    } else if (itR.row() == itI.row()) {
+                        row = itR.row();
+                        col = itR.col();
+                        ++itR;
+                        ++itI;
                     } else {
                         row = itI.row();
                         col = itI.col();
                         ++itI;
                     }
-                    // We extract the element of interest and compute its power
-                    SparseGmpEigenMatrix tmp(block(row, col, 1, 1));
-                    tmp = tmp.log().times_sf(b).exp();
-                    result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
-                    if (tmp.isComplex)
-                        result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
-                    else
-                        result.matrixI.coeffRef(row,col) = 0;
+                } else if (itR) {
+                    row = itR.row();
+                    col = itR.col();
+                    ++itR;
+                } else {
+                    row = itI.row();
+                    col = itI.col();
+                    ++itI;
                 }
+
+                // We extract the element of interest and compute its power
+                SparseGmpEigenMatrix a(block(row, col, 1, 1)), bb, tmp;
+                if (b.numel() == 1)
+                    bb = b;
+                else
+                    bb = b.block(row, col, 1, 1);
+                tmp = a.log().times_sf(bb).exp();
+
+                // Since this formula give 0^x = NaN, we need to enforce by hand that 0^0 = 1, 0^(-2) = Inf, 0^1i = NaN, and 0^3 = 0
+                if ((a.matrixR.coeff(0,0) == 0) && ((!a.isComplex) || ((a.isComplex) && (a.matrixI.coeff(0,0) == 0)))) {
+                    if (bb.matrixR.coeff(0,0) == 0) {
+                        tmp.matrixR.coeffRef(0,0) = 1;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) < 0) {
+                        tmp.matrixR.coeffRef(0,0) = mpreal("Inf");
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) > 0) {
+                        tmp.matrixR.coeffRef(0,0) = 0;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    }
+                }
+
+                // We assign the value
+                result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
+                if (tmp.isComplex)
+                    result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
+                else
+                    result.matrixI.coeffRef(row,col) = 0;
             }
-        } else {
-            for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
-                SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
-                SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);
+        }
+        result.matrixR.prune(0, 0);
+        result.matrixR.makeCompressed();
+        result.matrixI.prune(0, 0);
+        result.matrixI.makeCompressed();
+        result.checkComplexity();
+    } else if (!b.isInt()) {
+        // Result could be potentially complex
+        result.matrixI.resize(matrixR.rows(),matrixR.cols());
+        result.matrixI.reserve(result.matrixR.nonZeros());
 
-                IndexType row, col;
-                while ((itR) || (itI)) {
-                    if ((itR) && (itI)) {
-                        if (itR.row() < itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                        } else if (itR.row() == itI.row()) {
-                            row = itR.row();
-                            col = itR.col();
-                            ++itR;
-                            ++itI;
-                        } else {
-                            row = itI.row();
-                            col = itI.col();
-                            ++itI;
+        for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
+            SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
+
+            IndexType row, col;
+            while (itR) {
+                row = itR.row();
+                col = itR.col();
+                ++itR;
+
+                // We extract the element of interest and compute its power
+                SparseGmpEigenMatrix a(block(row, col, 1, 1)), bb, tmp;
+                if (b.numel() == 1)
+                    bb = b;
+                else
+                    bb = b.block(row, col, 1, 1);
+                tmp = a.log().times_sf(bb).exp();
+
+                // Since this formula give 0^x = NaN, we need to enforce by hand that 0^0 = 1, 0^(-2) = Inf, 0^1i = NaN, and 0^3 = 0
+                if ((a.matrixR.coeff(0,0) == 0) && ((!a.isComplex) || ((a.isComplex) && (a.matrixI.coeff(0,0) == 0)))) {
+                    if (bb.matrixR.coeff(0,0) == 0) {
+                        tmp.matrixR.coeffRef(0,0) = 1;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
                         }
-                    } else if (itR) {
-                        row = itR.row();
-                        col = itR.col();
-                        ++itR;
-                    } else {
-                        row = itI.row();
-                        col = itI.col();
-                        ++itI;
+                    } else if (bb.matrixR.coeff(0,0) < 0) {
+                        tmp.matrixR.coeffRef(0,0) = mpreal("Inf");
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
+                    } else if (bb.matrixR.coeff(0,0) > 0) {
+                        tmp.matrixR.coeffRef(0,0) = 0;
+                        if (tmp.isComplex) {
+                            tmp.matrixI.coeffRef(0,0) = 0;
+                            tmp.isComplex = false;
+                        }
                     }
-                    // We extract the element of interest and compute its power
-                    SparseGmpEigenMatrix tmp(block(row, col, 1, 1));
-                    tmp = tmp.log().times_sf(b.block(row,col,1,1)).exp();
-                    result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
-                    if (tmp.isComplex)
-                        result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
-                    else
-                        result.matrixI.coeffRef(row,col) = 0;
                 }
+
+                // We assign the value
+                result.matrixR.coeffRef(row,col) = tmp.matrixR.coeff(0,0);
+                if (tmp.isComplex)
+                    result.matrixI.coeffRef(row,col) = tmp.matrixI.coeff(0,0);
             }
         }
         result.matrixR.prune(0, 0);

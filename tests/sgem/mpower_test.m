@@ -9,21 +9,15 @@ end
 function test_consistency
     x = generateMatrices(2, 5, {'A', 'AR', 'AI'});
 
-    % NOTE: Due to issue #4 we only check powers for positive numbers
-    % So we make sure the numbers are positive and not too big
-    for i = 1:numel(x)
-        x{i} = sparse(1.6 + x{i}./9);
-    end
-
     % A few scalar cases
     r = gem.rand;
     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-%     r = -gem.rand;
-%     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-%     r = gem.rand*1i;
-%     validateDoubleConsistency(@(x) mpower(x(1), r), x);
-%     r = -gem.rand + gem.rand*1i;
-%     validateDoubleConsistency(@(x) mpower(x(1), r), x);
+    r = -gem.rand;
+    validateDoubleConsistency(@(x) mpower(x(1), r), x);
+    r = gem.rand*1i;
+    validateDoubleConsistency(@(x) mpower(x(1), r), x);
+    r = -gem.rand + gem.rand*1i;
+    validateDoubleConsistency(@(x) mpower(x(1), r), x);
     
     % We currently also support two cases for square matrices
     x = generateMatrices(2, 5, {'QA', 'QAR', 'QAI'});

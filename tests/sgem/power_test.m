@@ -14,12 +14,6 @@ function test_consistency
         y = generateMatrices(1, 5, {'A'}, 2);
     end
 
-    % NOTE: Due to issue #4 we only check powers for positive numbers
-    % So we make sure the numbers are positive and not too big
-    for i = 1:numel(y)
-        y{i} = sparse(1.6 + y{i}./9);
-    end
-    
     % element-wise power between two matrices
     validateDoubleConsistency2(@(x,y) power(x,y), y(1,:), y(2,:), 1e-3);
     validateDoubleConsistency2(@(x,y) power(x,full(y)), y(1,:), y(2,:), 1e-3);

@@ -4520,22 +4520,33 @@ GmpEigenMatrix& GmpEigenMatrix::svd_new(GmpEigenMatrix& U, GmpEigenMatrix& V) co
 
         // We need to check that the vectors are indeed orthogonal to each other, otherwise we orthogonalize them...
         // We only check the overlap for similar singular values
+        // TODO: simplify this part, potentially make use of additional structure
+        // TODO: make sure that we always have enough support on the relevant subspaces with the current sub-choice of columns un Ureal and Vreal, otherwise consider the whole space
         IndexType firstI(0);
-        mpreal eps(10*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to singular values are identical or not
+        mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to singular values are identical or not
         for (IndexType i(1); i < sizeS/2; ++i) {
-            if ((mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) && (i > firstI + 1)) {
-                IndexType lastI(i-1);
+            std::cout << "firstI = " << firstI << ", i = " << i << ", sizeS/2-1 = " << sizeS/2-1 << std::endl << std::flush;
+            std::cout << "((" << (firstI < i-1) << ") && (" <<  (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) << ")) ||  ((" << (firstI < i) << ") && (" <<  (i == sizeS/2-1) << "))"<< std::endl << std::flush;
+            if (((firstI < i-1) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)) ||
+                ((firstI < i) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) <= eps) && (i == sizeS/2-1))) {
+                std::cout << "abs = " << mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) << ", eps = " << eps << std::endl << std::flush;
+                IndexType lastI;
+                if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)
+                    lastI = i-1;
+                else
+                    lastI = i;
                 std::cout << "firstI = " << firstI << ", lastI = " << lastI << std::endl << std::flush;
 
                 // The singular values firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
                 // First we orthogonalize the U subspace
+                {
                 GmpEigenMatrix U1(U.block(0, firstI, sizeS/2, lastI-firstI+1)), U2;
                 std::cout << "1" << std::endl << std::flush;
                 U1 = U1*U1.ctranspose();
                 std::cout << "2" << std::endl << std::flush;
                 if (lastI-firstI+1 <= sizeS/2 - 2) {
                     std::cout << "3" << std::endl << std::flush;
-                    U1.eigs_new(lastI-firstI+1, U2, 1, GmpEigenMatrix(mpreal(0)));
+                    U1.eigs(lastI-firstI+1, U2, 1, GmpEigenMatrix(mpreal(0)));
                 } else {
                     std::cout << "4" << std::endl << std::flush;
                     // We need to compute all eigenvalues and just keep the ones we care about
@@ -4599,8 +4610,84 @@ GmpEigenMatrix& GmpEigenMatrix::svd_new(GmpEigenMatrix& U, GmpEigenMatrix& V) co
                     U.matrixI.block(0, firstI, sizeS/2, lastI-firstI+1) = U2.matrixI.block(0, 0, sizeS/2, lastI-firstI+1);
                 }
                 std::cout << "13" << std::endl << std::flush;
+                }
 
                 // Now we orthogonalize the V subspace...
+                {
+                GmpEigenMatrix V1(V.block(0, firstI, sizeS/2, lastI-firstI+1)), V2;
+                std::cout << "1" << std::endl << std::flush;
+                V1 = V1*V1.ctranspose();
+                std::cout << "2" << std::endl << std::flush;
+                if (lastI-firstI+1 <= sizeS/2 - 2) {
+                    std::cout << "3" << std::endl << std::flush;
+                    V1.eigs(lastI-firstI+1, V2, 1, GmpEigenMatrix(mpreal(0)));
+                } else {
+                    std::cout << "4" << std::endl << std::flush;
+                    // We need to compute all eigenvalues and just keep the ones we care about
+                    GmpEigenMatrix V3;
+                    GmpEigenMatrix ev(V1.eig(V3).diagExtract(0));
+                    std::cout << "5" << std::endl << std::flush;
+                    // The eigenvalues were not necessarily sorted
+                    std::vector < std::vector < IndexType > > sortedIndices;
+                    std::cout << "ev: " << ev.matrixR.rows() << "x" << ev.matrixR.cols() << std::endl << std::flush;
+                    ev.sort(0, 0, sortedIndices);
+                    std::cout << "6" << std::endl << std::flush;
+                    // We are interested in the last vectors only
+                    std::vector < IndexType > indicesA, indicesB;
+                    for (IndexType j(0); j < sizeS/2; ++j)
+                        indicesA.push_back(j);
+                    std::cout << "7" << std::endl << std::flush;
+                    std::cout << "sortedIndices: " << sortedIndices.size() << " x " << sortedIndices[0].size() << std::endl << std::flush;
+                    for (IndexType j(sizeS/2-(lastI-firstI+1)); j < sizeS/2; ++j)
+                        indicesB.push_back(sortedIndices[j][0]);
+                    std::cout << "8" << std::endl << std::flush;
+
+                    for(int n : indicesA) {
+                        std::cout << n << '\n' << std::flush;
+                    }
+                    std::cout << std::endl;
+
+                    for(int n : indicesB) {
+                        std::cout << n << '\n' << std::flush;
+                    }
+                    std::cout << std::endl;
+
+                    std::cout << "V3: " << V3.matrixR.rows() << "x" << V3.matrixR.cols() << std::endl << std::flush;
+
+                    V2 = V3.subsref(indicesA, indicesB);
+                    std::cout << "V2: " << V2.matrixR.rows() << "x" << V2.matrixR.cols() << std::endl << std::flush;
+                    std::cout << "complexity: V3:" << V3.isComplex << ", V2:" << V2.isComplex << ", V:" << V.isComplex << std::endl << std::flush;
+                    std::cout << "9" << std::endl << std::flush;
+                    (V2.ctranspose()*V2).displayIndividual(10);
+                }
+                std::cout << "10" << std::endl << std::flush;
+                // Normalize the vectors
+                V2 *= (GmpEigenMatrix(mpreal('1')).rdivide((V2.ctranspose()*V2).diagExtract(0).sqrt())).diagCreate(0);
+                std::cout << "V: " << V.matrixR.rows() << "x" << V.matrixR.cols() << std::endl << std::flush;
+                std::cout << "V2: " << V2.matrixR.rows() << "x" << V2.matrixR.cols() << std::endl << std::flush;
+                std::cout << "11" << std::endl << V.matrixR.rows() << "x" << V.matrixR.cols() << ", " << firstI << ", " << lastI-firstI+1 << std::endl << std::flush;
+                // Replace the vectors
+                V.matrixR.block(0, firstI, sizeS/2, lastI-firstI+1) = V2.matrixR.block(0, 0, sizeS/2, lastI-firstI+1);
+                std::cout << "12" << std::endl << std::flush;
+                if (V.isComplex) {
+                    std::cout << "12a" << std::endl << std::flush;
+                    if (V2.isComplex) {
+                        std::cout << "12aa" << std::endl << std::flush;
+                        V.matrixI.block(0, firstI, sizeS/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeS/2, lastI-firstI+1);
+                    } else {
+                        std::cout << "12ab" << std::endl << std::flush;
+                        V.matrixI.block(0, firstI, sizeS/2, lastI-firstI+1) *= 0;
+                    }
+                } else if (V2.isComplex) {
+                    std::cout << "12b" << std::endl << std::flush;
+                    V.matrixI.resize(V.matrixR.rows(), V.matrixR.cols());
+                    V.matrixI.block(0, firstI, sizeS/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeS/2, lastI-firstI+1);
+                }
+                std::cout << "13" << std::endl << std::flush;
+                }
+            }
+            if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) {
+                firstI = i;
             }
         }
         U.checkComplexity();

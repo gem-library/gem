@@ -61,7 +61,7 @@ The library currently relies on:
  - [Eigen](http://eigen.tuxfamily.org/), and [Spectra](http://yixuan.cos.name/spectra/) by Yixuan Qiu for matrix manipulations
  - [MOxUnit](https://github.com/MOxUnit/MOxUnit) and [MOcov](https://github.com/MOcov/MOcov) by Nikolaas N. Oosterhof for testing and code coverage monitoring
 
-Feedback an suggestions are welcome. Contributions are als welcome through the [**github page**](https://github.com/gem-library/gem) (see [**how to contribute**](doc/howToContribute.md)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
+Feedback an suggestions are welcome. Contributions are als welcome through the [**github page**](https://github.com/gem-library) (see [**how to contribute**](doc/howToContribute.md)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
 
 ## License
 

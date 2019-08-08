@@ -4,4 +4,4 @@
 
 An open source library for high precision numerical computation with Matlab and Octave.
 
-See the [companion microsite](https://gem-library.github.io/gem/) for details.
+See the [companion microsite](https://gem-library.github.io) for details.

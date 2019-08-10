@@ -61,6 +61,7 @@ The following function can be applied to gem/sgem objects directly.
 | double | ✔ | ✔ |  |
 | eig | ✔ | ✗ |  |
 | eigs | ✔ | ✔ |  |
+| eps | ✔ | ✔ |  |
 | end | ✔ | ✔ |  |
 | eq | ✔ | ✔ |  |
 | exp | ✔ | ✔ |  |
@@ -110,6 +111,7 @@ The following function can be applied to gem/sgem objects directly.
 | nonzeros | ✔ | ✔ |  |
 | norm | ✔ | ✔ |  |
 | not | ✔ | ✔ |  |
+| null | ✔ | ✔ |  through matlab's implementation, without option |
 | numel | ✔ | ✔ |  |
 | num2str | ✔ | ✔ |  through matlab's implementation and sprintf |
 | or | ✔ | ✔ |  |

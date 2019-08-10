@@ -111,7 +111,7 @@ The following function can be applied to gem/sgem objects directly.
 | nonzeros | ✔ | ✔ |  |
 | norm | ✔ | ✔ |  |
 | not | ✔ | ✔ |  |
-| null | ✔ | ✔ |  through matlab's implementation, without option |
+| null | ✔ | ✗ |  through matlab's implementation |
 | numel | ✔ | ✔ |  |
 | num2str | ✔ | ✔ |  through matlab's implementation and sprintf |
 | or | ✔ | ✔ |  |

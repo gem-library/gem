@@ -7,7 +7,7 @@
 - Included Eigen and Spectra as submodules
 - Updated to latest Eigen and Spectra libraries
 - General properties and functions such as gemWorkingPrecision and gemRand are now static methods accessible as gem.workingPrecision and gem.rand
-- Added gem.randn and sign functions
+- Added gem.randn, sign, eps and null functions
 - Additional options supported for min and max functions
 - Bug fixes
 

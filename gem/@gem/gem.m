@@ -691,7 +691,7 @@ classdef gem < handle
             str = str(find(str~=' '));
 
             % Now we check if the string contains a number in scientific notation
-            str2 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+|[0-9]*(\.|)[0-9]+e(\+|\-|)[0-9]+)','',1);
+            str2 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+|[0-9]*(\.|)[0-9]+e(\+|\-|)[0-9]+)','','once');
             if length(str2) ~= length(str)
                 if length(str2) == 0
                     % The string denotes a number in scientific notation
@@ -706,7 +706,7 @@ classdef gem < handle
             end
 
             % nothing was found, so we check if there is just a standard number
-            str3 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*|[0-9]*(\.|)[0-9]+)','',1);
+            str3 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*|[0-9]*(\.|)[0-9]+)','','once');
             bool = (length(str3) == 0);
         end
 

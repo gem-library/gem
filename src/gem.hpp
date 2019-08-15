@@ -327,6 +327,7 @@ public:
     GmpEigenMatrix& mldivide_new(const GmpEigenMatrix& b) const;
     GmpEigenMatrix inv() const;
     GmpEigenMatrix& inv_new() const;
+    GmpEigenMatrix orthogonalizeRR() const;
     GmpEigenMatrix eig(GmpEigenMatrix& V) const;
     GmpEigenMatrix& eig_new(GmpEigenMatrix& V) const;
     GmpEigenMatrix eigs(const long int& nbEigenvalues, GmpEigenMatrix& V, const long int& type, const GmpEigenMatrix& sigma) const;

@@ -77,6 +77,11 @@ else
         error('Indices out of bound in gem::subsasgn')
     end
     if (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))
+        % If the object is empty, we first create it
+        if prod(s) == 0
+            this = gem(0);
+            s = size(this);
+        end
         % The matrix is too small so we increase its size
         objId = this.objectIdentifier;
         gem_mex('resize', objId, max(s(1), max(indices{1})), max(s(2), max(indices{2})));

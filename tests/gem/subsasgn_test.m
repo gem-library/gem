@@ -76,17 +76,23 @@ function test_consistency
     x(5) = 5;
     x(6:7) = [6 7];
     
-    clear x;
-    x(10) = gem(2);
-    assert(isa(x,'gem'));
-    assert(isequal(size(x),[1 10]));
-    assert(isequal(x(10), gem(2)));
+    
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        % Octave incorrectly calls gem.size for empty array
+        % c.f. https://savannah.gnu.org/bugs/?56856>
+        clear x;
+        x(10) = gem(2);
+        assert(isa(x,'gem'));
+        assert(isequal(size(x),[1 10]));
+        assert(isequal(x(10), gem(2)));
 
-    clear x;
-    x(1,10) = gem(2);
-    assert(isa(x,'gem'));
-    assert(isequal(size(x),[1 10]));
-    assert(isequal(x(10), gem(2)));
+        clear x;
+        x(1,10) = gem(2);
+        assert(isa(x,'gem'));
+        assert(isequal(size(x),[1 10]));
+        assert(isequal(x(10), gem(2)));
+    end
 end
 
 function test_inputs

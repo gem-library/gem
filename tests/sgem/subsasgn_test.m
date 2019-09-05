@@ -78,7 +78,9 @@ function test_consistency
 
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     if ~isOctave
-        % Octave incorrectly calls gem.size for empty array
+        % Octave incorrectly transforms empty arrays into objects, so these
+        % cases fail : subsasgn is not aware that it should not ask whether
+        % x is empty...
         % c.f. https://savannah.gnu.org/bugs/?56856>
         clear x;
         x(10) = sgem(2);

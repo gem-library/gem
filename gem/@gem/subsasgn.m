@@ -6,6 +6,12 @@ if (length(subs) > 1) || (length(subs.subs) > 2)
     error('Wrong call to gem::subsasgn');
 end
 
+% If this is empty (because it was not initialized, otherwise this function
+% would not be called), it will be of type gem
+if isequal(subs.type, '()') && isempty(this)
+    this = gem([]);
+end
+
 
 % We extract the coordinates of the matrix
 indices = cell(1,length(subs.subs));
@@ -50,13 +56,8 @@ if length(indices) == 1
     if (min(indices{1}) < 1) || ((max(indices{1}) > prod(s)) && (min(s) > 1))
         error('Indices out of bound in gem::subsasgn');
     elseif max(indices{1}) > prod(s)
-        % If the object is empty, we first create it
-        if prod(s) == 0
-            this = gem(0);
-            s = size(this);
-        end
-        % Then we need to increase the size of the vector
-        if s(1) == 1
+        % We need to increase the size of the vector
+        if s(1) <= 1
             objId = this.objectIdentifier;
             gem_mex('resize', objId, 1, max(indices{1}));
         else
@@ -77,11 +78,6 @@ else
         error('Indices out of bound in gem::subsasgn')
     end
     if (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))
-        % If the object is empty, we first create it
-        if prod(s) == 0
-            this = gem(0);
-            s = size(this);
-        end
         % The matrix is too small so we increase its size
         objId = this.objectIdentifier;
         gem_mex('resize', objId, max(s(1), max(indices{1})), max(s(2), max(indices{2})));

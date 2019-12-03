@@ -1294,7 +1294,7 @@ GmpEigenMatrix GmpEigenMatrix::imag() const
     if (isComplex)
         result.matrixR = matrixI;
     else
-        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols(), mpfr::mpreal::get_default_prec());
+        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols());
 
     return result;
 }
@@ -1308,7 +1308,7 @@ GmpEigenMatrix& GmpEigenMatrix::imag_new() const
     if (isComplex)
         result.matrixR = matrixI;
     else
-        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols(), mpfr::mpreal::get_default_prec());
+        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols());
 
     return result;
 }

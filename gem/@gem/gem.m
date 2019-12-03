@@ -309,6 +309,9 @@ classdef gem < handle
     methods (Static)
         function result = loadobj(structure)
             fprintf('loading...');
+            % In case this is the first command called, we make sure the
+            % default precision of the library is initialized
+            gem.workingPrecision;
             % The result should be an instance of a gem object with the data contained in the provided structure
             if structure.dataVersion > 1
                 error('The object was saved with a newer version of the library. Please upgrade the library to load it again.');

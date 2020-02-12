@@ -108,7 +108,7 @@ function test_precision
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
+                x = generateMatrices(2, 15, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
 
                 targetPrecision = 10^(-(gem.workingPrecision-10));
                 for i = 1:length(x)

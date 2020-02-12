@@ -26,7 +26,13 @@ function [V D] = eig(this, varargin)
     % ...  and create a new matlab object to keep this handle
     V = gem('encapsulate', newObjectIdentifierV);
     D = gem('encapsulate', newObjectIdentifierD);
-
+    
+    % In rare occations the decomposition might fail. It then returns empty
+    % results. We check if this was the case.
+    if isempty(V) || isempty(D)
+        warning('The eigendecomposition failed (we are possibly in presence of a complex non-hermitian matrices with degenerate eigenvalues)');
+    end
+    
     % We normalize the eigenvectors (this should not be done if the
     % option 'nobalance' is passed (once this option is implemented).
     V = V*diag(1./sqrt(diag(V'*V)));

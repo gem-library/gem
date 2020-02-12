@@ -58,7 +58,4 @@ function test_inputs
     
     % input 1 cannot be anything
     shouldProduceAnError(@() svd(gem.rand(2), 'economic'));
-    
-    % maximum 2 outputs supported
-    shouldProduceAnError(@() svd(gem.rand(2)), 4);
 end

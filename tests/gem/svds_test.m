@@ -42,7 +42,7 @@ function test_consistency
                 validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
                 validateDoubleConsistency(@(x) svds(x, min(2,size(x,1)), 'largest'), x, 1e-9, 1);
 
-%                 % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
+%                 % Currently there is a bug in spectra which doesn't allow us to test for smallest eigenvalues...
 %                 for i = 1:length(x)
 %                     if rank(x{i}) == size(x{i},1)
 %                         validateDoubleConsistency(@(x) svds(x, min(2,size(x,1)), 'smallest'), x(i), 1e-9);
@@ -147,9 +147,6 @@ function test_inputs
     shouldProduceAnError(@() svds(gem.rand(2), 1, 'small'));
     shouldProduceAnError(@() svds(gem.rand(2), 1, [1 2]));
     
-    % maximum 3 outputs supported
-    shouldProduceAnError(@() svds(gem.rand(2)), 4);
-        
     % no eigenvectors computed for zero eigenvalues
     vect = gem.rand(4,1);
     shouldProduceAnError(@() svds(vect*vect', 2), 3);

@@ -18,8 +18,35 @@ function test_precision
     for i = 1:length(x)
         [V D] = eig(x{i});
         
-        precision = double(abs(norm( V*D*inv(V) - x{i} ,1)));
+        precision = double(abs(norm( V*D - x{i}*V ,1)));
         assert(precision < targetPrecision);
+    end
+    
+    % Let's test more cases with degenerate subspaces
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        x = generateMatrices(2, 10, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
+
+        targetPrecision = 10^(-(gem.workingPrecision-10));
+        for i = 1:length(x)
+            [V D] = eig(x{i});
+
+            precision = double(abs(norm( V*D - x{i}*V ,1)));
+            assert(precision < targetPrecision);
+            
+            d = diag(D);
+            which = ceil(length(d)*rand(1,length(d)));
+            y = V*diag(d(which))*inv(V);
+            
+            % At the moment, we don't support non-hermitian complex
+            % matrices with degenerate eigenvalues. This is bug #14
+            if isreal(y) || ishermitian(y)
+                [V D] = eig(y);
+
+                precision = double(abs(norm( V*D - y*V ,1)));
+                assert(precision < targetPrecision);
+            end
+        end
     end
 end
 

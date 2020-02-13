@@ -3704,7 +3704,7 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
             V.checkComplexity();
 
             // ... except for degenerate eigenspaces, so we orthogonalize the vectors
-            // corresponding to the same singular values
+            // corresponding to the same eigenvalues
             IndexType firstI(0);
             mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
             for (IndexType i(1); i < size; ++i) {
@@ -3716,7 +3716,7 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
                     else
                         lastI = i;
 
-                    // The singular values firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                    // The eigenvalues firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
                     // First we orthogonalize the U subspace
                     GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, 2*size, 2*(lastI-firstI+1)));
                     Vreal1 = Vreal1.orthogonalizeRR();
@@ -3979,7 +3979,7 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
             V.checkComplexity();
 
             // ... except for degenerate eigenspaces, so we orthogonalize the vectors
-            // corresponding to the same singular values
+            // corresponding to the same eigenvalues
             IndexType firstI(0);
             mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
             for (IndexType i(1); i < size; ++i) {
@@ -3991,7 +3991,7 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
                     else
                         lastI = i;
 
-                    // The singular values firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                    // The eigenvalues firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
                     // First we orthogonalize the U subspace
                     GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, 2*size, 2*(lastI-firstI+1)));
                     Vreal1 = Vreal1.orthogonalizeRR();

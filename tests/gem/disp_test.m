@@ -10,9 +10,9 @@ function test_consistency
     x = generateMatrices(1, 5, {'F', 'FR', 'FI'});
     
     for i = 1:numel(x)
-        disp(x{i});
-        disp(x{i}, 4);
-        disp(x{i}, -1);
-        disp(x{i}, gem(4));
+        assert(~isempty(evalc('disp(x{i});')));
+        assert(~isempty(evalc('disp(x{i}, 4);')));
+        assert(~isempty(evalc('disp(x{i}, -1);')));
+        assert(~isempty(evalc('disp(x{i}, gem(4));')));
     end
 end

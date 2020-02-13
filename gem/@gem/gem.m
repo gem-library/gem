@@ -309,6 +309,9 @@ classdef gem < handle
     methods (Static)
         function result = loadobj(structure)
             fprintf('loading...');
+            % In case this is the first command called, we make sure the
+            % default precision of the library is initialized
+            gem.workingPrecision;
             % The result should be an instance of a gem object with the data contained in the provided structure
             if structure.dataVersion > 1
                 error('The object was saved with a newer version of the library. Please upgrade the library to load it again.');
@@ -636,12 +639,12 @@ classdef gem < handle
 
                 % Now, let us identify the imaginary part...
                 % maybe it is written in scientific notation...
-                imagStart = regexp(str,'(\+|\-|)[0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+i');
+                imagStart = regexp(str,'(\+|\-|)([0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+|[0-9]*(\.|)[0-9]+e(\+|\-|)[0-9]+)i');
 
                 if isempty(imagStart)
                     % If not, we check if the imaginary part is written as a simple
                     % number
-                    imagStart = regexp(str,'(\+|\-|)[0-9]+(\.|)[0-9]*i');
+                    imagStart = regexp(str,'(\+|\-|)([0-9]+(\.|)[0-9]*|[0-9]*(\.|)[0-9]+)i');
                 end
 
                 if isempty(imagStart)
@@ -691,7 +694,7 @@ classdef gem < handle
             str = str(find(str~=' '));
 
             % Now we check if the string contains a number in scientific notation
-            str2 = regexprep(str,'(\+|\-|)[0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+','');
+            str2 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*e(\+|\-|)[0-9]+|[0-9]*(\.|)[0-9]+e(\+|\-|)[0-9]+)','','once');
             if length(str2) ~= length(str)
                 if length(str2) == 0
                     % The string denotes a number in scientific notation
@@ -706,7 +709,7 @@ classdef gem < handle
             end
 
             % nothing was found, so we check if there is just a standard number
-            str3 = regexprep(str,'(\+|\-|)[0-9]+(\.|)[0-9]*','');
+            str3 = regexprep(str,'(\+|\-|)([0-9]+(\.|)[0-9]*|[0-9]*(\.|)[0-9]+)','','once');
             bool = (length(str3) == 0);
         end
 

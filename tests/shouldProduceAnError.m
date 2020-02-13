@@ -53,6 +53,8 @@ switch nbOutputs
                 assert(false);
             end
         end
+    otherwise
+        error('unsupported call to shouldProduceAnError');
 end        
 
 end

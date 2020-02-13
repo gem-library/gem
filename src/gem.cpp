@@ -926,7 +926,7 @@ GmpEigenMatrix& GmpEigenMatrix::horzcat_new(const GmpEigenMatrix& b) const
 
 
 
-/* This function extracts a submatrix or size row x cols fomr the position (i,j) */
+/* This function extracts a submatrix or size row x cols from the position (i,j) */
 GmpEigenMatrix GmpEigenMatrix::block(const IndexType& i, const IndexType& j, const IndexType& rows, const IndexType& cols) const
 {
     GmpEigenMatrix result;
@@ -1294,7 +1294,7 @@ GmpEigenMatrix GmpEigenMatrix::imag() const
     if (isComplex)
         result.matrixR = matrixI;
     else
-        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols(), mpfr::mpreal::get_default_prec());
+        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols());
 
     return result;
 }
@@ -1308,7 +1308,7 @@ GmpEigenMatrix& GmpEigenMatrix::imag_new() const
     if (isComplex)
         result.matrixR = matrixI;
     else
-        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols(), mpfr::mpreal::get_default_prec());
+        result.matrixR = zeroMatrix(matrixR.rows(), matrixR.cols());
 
     return result;
 }
@@ -2603,6 +2603,10 @@ GmpEigenMatrix GmpEigenMatrix::sqrt() const
 {
     GmpEigenMatrix result;
 
+    // Check if the matrix is empty
+    if (matrixR.rows()*matrixR.cols() == 0)
+        return result;
+
     mpreal globalMin(0);
     if (!isComplex) {
         // In this case we need to compute the smallest element in the matrix
@@ -2643,6 +2647,10 @@ GmpEigenMatrix GmpEigenMatrix::sqrt() const
 GmpEigenMatrix& GmpEigenMatrix::sqrt_new() const
 {
     GmpEigenMatrix& result(*(new GmpEigenMatrix));
+
+    // Check if the matrix is empty
+    if (matrixR.rows()*matrixR.cols() == 0)
+        return result;
 
     mpreal globalMin(0);
     if (!isComplex) {
@@ -3590,7 +3598,76 @@ GmpEigenMatrix& GmpEigenMatrix::inv_new() const
     return result;
 }
 
-/* Eigen decopmosition: similar to [V D] = eig(A) */
+/* An auxiliary method that produces vectors spanning the provided subspace
+   that have the desired structure: [r i
+                                    -i r]
+   TODO: - Try to improve eig and svd so they don't need this function anymore
+
+   The input to this function must be real (imaginary part ignored), and it
+   produces a real output. Input and output are a set of column vectors. */
+GmpEigenMatrix GmpEigenMatrix::orthogonalizeRR() const
+{
+    GmpEigenMatrix result;
+    result.isComplex = false;
+
+    if (matrixR.cols() == 1) {
+        result.matrixR = matrixR;
+    } else {
+        // Method : we read the first eigenvector as [r; -i], deduce a second [i;r]
+        // and look for a basis of the remaining space
+        result.matrixR.setZero(matrixR.rows(),matrixR.cols());
+        result.matrixR.col(0) = matrixR;
+        result.matrixR.block(0,1,matrixR.rows()/2,1) = -matrixR.block(matrixR.rows()/2,0,matrixR.rows()/2,1);
+        result.matrixR.block(matrixR.rows()/2,1,matrixR.rows()/2,1) = matrixR.block(0,0,matrixR.rows()/2,1);
+        if (matrixR.cols() > 2) {
+            GmpEigenMatrix projector, oneVector, otherVector;
+            otherVector.isComplex = 0;
+
+            projector.isComplex = 0;
+            projector.matrixR = matrixR.block(0,1,matrixR.rows(),matrixR.cols()-1);
+            projector.matrixR = projector.matrixR*(projector.matrixR.transpose()) - result.matrixR.col(1)*(result.matrixR.col(1).transpose());
+
+            long int nbExtracted(2);
+            while (nbExtracted < matrixR.cols()) {
+                if (matrixR.rows() > 2) {
+                    projector.eigs(1, oneVector, 1, GmpEigenMatrix(mpreal(0)));
+                } else {
+                    // We need to do a 'full' eigendecomposition; that's quick but
+                    // then we need to keep only the vector we care about
+                    // Actually, since cols() <= rows() and we can arrive here
+                    // only if rows() <= 2, this implies that cols() <= 2, in
+                    // which case we should also not reach here, so no need to
+                    // code this section
+                    assert(cols() <= rows());
+                    mexErrMsgTxt("Error in GmpEigenMatrix::orthogonalizeRR");
+                }
+
+                if (nbExtracted + 1 >= matrixR.cols()) {
+                    result.matrixR.col(nbExtracted) = oneVector.matrixR;
+                    std::cout << " + 4 + " << std::endl;
+                    result.display(10);
+
+                    //projector -= oneVector*(oneVector.ctranspose()); // Not needed since we will exit the function
+                    nbExtracted += 1;
+                } else {
+                    otherVector.resize(oneVector.matrixR.rows(), oneVector.matrixR.cols());
+                    otherVector.matrixR.block(0,0,matrixR.rows()/2,1) = -oneVector.matrixR.block(matrixR.rows()/2,0,matrixR.rows()/2,1);
+                    otherVector.matrixR.block(matrixR.rows()/2,0,matrixR.rows()/2,1) = oneVector.matrixR.block(0,0,matrixR.rows()/2,1);
+
+                    result.matrixR.block(0, nbExtracted, matrixR.rows(), 1) = oneVector.matrixR;
+                    result.matrixR.block(0, nbExtracted+1, matrixR.rows(), 1) = otherVector.matrixR;
+
+                    projector -= oneVector*(oneVector.ctranspose()) + otherVector*(otherVector.ctranspose());
+                    nbExtracted += 2;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+/* Eigen decomposition: similar to [V D] = eig(A) */
 GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
 {
     GmpEigenMatrix result;
@@ -3620,9 +3697,43 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
             V.matrixI.setZero(size,size);
             for (IndexType i(0); i < size; ++i) {
                 result.matrixR(i,i) = Dreal.matrixR(2*i,0);
-                // This way of extracting the eigenvector always works ;-)
+                // This way of extracting the eigenvector works...
                 V.matrixR.block(0,i,size,1) = Vreal.matrixR.block(0,2*i,size,1);
                 V.matrixI.block(0,i,size,1) = -Vreal.matrixR.block(size,2*i,size,1);
+            }
+            V.checkComplexity();
+
+            // ... except for degenerate eigenspaces, so we orthogonalize the vectors
+            // corresponding to the same eigenvalues
+            IndexType firstI(0);
+            mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
+            for (IndexType i(1); i < size; ++i) {
+                if (((firstI < i-1) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)) ||
+                    ((firstI < i) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) <= eps) && (i == size-1))) {
+                    IndexType lastI;
+                    if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)
+                        lastI = i-1;
+                    else
+                        lastI = i;
+
+                    // The eigenvalues firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                    // First we orthogonalize the U subspace
+                    GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, 2*size, 2*(lastI-firstI+1)));
+                    Vreal1 = Vreal1.orthogonalizeRR();
+
+                    if (!V.isComplex) {
+                        V.isComplex = true;
+                        V.matrixI.setZero(size,size);
+                    }
+
+                    for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                        V.matrixR.block(0, firstI + i, size, 1) = Vreal1.matrixR.block(0,2*i,size,1);
+                        V.matrixI.block(0, firstI + i, size, 1) = -Vreal1.matrixR.block(size,2*i,size,1);
+                    }
+                }
+                if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) {
+                    firstI = i;
+                }
             }
             V.checkComplexity();
         } else {
@@ -3683,10 +3794,6 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
             IndexType i(0), nbEigsWritten(0);
             mpreal eps(10*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether an eigenvector is complex or not
             while (i < Vreal.matrixR.cols()) {
-                // We define two vectors which will allow us to distinguish the case we are in
-                Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
-                bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
-                bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
 
                 if ((i == Vreal.matrixR.cols()-1) || (Dreal.matrixR(i,i+1) == 0)
                 || ((Dreal.matrixR(i,i+1) < eps) && ((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) && ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps))) {
@@ -3695,6 +3802,25 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
                     ++i;
                 } else {
                     // The next eigenvalue is complex
+
+                    // We define two vectors which will allow us to distinguish the case we are in
+                    Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
+                    bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
+                    bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
+
+                    // We check that at least one of these numbers is decently small (otherwise the expected structure has not been respected, and the decomposition failed)
+                    if ((bigIfCase1.array().abs().maxCoeff() > 1000000*eps) && (bigIfCase2.array().abs().maxCoeff() > 1000000*eps))
+                    {
+                        // The eigenvectors found do not have the expected form, we cancel the computation
+                        result.matrixR.resize(0,0);
+                        result.matrixI.resize(0,0);
+                        result.isComplex = false;
+                        V.matrixR.resize(0,0);
+                        V.matrixI.resize(0,0);
+                        V.isComplex = false;
+                        return result;
+                    }
+
                     // We directly take care of this case
                     if ( bigIfCase1.array().abs().maxCoeff() >= bigIfCase2.array().abs().maxCoeff() ) {
                         // We are in the [r i; -i r] case
@@ -3729,6 +3855,45 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
             }
             eigenvalues.checkComplexity();
             V.checkComplexity();
+
+            // If there are degenerate eigenspaces, so should treat carefully... but this time orthogonalization is not possible,
+            // so we just issue a warning
+            IndexType firstI(0);
+            mpreal eps2(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
+            bool warningGiven(false);
+            for (IndexType i(1); i < size; ++i) {
+                if (((firstI < i-1) && ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2)) ||
+                    ((firstI < i) && ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) <= eps2) && (i == size-1))) {
+                    IndexType lastI;
+                    if ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2)
+                        lastI = i-1;
+                    else
+                        lastI = i;
+
+                    // The eigenvalues firstI...lastI are identical, so we are not certain that the eigenvectors are correct here
+/*                    std::cerr << "Duplicate eigenvalues: [" << std::endl;
+                    for (IndexType j(firstI); j <= lastI; ++j) {
+                        eigenvalues.block(j,0,1,1).display(50);
+                    }
+                    std::cerr << "[" << std::endl;*/
+                    if (!warningGiven) {
+                        // The decomposition most likely failed, so we cancel everything to avoid giving a wrong result
+                        result.matrixR.resize(0,0);
+                        result.matrixI.resize(0,0);
+                        result.isComplex = false;
+                        V.matrixR.resize(0,0);
+                        V.matrixI.resize(0,0);
+                        V.isComplex = false;
+                        return result;
+//                        // Alternatively, we simply issue a warning:
+//                        std::cout << "Warning: This complex non-symmetric matrix contains duplicate eigenvalues, the eigenvectors might be incorrect" << std::endl;
+//                        warningGiven = true;
+                    }
+                }
+                if ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2) {
+                    firstI = i;
+                }
+            }
 
             // We can now put the eigenvalues in a matrix
             result = eigenvalues.diagCreate(0);
@@ -3776,7 +3941,8 @@ GmpEigenMatrix GmpEigenMatrix::eig(GmpEigenMatrix& V) const
     return result;
 }
 
-/* Eigen decopmosition: similar to [V D] = eig(A) */
+
+/* Eigen decomposition: similar to [V D] = eig(A) */
 GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
 {
     GmpEigenMatrix& result(*(new GmpEigenMatrix));
@@ -3806,9 +3972,43 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
             V.matrixI.setZero(size,size);
             for (IndexType i(0); i < size; ++i) {
                 result.matrixR(i,i) = Dreal.matrixR(2*i,0);
-                // This way of extracting the eigenvector always works ;-)
+                // This way of extracting the eigenvector works...
                 V.matrixR.block(0,i,size,1) = Vreal.matrixR.block(0,2*i,size,1);
                 V.matrixI.block(0,i,size,1) = -Vreal.matrixR.block(size,2*i,size,1);
+            }
+            V.checkComplexity();
+
+            // ... except for degenerate eigenspaces, so we orthogonalize the vectors
+            // corresponding to the same eigenvalues
+            IndexType firstI(0);
+            mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
+            for (IndexType i(1); i < size; ++i) {
+                if (((firstI < i-1) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)) ||
+                    ((firstI < i) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) <= eps) && (i == size-1))) {
+                    IndexType lastI;
+                    if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)
+                        lastI = i-1;
+                    else
+                        lastI = i;
+
+                    // The eigenvalues firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                    // First we orthogonalize the U subspace
+                    GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, 2*size, 2*(lastI-firstI+1)));
+                    Vreal1 = Vreal1.orthogonalizeRR();
+
+                    if (!V.isComplex) {
+                        V.isComplex = true;
+                        V.matrixI.setZero(size,size);
+                    }
+
+                    for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                        V.matrixR.block(0, firstI + i, size, 1) = Vreal1.matrixR.block(0,2*i,size,1);
+                        V.matrixI.block(0, firstI + i, size, 1) = -Vreal1.matrixR.block(size,2*i,size,1);
+                    }
+                }
+                if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) {
+                    firstI = i;
+                }
             }
             V.checkComplexity();
         } else {
@@ -3869,10 +4069,6 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
             IndexType i(0), nbEigsWritten(0);
             mpreal eps(10*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether an eigenvector is complex or not
             while (i < Vreal.matrixR.cols()) {
-                // We define two vectors which will allow us to distinguish the case we are in
-                Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
-                bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
-                bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
 
                 if ((i == Vreal.matrixR.cols()-1) || (Dreal.matrixR(i,i+1) == 0)
                 || ((Dreal.matrixR(i,i+1) < eps) && ((Vreal.matrixR.block(0,i,size,1).array().abs() - Vreal.matrixR.block(size,i+1,size,1).array().abs()).abs().maxCoeff() > eps) && ((Vreal.matrixR.block(0,i+1,size,1).array().abs() - Vreal.matrixR.block(size,i,size,1).array().abs()).abs().maxCoeff() > eps))) {
@@ -3881,6 +4077,25 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
                     ++i;
                 } else {
                     // The next eigenvalue is complex
+
+                    // We define two vectors which will allow us to distinguish the case we are in
+                    Matrix<mpreal,Dynamic,Dynamic> bigIfCase1(2*size, 1), bigIfCase2(2*size, 1);
+                    bigIfCase1 << Vreal.matrixR.block(0,i,size,1)+Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)-Vreal.matrixR.block(size,i,size,1);
+                    bigIfCase2 << Vreal.matrixR.block(0,i,size,1)-Vreal.matrixR.block(size,i+1,size,1), Vreal.matrixR.block(0,i+1,size,1)+Vreal.matrixR.block(size,i,size,1);
+
+                    // We check that at least one of these numbers is decently small (otherwise the expected structure has not been respected, and the decomposition failed)
+                    if ((bigIfCase1.array().abs().maxCoeff() > 1000000*eps) && (bigIfCase2.array().abs().maxCoeff() > 1000000*eps))
+                    {
+                        // The eigenvectors found do not have the expected form, we cancel the computation
+                        result.matrixR.resize(0,0);
+                        result.matrixI.resize(0,0);
+                        result.isComplex = false;
+                        V.matrixR.resize(0,0);
+                        V.matrixI.resize(0,0);
+                        V.isComplex = false;
+                        return result;
+                    }
+
                     // We directly take care of this case
                     if ( bigIfCase1.array().abs().maxCoeff() >= bigIfCase2.array().abs().maxCoeff() ) {
                         // We are in the [r i; -i r] case
@@ -3915,6 +4130,45 @@ GmpEigenMatrix& GmpEigenMatrix::eig_new(GmpEigenMatrix& V) const
             }
             eigenvalues.checkComplexity();
             V.checkComplexity();
+
+            // If there are degenerate eigenspaces, so should treat carefully... but this time orthogonalization is not possible,
+            // so we just issue a warning
+            IndexType firstI(0);
+            mpreal eps2(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to eigenvalues are identical or not
+            bool warningGiven(false);
+            for (IndexType i(1); i < size; ++i) {
+                if (((firstI < i-1) && ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2)) ||
+                    ((firstI < i) && ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) <= eps2) && (i == size-1))) {
+                    IndexType lastI;
+                    if ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2)
+                        lastI = i-1;
+                    else
+                        lastI = i;
+
+                    // The eigenvalues firstI...lastI are identical, so we are not certain that the eigenvectors are correct here
+/*                    std::cerr << "Duplicate eigenvalues: [" << std::endl;
+                    for (IndexType j(firstI); j <= lastI; ++j) {
+                        eigenvalues.block(j,0,1,1).display(50);
+                    }
+                    std::cerr << "[" << std::endl;*/
+                    if (!warningGiven) {
+                        // The decomposition most likely failed, so we cancel everything to avoid giving a wrong result
+                        result.matrixR.resize(0,0);
+                        result.matrixI.resize(0,0);
+                        result.isComplex = false;
+                        V.matrixR.resize(0,0);
+                        V.matrixI.resize(0,0);
+                        V.isComplex = false;
+                        return result;
+//                        // Alternatively, we simply issue a warning:
+//                        std::cout << "Warning: This complex non-symmetric matrix contains duplicate eigenvalues, the eigenvectors might be incorrect" << std::endl;
+//                        warningGiven = true;
+                    }
+                }
+                if ((eigenvalues.block(firstI,0,1,1) - eigenvalues.block(i,0,1,1)).abs().matrixR(0,0) > eps2) {
+                    firstI = i;
+                }
+            }
 
             // We can now put the eigenvalues in a matrix
             result = eigenvalues.diagCreate(0);
@@ -4448,11 +4702,81 @@ GmpEigenMatrix GmpEigenMatrix::svd(GmpEigenMatrix& U, GmpEigenMatrix& V) const
         V.matrixI.setZero(sizeV/2,sizeS/2);
         for (IndexType i(0); i < sizeS/2; ++i) {
             result.matrixR(i,i) = Sreal.matrixR(2*i,0);
-            // This way of extracting the singular vectors always works ;-)
+            // This way of extracting the singular vectors works...
             U.matrixR.block(0,i,sizeU/2,1) = Ureal.matrixR.block(0,2*i,sizeU/2,1);
             U.matrixI.block(0,i,sizeU/2,1) = -Ureal.matrixR.block(sizeU/2,2*i,sizeU/2,1);
             V.matrixR.block(0,i,sizeV/2,1) = Vreal.matrixR.block(0,2*i,sizeV/2,1);
             V.matrixI.block(0,i,sizeV/2,1) = -Vreal.matrixR.block(sizeV/2,2*i,sizeV/2,1);
+        }
+        U.checkComplexity();
+        V.checkComplexity();
+
+        // ... except for degenerate eigenspaces, so we orthogonalize the vectors
+        // corresponding to the same singular values
+        IndexType firstI(0);
+        mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to singular values are identical or not
+        for (IndexType i(1); i < sizeS/2; ++i) {
+            if (((firstI < i-1) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)) ||
+                ((firstI < i) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) <= eps) && (i == sizeS/2-1))) {
+                IndexType lastI;
+                if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)
+                    lastI = i-1;
+                else
+                    lastI = i;
+
+                // The singular values firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                // First we orthogonalize the U subspace
+                GmpEigenMatrix Ureal1(Ureal.block(0, 2*firstI, sizeU, 2*(lastI-firstI+1)));
+                Ureal1 = Ureal1.orthogonalizeRR();
+
+                if (!U.isComplex) {
+                    U.isComplex = true;
+                    U.matrixI.setZero(sizeU/2,sizeS/2);
+                }
+
+                for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                    U.matrixR.block(0, firstI + i, sizeU/2, 1) = Ureal1.matrixR.block(0,2*i,sizeU/2,1);
+                    U.matrixI.block(0, firstI + i, sizeU/2, 1) = -Ureal1.matrixR.block(sizeU/2,2*i,sizeU/2,1);
+                }
+
+                // Now we find the corresponding V eigenvectors...
+                if (mpfr::abs(result.matrixR(firstI, firstI)) > eps) {
+                    // We can compute the eigenvectors easily
+                    GmpEigenMatrix U2(U.block(0, firstI, sizeU/2, lastI-firstI+1));
+                    GmpEigenMatrix V2(((*this).ctranspose())*U2);
+                    V2 *= (GmpEigenMatrix(mpreal('1')).rdivide(result.block(firstI, firstI, lastI-firstI+1, lastI-firstI+1).diagExtract(0))).diagCreate(0);
+
+                    // Replace the vectors
+                    V.matrixR.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixR.block(0, 0, sizeV/2, lastI-firstI+1);
+                    if (V.isComplex) {
+                        if (V2.isComplex) {
+                            V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeV/2, lastI-firstI+1);
+                        } else {
+                            V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) *= 0;
+                        }
+                    } else if (V2.isComplex) {
+                        V.matrixI.resize(V.matrixR.rows(), V.matrixR.cols());
+                        V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeV/2, lastI-firstI+1);
+                    }
+                } else {
+                    // We need to re-orthogonalize the other eigenvectors independently
+                    GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, sizeV, 2*(lastI-firstI+1)));
+                    Vreal1 = Vreal1.orthogonalizeRR();
+
+                    if (!V.isComplex) {
+                        V.isComplex = true;
+                        V.matrixI.setZero(sizeV/2,sizeS/2);
+                    }
+
+                    for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                        V.matrixR.block(0, firstI + i, sizeV/2, 1) = Vreal1.matrixR.block(0,2*i,sizeV/2,1);
+                        V.matrixI.block(0, firstI + i, sizeV/2, 1) = -Vreal1.matrixR.block(sizeV/2,2*i,sizeV/2,1);
+                    }
+                }
+            }
+            if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) {
+                firstI = i;
+            }
         }
         U.checkComplexity();
         V.checkComplexity();
@@ -4509,11 +4833,81 @@ GmpEigenMatrix& GmpEigenMatrix::svd_new(GmpEigenMatrix& U, GmpEigenMatrix& V) co
         V.matrixI.setZero(sizeV/2,sizeS/2);
         for (IndexType i(0); i < sizeS/2; ++i) {
             result.matrixR(i,i) = Sreal.matrixR(2*i,0);
-            // This way of extracting the singular vectors always works ;-)
+            // This way of extracting the singular vectors works...
             U.matrixR.block(0,i,sizeU/2,1) = Ureal.matrixR.block(0,2*i,sizeU/2,1);
             U.matrixI.block(0,i,sizeU/2,1) = -Ureal.matrixR.block(sizeU/2,2*i,sizeU/2,1);
             V.matrixR.block(0,i,sizeV/2,1) = Vreal.matrixR.block(0,2*i,sizeV/2,1);
             V.matrixI.block(0,i,sizeV/2,1) = -Vreal.matrixR.block(sizeV/2,2*i,sizeV/2,1);
+        }
+        U.checkComplexity();
+        V.checkComplexity();
+
+        // ... except for degenerate eigenspaces, so we orthogonalize the vectors
+        // corresponding to the same singular values
+        IndexType firstI(0);
+        mpreal eps(10000*mpfr::pow(10, -mpfr::bits2digits(mpreal::get_default_prec()))); // This is the critical point at which we judge whether to singular values are identical or not
+        for (IndexType i(1); i < sizeS/2; ++i) {
+            if (((firstI < i-1) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)) ||
+                ((firstI < i) && (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) <= eps) && (i == sizeS/2-1))) {
+                IndexType lastI;
+                if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps)
+                    lastI = i-1;
+                else
+                    lastI = i;
+
+                // The singular values firstI...lastI are identical, so there are degenerate subspaces to orthogonalize
+                // First we orthogonalize the U subspace
+                GmpEigenMatrix Ureal1(Ureal.block(0, 2*firstI, sizeU, 2*(lastI-firstI+1)));
+                Ureal1 = Ureal1.orthogonalizeRR();
+
+                if (!U.isComplex) {
+                    U.isComplex = true;
+                    U.matrixI.setZero(sizeU/2,sizeS/2);
+                }
+
+                for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                    U.matrixR.block(0, firstI + i, sizeU/2, 1) = Ureal1.matrixR.block(0,2*i,sizeU/2,1);
+                    U.matrixI.block(0, firstI + i, sizeU/2, 1) = -Ureal1.matrixR.block(sizeU/2,2*i,sizeU/2,1);
+                }
+
+                // Now we find the corresponding V eigenvectors...
+                if (mpfr::abs(result.matrixR(firstI, firstI)) > eps) {
+                    // We can compute the eigenvectors easily
+                    GmpEigenMatrix U2(U.block(0, firstI, sizeU/2, lastI-firstI+1));
+                    GmpEigenMatrix V2(((*this).ctranspose())*U2);
+                    V2 *= (GmpEigenMatrix(mpreal('1')).rdivide(result.block(firstI, firstI, lastI-firstI+1, lastI-firstI+1).diagExtract(0))).diagCreate(0);
+
+                    // Replace the vectors
+                    V.matrixR.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixR.block(0, 0, sizeV/2, lastI-firstI+1);
+                    if (V.isComplex) {
+                        if (V2.isComplex) {
+                            V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeV/2, lastI-firstI+1);
+                        } else {
+                            V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) *= 0;
+                        }
+                    } else if (V2.isComplex) {
+                        V.matrixI.resize(V.matrixR.rows(), V.matrixR.cols());
+                        V.matrixI.block(0, firstI, sizeV/2, lastI-firstI+1) = V2.matrixI.block(0, 0, sizeV/2, lastI-firstI+1);
+                    }
+                } else {
+                    // We need to re-orthogonalize the other eigenvectors independently
+                    GmpEigenMatrix Vreal1(Vreal.block(0, 2*firstI, sizeV, 2*(lastI-firstI+1)));
+                    Vreal1 = Vreal1.orthogonalizeRR();
+
+                    if (!V.isComplex) {
+                        V.isComplex = true;
+                        V.matrixI.setZero(sizeV/2,sizeS/2);
+                    }
+
+                    for (IndexType i(0); i < lastI-firstI+1; ++i) {
+                        V.matrixR.block(0, firstI + i, sizeV/2, 1) = Vreal1.matrixR.block(0,2*i,sizeV/2,1);
+                        V.matrixI.block(0, firstI + i, sizeV/2, 1) = -Vreal1.matrixR.block(sizeV/2,2*i,sizeV/2,1);
+                    }
+                }
+            }
+            if (mpfr::abs(result.matrixR(firstI, firstI) - result.matrixR(i,i)) > eps) {
+                firstI = i;
+            }
         }
         U.checkComplexity();
         V.checkComplexity();

@@ -32,7 +32,7 @@ You can also install the **GEM library** from the source code. This can be usefu
 ```
 git clone https://www.github.com/gem-library/gem
 cd gem
-git submodules update --init
+git submodule update --init
 ```
 
 This creates a folder **gem** with most of the necessary code (including Eigen, Spectra, MOxUnit and MOcov). To compile the library, follow the [**detailed instructions**](compilationInstructions.html). Once the library is compiled, proceed with the following steps.

@@ -129,7 +129,7 @@ std::string mprealToString2(const mpfr::mpreal& x, const int& width, const bool&
 /* Now we define some mpreal matrix constructors */
 
 // The zero matrix
-inline Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> zeroMatrix(const IndexType& rows, const IndexType& cols, const double& precision = 1.0)
+inline Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> zeroMatrix(const IndexType& rows, const IndexType& cols, const double& precision = mpfr::bits2digits(mpfr::mpreal::get_default_prec()))
 {
     Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> matrix;
 
@@ -144,7 +144,7 @@ inline Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> zeroMatrix(cons
 }
 
 // The identity matrix
-inline Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> identityMatrix(const IndexType& dim, const double& precision = 1.0)
+inline Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> identityMatrix(const IndexType& dim, const double& precision = mpfr::bits2digits(mpfr::mpreal::get_default_prec()))
 {
     Eigen::Matrix<mpfr::mpreal,Eigen::Dynamic,Eigen::Dynamic> matrix;
 

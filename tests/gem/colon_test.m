@@ -27,7 +27,7 @@ function test_consistency
 end
 
 function test_empty
-    assert(isempty(sgem(2):sgem(1)));
-    assert(isempty(sgem(2):1:sgem(1)));
-    assert(isempty(sgem(1):-1:sgem(2)));
+    assert(isempty(gem(2):gem(1)));
+    assert(isempty(gem(2):1:gem(1)));
+    assert(isempty(gem(1):-1:gem(2)));
 end

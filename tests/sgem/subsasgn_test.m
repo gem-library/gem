@@ -75,6 +75,25 @@ function test_consistency
     x = x';
     x(5) = 5;
     x(6:7) = [6 7];
+
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        % Octave incorrectly transforms empty arrays into objects, so these
+        % cases fail : subsasgn is not aware that it should not ask whether
+        % x is empty...
+        % c.f. https://savannah.gnu.org/bugs/?56856>
+        clear x;
+        x(10) = sgem(2);
+        assert(isa(x,'sgem'));
+        assert(isequal(size(x),[1 10]));
+        assert(isequal(x(10), sgem(2)));
+
+        clear x;
+        x(1, 10) = sgem(2);
+        assert(isa(x,'sgem'));
+        assert(isequal(size(x),[1 10]));
+        assert(isequal(x(10), sgem(2)));
+    end
 end
 
 function test_inputs

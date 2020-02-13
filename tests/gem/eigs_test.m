@@ -32,7 +32,7 @@ function test_consistency
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
+                x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
 
                 validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
                 validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);

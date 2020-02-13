@@ -45,7 +45,7 @@ function test_consistency
                     end
                 end
 
-%                 % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
+%                 % Currently there is a bug in spectra which doesn't allow us to test for smallest eigenvalues...
 
                 testRun = true;
             catch me
@@ -139,12 +139,9 @@ function test_inputs
     shouldProduceAnError(@() svds(x, 1, 'small'));
     shouldProduceAnError(@() svds(x, 1, [1 2]));
     
-    % maximum 3 outputs supported
-    shouldProduceAnError(@() svds(x), 4);
-    
     % no eigenvectors computed for zero eigenvalues
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() svds(sparse(vect*vect'), 2), 4);
+    shouldProduceAnError(@() svds(sparse(vect*vect'), 2), 2);
     
     % no computation over an existing eigenvalue
     vect = gem.rand(4,1);

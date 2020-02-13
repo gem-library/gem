@@ -12,16 +12,38 @@ function test_consistency
 end
 
 function test_precision
-    % NOTE: For now we don't deal (c.f. github issue #3)
-    x = generateMatrices(2, 5, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR'});%, 'FSI'});
+    x = generateMatrices(2, 5, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
     
     targetPrecision = 10^(-(gem.workingPrecision-10));
     for i = 1:length(x)
         [U S V] = svd(x{i}, 'econ');
         
-        precision = double(abs(norm( U*S*V' - x{i} ,1)));
+        precision = double(abs(norm( U*S - x{i}*V ,1)));
         assert(precision < targetPrecision);
     end
+    
+    % Let's test more cases with degenerate subspaces
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    if ~isOctave
+        x = generateMatrices(2, 10, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
+
+        targetPrecision = 10^(-(gem.workingPrecision-10));
+        for i = 1:length(x)
+            [U S V] = svd(x{i}, 'econ');
+
+            precision = double(abs(norm( U*S - x{i}*V ,1)));
+            assert(precision < targetPrecision);
+            
+            d = diag(S);
+            which = ceil(length(d)*rand(1,length(d)));
+            y = U*diag(d(which))*V';
+            
+            [U S V] = svd(y, 'econ');
+
+            precision = double(abs(norm( U*S - y*V ,1)));
+            assert(precision < targetPrecision);
+        end
+    end    
 end
 
 function test_empty
@@ -36,7 +58,4 @@ function test_inputs
     
     % input 1 cannot be anything
     shouldProduceAnError(@() svd(gem.rand(2), 'economic'));
-    
-    % maximum 2 outputs supported
-    shouldProduceAnError(@() svd(gem.rand(2)), 4);
 end

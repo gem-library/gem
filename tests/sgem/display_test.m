@@ -10,16 +10,16 @@ function test_consistency
     x = generateMatrices(1, 5, {'A', 'AR', 'AI'});
 
     for i = 1:numel(x)
-        display(x{i});
+        assert(~isempty(evalc('display(x{i});')));
 
-        display(x{i}, 4);
-        display(x{i}, -1);
-        display(x{i}, gem(4));
+        assert(~isempty(evalc('display(x{i}, 4);')));
+        assert(~isempty(evalc('display(x{i}, -1);')));
+        assert(~isempty(evalc('display(x{i}, gem(4));')));
 
-        display(x{i}, 'name');
+        assert(~isempty(evalc('display(x{i}, ''name'');')));
 
-        display(x{i}, 'name', 4);
-        display(x{i}, 'name', -1);
-        display(x{i}, 'name', gem(4));
+        assert(~isempty(evalc('display(x{i}, ''name'', 4);')));
+        assert(~isempty(evalc('display(x{i}, ''name'', -1);')));
+        assert(~isempty(evalc('display(x{i}, ''name'', gem(4));')));
     end
 end

@@ -1,6 +1,6 @@
 [submodule "eigen"]
 	path = external/eigen
-	url = https://github.com/eigenteam/eigen-git-mirror
+	url = https://gitlab.com/libeigen/eigen
 [submodule "spectra"]
 	path = external/spectra
 	url = https://github.com/yixuan/spectra

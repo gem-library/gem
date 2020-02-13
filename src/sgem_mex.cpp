@@ -167,6 +167,24 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
+    /* Gets the working precision */
+    if (!strcmp("getWorkingPrecision", cmd)) {
+        // We check that the parameters are correct
+        if ((nlhs != 1) || (nrhs != 1))
+            mexErrMsgTxt("getWorkingPrecision: Unexpected arguments.");
+
+        // We allocate space for the result
+        plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
+
+        // We check where the output data should be places
+        int* outputMatrix = (int*)mxGetData(plhs[0]);
+
+        // And stock it at the right place
+        outputMatrix[0] = mpfr::mpreal::get_default_prec();
+        return;
+    }
+
+
     /* Sets the working precision */
     if (!strcmp("setWorkingPrecision", cmd)) {
         // We check that the parameters are correct

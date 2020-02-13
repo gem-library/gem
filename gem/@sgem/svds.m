@@ -146,18 +146,11 @@ function [U S V] = svds(this, varargin)
     elseif nargout <= 3
         % We compute the eigenvalues on both sides
         [U valsU] = eigs(this*this', [], nbSingularvalues, type);
-        [V valsV] = eigs(this'*this, [], nbSingularvalues, type);
         valsU = max(valsU,0); % We round up eventual slightly negative values
-        valsV = max(valsV,0); % We round up eventual slightly negative values
         S = sqrt(valsU);
         
-        % We check that the same singular values were found on both sides
-        if max(abs(valsU-valsV)) > 10^(-gem.workingPrecision*2/3 + 2)
-            warning('The left and right singular values don''t match in sgem::svds')
-        end
-        
-        % We correct the phases of V
-        V = (V.*(ones(size(V,1),1)*exp(-1i*diag(angle(U'*this*V))).'));
+        % Compute the corresponding eigenvectors
+        V = this'*U*diag(1./diag(S));
 
         % We make sure the order of the singular values is decreasing
         if isequal(type,'sm')

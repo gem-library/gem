@@ -31,7 +31,7 @@ function test_consistency
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 15, {'PQ', 'PQR', 'PQI', 'PS', 'PSR'});%, 'PSI'});
+                x = generateMatrices(2, 15, {'PQ', 'PQR', 'PQI', 'PS', 'PSR', 'PSI'});
 
                 for i = 1:length(x)
                     if size(x{i},1) >= 8
@@ -113,7 +113,7 @@ function test_precision
         testRun = false;
         while ~testRun
             try
-                x = generateMatrices(2, 15, {'PQ', 'PQR', 'PQI', 'PS', 'PSR'});%, 'PSI'});
+                x = generateMatrices(2, 15, {'PQ', 'PQR', 'PQI', 'PS', 'PSR', 'PSI'});
 
                 % Spectra sometimes stops at a precision of ~1e-15! So we don't check
                 % this for now unfortunately with a very high precision,,,

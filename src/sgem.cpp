@@ -5153,7 +5153,7 @@ GmpEigenMatrix SparseGmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEige
             V.checkComplexity();
         } else {
             //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),(long int)matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5266,7 +5266,7 @@ GmpEigenMatrix SparseGmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEige
             V.checkComplexity();
         } else {
             //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),(long int)matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5375,7 +5375,7 @@ GmpEigenMatrix& SparseGmpEigenMatrix::eigs_new(const long int& nbEigenvalues, Gm
             V.checkComplexity();
         } else {
             //long int ncv(std::min(std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            long int ncv(std::min(3+std::max(1+nbEigenvalues,2*nbEigenvalues),(long int)matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class
@@ -5488,7 +5488,7 @@ GmpEigenMatrix& SparseGmpEigenMatrix::eigs_new(const long int& nbEigenvalues, Gm
             V.checkComplexity();
         } else {
             //long int ncv(std::min(std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows())); // the tightest bounds... don't always converge
-            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),matrixR.rows()));
+            long int ncv(std::min(3+std::max(2+nbEigenvalues,2*nbEigenvalues),(long int)matrixR.rows()));
             switch (type) {
                 case 1: {
                     // Construct matrix operation object using the wrapper class

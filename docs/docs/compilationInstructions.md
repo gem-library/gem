@@ -41,14 +41,10 @@ The following was only tested on Matlab.
 7. Create the folder 'external/staticLibraries'
 8. From within msys (launch C:\MinGW\msys\1.0\msys.bat), go into the external/gmp folder and run the following commands:
     - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries``
-    - `make`
-    - `make check`
-    - `make install`
+    - `make && make check && make install`
 9. From within msys, go into the external/mpfr folder and run the following commands:
     - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries``
-    - `make`
-    - `make check`
-    - `make install`
+    - `make && make check && make install`
 10. Install the TDM64-GCC compiler from [http://tdm-gcc.tdragon.net/download](http://tdm-gcc.tdragon.net/download), making sure you include the component `Components/gcc/openmp` in the TDM-GCC Setup. Configure it for Matlab by typing `setenv('MW_MINGW64_LOC','C:\TDM-GCC-64')` and `mex -setup cpp` in Matlab (see [**here**](https://fr.mathworks.com/help/matlab/matlab_external/compiling-c-mex-files-with-mingw.html) for more details).
 11. Download the latest Eigen source code on [eigen.tuxfamily.org](http://eigen.tuxfamily.org) and place it into gem's 'external' folder.
 12. Download the latest version of Spectra on [http://yixuan.cos.name/spectra/download.html](http://yixuan.cos.name/spectra/download.html) and place it into gem's 'external' folder.

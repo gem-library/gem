@@ -27,12 +27,10 @@ You can then follow the [**tutorial**](gettingStarted.html).
 
 You can also install the **GEM library** from the source code. This can be useful for development purpose. For this:
 
-- Clone the library from GitHub using the following commands:
+- Clone the library from GitHub using the following command:
 
 ```
-git clone https://www.github.com/gem-library/gem
-cd gem
-git submodule update --init
+git clone --recursive https://www.github.com/gem-library/gem
 ```
 
 This creates a folder **gem** with most of the necessary code (including Eigen, Spectra, MOxUnit and MOcov). To compile the library, follow the [**detailed instructions**](compilationInstructions.html). Once the library is compiled, proceed with the following steps.

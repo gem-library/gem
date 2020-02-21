@@ -39,7 +39,7 @@ The following was only tested on Matlab.
 6. Download MPFR-C++ from [http://www.holoborodko.com/pavel/mpfr/](http://www.holoborodko.com/pavel/mpfr/
 ) and place it into gem's 'external' folder
 7. Create the folder 'external/staticLibraries'
-8. From within msys (launch C:\MinGW\msys\1.0\msys.bat), go into the external/gmp folder and run the following commands:
+8. From within msys (launch C:\MinGW\msys\1.0\msys.bat), go into the external/gmp folder (the `C:` drive is located in `/c/`) and run the following commands:
     - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries``
     - `make && make check && make install`
 9. From within msys, go into the external/mpfr folder and run the following commands:

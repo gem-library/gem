@@ -7,11 +7,6 @@ function test_suite = min_test()
 end
 
 function test_consistency
-    % Check if we are running octave: octave doesn't support min with 'all'
-    % parameter, and it doesn't support min with a scalar for sparse
-    % objects
-    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-    
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
         x = generateMatrices(2, 5, {'F', 'FR', 'FI'});
@@ -51,12 +46,8 @@ function test_consistency
     validateDoubleConsistency2(@(x,y) min(double(x(1)),y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) min(double(sparse(x(1))),y), y(1,:), y(2,:));
     
-    if isOctave
-        for i = 1:length(x)
-            assert(abs(min(x{i}, [], 'all') - min(min(double(x{i})))) < 1e-5);
-        end
-    else
-        validateDoubleConsistency(@(x) min(x, [], 'all'), x);
+    for i = 1:length(x)
+        assert(abs(min(x{i}, [], 'all') - min(min(double(x{i})))) < 1e-5);
     end
 end
 

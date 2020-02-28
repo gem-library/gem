@@ -46,15 +46,8 @@ function test_consistency
     validateDoubleConsistency2(@(x,y) max(double(x(1)),y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) max(double(sparse(x(1))),y), y(1,:), y(2,:));
     
-    % Check if we are running octave: octave doesn't support max with 'all'
-    % parameter
-    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-    if isOctave
-        for i = 1:length(x)
-            assert(abs(max(x{i}, [], 'all') - max(max(double(x{i})))) < 1e-5);
-        end
-    else
-        validateDoubleConsistency(@(x) max(x, [], 'all'), x);
+    for i = 1:length(x)
+        assert(abs(max(x{i}, [], 'all') - max(max(double(x{i})))) < 1e-5);
     end
 end
 

@@ -7,11 +7,6 @@ function test_suite = max_test()
 end
 
 function test_consistency
-    % Check if we are running octave: octave doesn't support max with 'all'
-    % parameter, and it doesn't support max with a scalar for sparse
-    % objects
-    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
-
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
         x = generateMatrices(2, 5, {'P', 'PR', 'PI'});
@@ -53,12 +48,8 @@ function test_consistency
     validateDoubleConsistency2(@(x,y) max(double(x(1)),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
     validateDoubleConsistency2(@(x,y) max(double(full(x(1))),y), y(1,:), y(2,:), 1e-12, 0, isOctave);
     
-    if isOctave
-        for i = 1:length(x)
-            assert(abs(max(x{i}, [], 'all') - max(max(double(x{i})))) < 1e-5);
-        end
-    else
-        validateDoubleConsistency(@(x) max(x, [], 'all'), x);
+    for i = 1:length(x)
+        assert(abs(max(x{i}, [], 'all') - max(max(double(x{i})))) < 1e-5);
     end
 end
 

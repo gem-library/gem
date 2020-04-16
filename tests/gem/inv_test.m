@@ -10,7 +10,9 @@ function test_consistency
     x = generateMatrices(2, 5, {'FQ', 'FQR', 'FQI'});
     validateDoubleConsistency(@(x) inv(x), x);
     
-    validateDoubleConsistency(@(x) inv(x), {gem([1 1; 1 1])});    
+    % This should create a warning
+    command = 'validateDoubleConsistency(@(x) inv(x), {gem([1 1; 1 1])});';
+    assert(~isempty(evalc(command)));
 end
 
 function test_empty

@@ -13,7 +13,8 @@ function test_consistency
     validateDoubleConsistency(@(x) mldivide(r, x), x, 1e-5);
     
     % This should produce a warning because the matrix is almost singular
-    mldivide(sgem([1 0; 1 1e-47]), [1 0]');
+    command = 'mldivide(sgem([1 0; 1 1e-47]), [1 0]'');';
+    assert(~isempty(evalc(command)));
 end
 
 function test_precision

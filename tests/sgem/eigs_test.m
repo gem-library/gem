@@ -42,7 +42,7 @@ function test_consistency
                     end
                 end
 
-%                 % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
+%                 % Currently there is a bug in spectra which doesn't allow us to test for smallest eigenvalues...
 
                 testRun = true;
             catch me

@@ -7,6 +7,11 @@ function test_suite = max_test()
 end
 
 function test_consistency
+    % Check if we are running octave: octave doesn't support min with 'all'
+    % parameter, and it doesn't support min with a scalar for sparse
+    % objects
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    
     global fastTests
     if isempty(fastTests) || (fastTests == 0)
         x = generateMatrices(2, 5, {'P', 'PR', 'PI'});

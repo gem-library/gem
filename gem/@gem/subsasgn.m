@@ -42,26 +42,31 @@ switch subs.type
 end
 
 
+%% If needed, we prepare a copy of the object, only this object will be modified
+if (length(indices) == 1) && (isempty(indices{1}))
+    % There is nothing to assign. But we check that the rhs does not
+    % contain more than 1 element
+    if numel(values) > 1
+        error('In an assignment A(I) = B in gem::subsasgn, the number of elements in B and I must be the same');
+    end
+    result = this;
+    return;
+else
+    result = copy(this);
+end
+
+
 %% Let's make some more checks
 if length(indices) == 1
-    if isempty(indices{1})
-        % There is nothing to assign. But we check that the rhs does not
-        % contain more than 1 element
-        if numel(values) > 1
-            error('In an assignment  A(I) = B in gem::subsasgn, the number of elements in B and I must be the same');
-        end
-        result = this;
-        return;
-    end
     if (min(indices{1}) < 1) || ((max(indices{1}) > prod(s)) && (min(s) > 1))
         error('Indices out of bound in gem::subsasgn');
     elseif max(indices{1}) > prod(s)
         % We need to increase the size of the vector
         if s(1) <= 1
-            objId = this.objectIdentifier;
+            objId = result.objectIdentifier;
             gem_mex('resize', objId, 1, max(indices{1}));
         else
-            objId = this.objectIdentifier;
+            objId = result.objectIdentifier;
             gem_mex('resize', objId, max(indices{1}), 1);
         end
     end
@@ -79,7 +84,7 @@ else
     end
     if (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))
         % The matrix is too small so we increase its size
-        objId = this.objectIdentifier;
+        objId = result.objectIdentifier;
         gem_mex('resize', objId, max(s(1), max(indices{1})), max(s(2), max(indices{2})));
     end
 
@@ -112,8 +117,7 @@ if ~isequal(class(values), 'gem')
 end
 
 
-%% Now we copy the object, and assign the requested numbers to the current object
-result = copy(this);
+%% Now we assign the requested numbers to the current object
 if length(indices) == 1
     objId1 = result.objectIdentifier;
     objId2 = values.objectIdentifier;

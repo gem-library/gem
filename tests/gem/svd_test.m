@@ -9,6 +9,8 @@ end
 function test_consistency
     x = generateMatrices(2, 5, {'F', 'FR', 'FI', 'FQ', 'FQR', 'FQI', 'FS', 'FSR', 'FSI'});
     validateDoubleConsistency(@(x) svd(x), x);
+    validateDoubleConsistency(@(x) svd(x, 0), x);
+    validateDoubleConsistency(@(x) svd(x, 'econ'), x);
 end
 
 function test_precision
@@ -16,8 +18,15 @@ function test_precision
     
     targetPrecision = 10^(-(gem.workingPrecision-10));
     for i = 1:length(x)
+        [U S V] = svd(x{i});
+        precision = double(abs(norm( U*S - x{i}*V ,1)));
+        assert(precision < targetPrecision);
+
+        [U S V] = svd(x{i}, 0);
+        precision = double(abs(norm( U*S - x{i}*V ,1)));
+        assert(precision < targetPrecision);
+
         [U S V] = svd(x{i}, 'econ');
-        
         precision = double(abs(norm( U*S - x{i}*V ,1)));
         assert(precision < targetPrecision);
     end
@@ -29,17 +38,31 @@ function test_precision
 
         targetPrecision = 10^(-(gem.workingPrecision-10));
         for i = 1:length(x)
-            [U S V] = svd(x{i}, 'econ');
-
+            [U S V] = svd(x{i});
             precision = double(abs(norm( U*S - x{i}*V ,1)));
             assert(precision < targetPrecision);
             
+            [U S V] = svd(x{i}, 0);
+            precision = double(abs(norm( U*S - x{i}*V ,1)));
+            assert(precision < targetPrecision);
+
+            [U S V] = svd(x{i}, 'econ');
+            precision = double(abs(norm( U*S - x{i}*V ,1)));
+            assert(precision < targetPrecision);
+
             d = diag(S);
             which = ceil(length(d)*rand(1,length(d)));
             y = U*diag(d(which))*V';
             
-            [U S V] = svd(y, 'econ');
+            [U S V] = svd(y);
+            precision = double(abs(norm( U*S - y*V ,1)));
+            assert(precision < targetPrecision);
 
+            [U S V] = svd(y, 0);
+            precision = double(abs(norm( U*S - y*V ,1)));
+            assert(precision < targetPrecision);
+
+            [U S V] = svd(y, 'econ');
             precision = double(abs(norm( U*S - y*V ,1)));
             assert(precision < targetPrecision);
         end

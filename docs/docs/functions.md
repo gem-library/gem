@@ -6,7 +6,7 @@ position: 3
 
 # {{page.title}}
 
-Here is a list of the functions currently implemented in the **GEM Library**. The first table shows functions which can be called without reference to a gem/sgem object (to create a high precision matrix for instance, or to adjust some library parameters).
+Here is a list of the functions currently implemented in the **GEM Library**. The first table shows static functions which can be called without reference to a gem/sgem object. These functions allow to create a high precision matrix or to adjust some library parameters.
 
 
 | function | full support | sparse support | remarks |

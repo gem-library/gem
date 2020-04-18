@@ -38,7 +38,7 @@ Related open source libraries include:
 
 - On Matlab/Octave, the command `sin(pi)` returns **1.2246e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns by **4.3348e-51**, a value compatible with the default working precision of 50 digits.
 
-- Matrix operations such as eigenvalue decompositions are computed straightforwardly. For instance, `eig(gem([1 1; 1 -1]))` computed the eigenvalues of a 2x2 integer matrix and returns a high precision decimal expansion of `sqrt(2)`.
+- Matrix operations such as eigenvalue decompositions are automatically computed in high precision. For instance, `eig(gem([1 1; 1 -1]))` computes the eigenvalues of a 2x2 integer matrix. The result includes a high precision decimal expansion of `sqrt(2)`.
 
 See the [**example page**](docs/publish/examples.html) for some usage illustrations.
 
@@ -61,7 +61,7 @@ The library currently relies on:
  - [Eigen](http://eigen.tuxfamily.org/), and [Spectra](http://yixuan.cos.name/spectra/) by Yixuan Qiu for matrix manipulations
  - [MOxUnit](https://github.com/MOxUnit/MOxUnit) and [MOcov](https://github.com/MOcov/MOcov) by Nikolaas N. Oosterhof for testing and code coverage monitoring
 
-Feedback an suggestions are welcome. Contributions are als welcome through the [**github page**](https://github.com/gem-library/gem) (see [**how to contribute**](doc/howToContribute.md)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
+Feedback an suggestions are welcome. Contributions are also welcome through the [**github page**](https://github.com/gem-library/gem) (see [**how to contribute**](docs/howToContribute.html)). We ask participants to follow the guidelines of the [Typelevel Code of Conduct](https://typelevel.org/conduct.html).
 
 ## License
 
@@ -72,4 +72,4 @@ The **GEM Library** is an open source project. It can be use freely, including f
 
 Background Photo by Andrea Sonda on Unsplash
 
-[^1]: Octave version 4.2.2 is supported. Changes introduced in version 4.4 broke the support for `classdefs`. This should be restored in the upcoming Octave 6 ([status](https://savannah.gnu.org/bugs/?56385) of the main related issue)
+[^1]: Octave version 4.2.2 is supported. Changes introduced in version 4.4 broke the support for `classdefs` ([status](https://savannah.gnu.org/bugs/?56385) of one important issue). Classdefs in Octave are being [heavily worked](https://wiki.octave.org/Classdef).

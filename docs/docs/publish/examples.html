@@ -8,7 +8,7 @@ comments: true
 <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
---><div class="content"><!--introduction--><h1>Examples</h1><p>Here are a few example illustrating usage of the <b>GEM Library</b>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Remarkable numbers</a></li><li><a href="#10">Matrix manipulations</a></li><li><a href="#14">Library parameters and functionalities</a></li></ul></div><h2>Remarkable numbers<a name="1"></a></h2><div><ul><li>Printing the 100 first decimals of <img src="examples_eq12719111378361454579.png" alt="$\pi$"></li></ul></div><pre class="codeinput">disp(gem(<span class="string">'pi'</span>,100), -1)
+--><div class="content"><!--introduction--><h1>Examples</h1><p>Here are a few example illustrating usage of the <b>GEM Library</b>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Remarkable numbers</a></li><li><a href="#10">Matrix manipulations</a></li><li><a href="#15">Good to know</a></li></ul></div><h2>Remarkable numbers<a name="1"></a></h2><div><ul><li>Printing the 100 first decimals of <img src="examples_eq12719111378361454579.png" alt="$\pi$"></li></ul></div><pre class="codeinput">disp(gem(<span class="string">'pi'</span>,100), -1)
 </pre><pre class="codeoutput">  3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170681
  
 </pre><p>Getting a string description of the first 100 decimals of <img src="examples_eq12719111378361454579.png" alt="$\pi$"></p><pre class="codeinput">toStrings(gem(<span class="string">'pi'</span>,100))
@@ -119,12 +119,12 @@ ans =
 </pre><pre class="codeoutput"> 
 ans = 
  
-   49.792447794335119553                         
-   -3.124289258420568349                         
-    1.158405885512340513 +  2.711285716211396706i
-    1.158405885512340513 -  2.711285716211396706i
-    2.845955318554816950                         
-    2.788330702939861328 +  0.559333788194000203i
+   49.561227168723702161                         
+    0.953620865268125156 +  2.779777041268530575i
+    0.953620865268125156 -  2.779777041268530575i
+   -2.632650105085427610 -  1.234291694364780003i
+   -2.632650105085427610 +  1.234291694364780003i
+   -1.594077382046923038 +  2.398727704013646137i
  
 </pre><div><ul><li>Solving a sparse linear system in high precision</li></ul></div><pre class="codeinput">A = sgem([2 4 1 2 2 5 1 3 5 3 4], [1 1 2 2 3 3 4 4 4 5 5], [4 -2 2 -1 -1 4 1 3 2 -6 2]);
 b = [8; -1; -18; 8; 20];
@@ -138,7 +138,7 @@ x =
    4.0000000000000000000
    5.0000000000000000000
  
-</pre><h2>Library parameters and functionalities<a name="14"></a></h2><div><ul><li>The default working and display precision</li></ul></div><pre class="codeinput">gem.workingPrecision
+</pre><div><ul><li>To solve a linear program in high precision, see <a href="https://yalmip.github.io/solver/refiner/">Refiner</a>.</li></ul></div><h2>Good to know<a name="15"></a></h2><div><ul><li>The default working and display precision</li></ul></div><pre class="codeinput">gem.workingPrecision
 gem.displayPrecision
 </pre><pre class="codeoutput">
 ans =
@@ -150,12 +150,13 @@ ans =
 
     20
 
-</pre><div><ul><li>`gem` and `sgem` objects can be saved to files</li></ul></div><pre class="codeinput">g = 1./gem([1:6]);
-save(<span class="string">'filename'</span>,<span class="string">'a'</span>);
+</pre><div><ul><li><tt>gem</tt> and <tt>sgem</tt> objects can be saved to files</li></ul></div><pre class="codeinput">g = 1./gem([1:6]);
+save(<span class="string">'filename'</span>,<span class="string">'g'</span>);
 clean <span class="string">g</span>;
 load(<span class="string">'filename'</span>);
 g
-</pre><pre class="codeoutput"> 
+</pre><pre class="codeoutput">loading...done
+ 
 g = 
  
    1.0000000000000000000   0.5000000000000000000   0.3333333333333333333   0.2500000000000000000   0.2000000000000000000   0.1666666666666666667
@@ -234,8 +235,11 @@ A = sgem([2 4 1 2 2 5 1 3 5 3 4], [1 1 2 2 3 3 4 4 4 5 5], [4 -2 2 -1 -1 4 1 3 2
 b = [8; -1; -18; 8; 20];
 x = A\b
 
+%%
+% * To solve a linear program in high precision, see <https://yalmip.github.io/solver/refiner/ Refiner>.
 
-%% Library parameters and functionalities
+
+%% Good to know
 
 %%
 % * The default working and display precision
@@ -243,12 +247,13 @@ gem.workingPrecision
 gem.displayPrecision
 
 %%
-% * `gem` and `sgem` objects can be saved to files
+% * |gem| and |sgem| objects can be saved to files
 g = 1./gem([1:6]);
-save('filename','a');
+save('filename','g');
 clean g;
 load('filename');
 g
+
 
 ##### SOURCE END #####
 -->

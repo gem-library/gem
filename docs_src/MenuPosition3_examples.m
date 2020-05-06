@@ -84,7 +84,7 @@ gem.displayPrecision
 %%
 % * |gem| and |sgem| objects can be saved to files
 g = 1./gem([1:6]);
-save('filename','a');
+save('filename','g');
 clean g;
 load('filename');
 g

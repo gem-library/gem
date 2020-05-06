@@ -1,4 +1,4 @@
-% sGEM : an implementation of sparse GMP Eigen Mantrices for MATLAB
+% sGEM : an open source implementation of sparse GMP Eigen Mantrices for MATLAB
 %
 % sgem is a MATLAB class wrapper to the sparse GmpEigenMatrix C++ class
 %

@@ -1,4 +1,4 @@
-% GEM : an implementation of GMP Eigen Matrices for MATLAB
+% GEM : an open source implementation of GMP Eigen Matrices for MATLAB
 %
 % gem is a MATLAB class wrapper to the GmpEigenMatrix C++ class
 %

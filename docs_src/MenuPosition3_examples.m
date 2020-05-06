@@ -46,9 +46,9 @@ disp(num2str((1+sqrt(gem(5)))/2, 50))
 
 %%
 % * The first few Mersenne prime numbers
-p  =  [2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279]';
+p  =  [2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279];
 mersennes = gem(2,400).^p-1;
-for i = 1:length(mersennes)
+for i = 1:numel(mersennes)
     disp(mersennes(i),-1)
 end
 
@@ -62,7 +62,7 @@ inv(Id)
 
 %%
 % * Computing the few largest eigenvalues of a random matrix
-eigs(gem.rand(100,100))
+eigs(gem.rand(50,50))
 
 %%
 % * Solving a sparse linear system in high precision
@@ -71,8 +71,11 @@ b = [8; -1; -18; 8; 20];
 x = A\b
 
 %%
-% * To solve a linear program in high precision, see <https://yalmip.github.io/solver/refiner/ Refiner>.
-
+% * Solving a linear program in high precision with YALMIP, see also <https://yalmip.github.io/solver/refiner/>.
+x1 = sdpvar;
+x2 = sdpvar;
+options = sdpsettings('solver', 'refiner', 'refiner.internalsolver', 'sedumi');
+optimize([7*x2 >= 1 + x1, x1 >= 0], x2, options);
 
 %% Good to know
 

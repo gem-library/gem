@@ -40,7 +40,7 @@ function [U S V] = svds(this, varargin)
     elseif nbSingularvalues < 0
         error('sgem::svds cannot compute a negative number of eigenvalues');
     end
-        
+    
     % We check if there is a second parameter
     if (length(varargin) > 1) && (~ischar(varargin{2}))
         error('The third argument of sgem::svds must be a text');
@@ -107,12 +107,24 @@ function [U S V] = svds(this, varargin)
                     U = subsref(U, subU);
                 end
             end
-
-            
             return;
         else
             error('Too many singular values for sgem::svds.');
         end
+    end
+    
+    % Should we invert the dimensions?
+    invertMode = 0;
+    if size(this,1) > size(this,2)
+        invertMode = 1;
+        this = this';
+    end
+    
+    if isequal(type, 'sm')
+        % If we reach here, we're going to look for the smallest eigenvalue
+        % of a positive semi-definite matrix. To avoid trouble with zero
+        % eigenvalues, we look for the eigenvalues closest to -1.
+        type = -1;
     end
     
     % We perform the computation
@@ -121,9 +133,9 @@ function [U S V] = svds(this, varargin)
         vals = eigs(this*this', [], nbSingularvalues, type);
         vals = max(vals,0); % We round up eventual slightly negative values
         U = sqrt(vals);
-
+        
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[size(U,1):-1:1]};
             U = subsref(U, subU);
@@ -134,8 +146,13 @@ function [U S V] = svds(this, varargin)
         valsU = max(valsU,0); % We round up eventual slightly negative values
         S = sqrt(valsU);
 
+        % Compute the corresponding eigenvectors if in inverted mode
+        if invertMode == 1
+            U = this'*U*diag(1./diag(S));
+        end
+        
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[1:size(U,1)] [size(U,2):-1:1]};
             U = subsref(U, subU);
@@ -150,10 +167,15 @@ function [U S V] = svds(this, varargin)
         S = sqrt(valsU);
         
         % Compute the corresponding eigenvectors
-        V = this'*U*diag(1./diag(S));
+        if invertMode == 1
+            V = U;
+            U = this'*U*diag(1./diag(S));
+        else
+            V = this'*U*diag(1./diag(S));
+        end
 
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[1:size(U,1)] [size(U,2):-1:1]};
             U = subsref(U, subU);

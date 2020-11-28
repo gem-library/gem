@@ -68,10 +68,11 @@ if length(indices) == 1
         error('Indices out of bound in sgem::subsref');
     end
 elseif length(indices) == 2
-    if (min(size(indices{1})) ~= 1) || (length(size(indices{1})) > 2) || (min(size(indices{2})) ~= 1) || (length(size(indices{2})) > 2)
+    if (min(size(indices{1})) > 1) || (length(size(indices{1})) > 2) || (min(size(indices{2})) > 1) || (length(size(indices{2})) > 2)
         error('Invalid indices in sgem::subsref');
     end
-    if (min(indices{1}) < 1) || (max(indices{1}) > s(1)) || (min(indices{2}) < 1) || (max(indices{2}) > s(2))
+    if ((~isempty(indices{1})) && ((min(indices{1}) < 1) || (max(indices{1}) > s(1)))) || ...
+            ((~isempty(indices{2})) && ((min(indices{2}) < 1) || (max(indices{2}) > s(2))))
         error('Indices out of bound in sgem::subsref');
     end
 else

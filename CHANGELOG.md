@@ -1,4 +1,12 @@
 ##
+- Updated MOxUnit submodule
+- Compatilibity with upcoming Octave 6
+- Improved subsref
+- Improved null
+- improved svds
+- improved eigs
+- improved mldivide
+- improved mrdivide
 
 ## [2.0.0] - 2020-05-08
 - Support for GNU Octave 4.2

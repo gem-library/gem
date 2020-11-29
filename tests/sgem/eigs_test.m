@@ -177,8 +177,8 @@ function test_inputs
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 2), 2);
     vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 1, 'sm'), 2);
-    
-    % no computation over an existing eigenvalue
+
+    % support computation over an existing eigenvalue
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0));
+    eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0);
 end

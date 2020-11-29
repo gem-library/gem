@@ -14,7 +14,7 @@
 %                                   magnitude.
 %
 % Note:
-%  - The precision of the computation performed here is gem.workingPrecision*2/3
+%  - The precision of the computation performed here may be gem.workingPrecision*2/3
 %  - It appears that sometimes the order of two eigenvalues can be
 %    inverted, so if this is crucial information, one should double check
 %    the last eigenvalues by computing a few more eigenvalues than needed.
@@ -95,7 +95,6 @@ function [V D] = eigs(this, varargin)
         end
 
         % We use eig to compute all eigenvalues
-%        warning('Too many eigenvalues for eigs, using eig instead.');
         if nargout == 2
             [V D] = eig(this);
             % We make sure the eigenvalues are ordered (not guaranteed by
@@ -158,39 +157,48 @@ function [V D] = eigs(this, varargin)
     if isequal(type,1)
         rankMatrix = rank(this);
         if rankMatrix < nbEigenvalues
-            if nargout >= 2
-                error('Eigenvectors are not computed for null eigenvalues.')
-            end
             if rankMatrix == 0
                 % This is the null matrix
-                V = gem(0);
+                if nargout == 1
+                    V = gem(zeros(nbEigenvalues,1));
+                else
+                    V = gem([eye(nbEigenvalues); zeros(size(this,1)-nbEigenvalues, nbEigenvalues)]);
+                    D = gem(zeros(nbEigenvalues));
+                end
                 return;
-            elseif rankMatrix == 1
-                warning('There is only one non-zero eigenvalues, computing this one only.');
-            else
-                warning(['There are only ', num2str(rankMatrix), ' non-zero eigenvalues, computing these ones only.']);
             end
             additionalSigmaMultiplicity = nbEigenvalues-rankMatrix;
+            if nargout >= 2
+                VNull = null(this);
+                subVNull.type='()';
+                subVNull.subs={':' [1:nbEigenvalues-rankMatrix]};
+                VNull = subsref(VNull, subVNull);
+            end
             nbEigenvalues = rankMatrix;
         end
     end
 
     % We make sure we won't try to invert a singular matrix (this is
     % numerically unstable as well)
+    sigmaShift = 0;
     if isequal(type,2)
         rankShifted = rank(this-sigma*eye(size(this)));
         if size(this,1) - rankShifted >= nbEigenvalues
             % Then we know that all requested eigenvalues are equal to
-            % sigma, but we still haven't computed corresponding
-            % eigenvectors (these would be given by a function such as
-            % 'null')
+            % sigma
             V = sigma*ones(nbEigenvalues,1);
             if nargout >= 2
-                error('Eigenvectors are not computed when sigma is an eigenvalue.')
+                D = diag(V);
+                V = null(this);
+                subV.type='()';
+                subV.subs={':' [1:nbEigenvalues]};
+                V = subsref(V, subV);
             end
             return;
         elseif size(this,1) - rankShifted > 0
-            error('Sigma is an eigenvalue of the considered matrix. Consider perturbing it a little bit to allow the numerical method to run smoothly.')
+            % We slightly shift the value of sigma
+            sigmaShift = 10*eps(this);
+            sigma = sigma-sigmaShift;
         end
     end
 
@@ -201,7 +209,7 @@ function [V D] = eigs(this, varargin)
     % ...  and create a new matlab object to keep this handle
     V = gem('encapsulate', newObjectIdentifierV);
     D = gem('encapsulate', newObjectIdentifierD);
-
+    
     % We make sure the eigenvalues are ordered
     if isequal(type, 1)
         [junk reorder] = sort((diag(D)-sigma).^2,1,'descend');
@@ -219,11 +227,15 @@ function [V D] = eigs(this, varargin)
     % option 'nobalance' is passed (once this option is implemented)).
     V = V*diag(1./sqrt(diag(V'*V)));
 
+    if additionalSigmaMultiplicity > 0
+        D = diag([diag(D); sigma*ones(additionalSigmaMultiplicity,1)]);
+        if nargout >= 2
+            V = [V VNull];
+        end
+    end
+    
     if nargout <= 1
         V = diag(D);
-        if additionalSigmaMultiplicity > 0
-            V = [V; sigma*ones(additionalSigmaMultiplicity,1)];
-        end
     end
 
 end

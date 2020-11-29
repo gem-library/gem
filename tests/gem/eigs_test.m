@@ -160,13 +160,12 @@ function test_inputs
     shouldProduceAnError(@() eigs(gem.rand(2,3)));
     shouldProduceAnError(@() eigs(gem.rand(20,30)));
     
-    % no eigenvectors computed for zero eigenvalues
+    % eigenvectors are computed for zero eigenvalues
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() eigs(vect*vect', [], 2), 2);
-    vect = gem.rand(4,1);
-    shouldProduceAnError(@() eigs(vect*vect', [], 1, 'sm'), 2);
+    [a b] = eigs(vect*vect', [], 2);
+    [a b] = eigs(vect*vect', [], 1, 'sm');
 
-    % no computation over an existing eigenvalue
+    % support computation over an existing eigenvalue
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() eigs(vect*vect' + (vect+1)*(vect+1)', [], 3, 0));
+    eigs(vect*vect' + (vect+1)*(vect+1)', [], 3, 0);
 end

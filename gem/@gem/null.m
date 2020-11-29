@@ -1,9 +1,9 @@
 % null - subspace of zero eigenvalue
 %
 % supported formats :
-%   Z = null(a)                   : resturns a orthonormal basis for the
+%   z = null(a)                   : resturns a orthonormal basis for the
 %                                   null space of a
-function Z = null(this)
+function z = null(this)
 
 [m,n] = size(this);
 
@@ -22,10 +22,10 @@ else
 end
 
 % identify close to zero values
-tol = max(m,n) * eps(max(s))*100;
+tol = max(m,n) * sqrt(eps(max(s)));
 r = sum(s > tol);
 
 % extract the relevant part
 sub.type='()';
 sub.subs={':', r+1:n};
-Z = subsref(V, sub);
+z = subsref(V, sub);

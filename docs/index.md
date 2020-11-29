@@ -72,4 +72,5 @@ The **GEM Library** is an open source project. It can be use freely, including f
 
 Background Photo by Andrea Sonda on Unsplash
 
-[^1]: Octave version 4.2.2 is supported. Changes introduced in version 4.4 broke the support for `classdefs` ([status](https://savannah.gnu.org/bugs/?56385) of one important issue). Classdefs in Octave are being [heavily worked](https://wiki.octave.org/Classdef).
+[^1]: Octave version 4.2.2 is supported. Changes introduced in version 4.4 broke the support for `classdefs`, but [after much effort](https://wiki.octave.org/Classdef) support is back! A few bugs are still limiting functionalities: [45833](https://savannah.gnu.org/bugs/?45833)[56856](https://savannah.gnu.org/bugs/?56856)[56864](https://savannah.gnu.org/bugs/?56864).
+

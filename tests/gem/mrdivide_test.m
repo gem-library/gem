@@ -50,6 +50,6 @@ function test_inputs
     shouldProduceAnError(@() mrdivide(x));
     shouldProduceAnError(@() mrdivide(x,x,x));
     
-    % sizes should match
-    shouldProduceAnError(@() mrdivide(x, [1 2 3]));
+    % sizes don't need to match
+    mrdivide(x, [1 2 3]);
 end

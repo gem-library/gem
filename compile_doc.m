@@ -1,4 +1,4 @@
-function replab_compiledoc
+function compile_doc
     % Creates pages for the documentation microsite from the matlab files 
     % listed in the folder 'srcdocs'.
     %

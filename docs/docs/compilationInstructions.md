@@ -7,15 +7,13 @@ position: 5
 How to compile the GEM Library
 ==============================
 
-The **GEM Library** can be downloaded an installed without compilation on most platforms, as described in the [**installation**](installation.html) section. It is however also possible to compile the library from scratch. This document describes steps which lead to a successful compilation of the **GEM Library** on various platforms.
-
-Here we assume that the target environment is Matlab, but the same instructions also apply to Octave.
+The **GEM Library** can be downloaded and installed without compilation on most platforms, as described in the [**installation**](installation.html) section. It is however also possible to compile the library from scratch. This document describes how to do that on various platforms.
 
 
 Steps to compile the GEM Library on *Ubuntu* :
 ----------------------------------------------
 
-The following steps work equally well for Matlab and Octave.
+The following steps work equally well for Matlab and Octave, except if you are using Octave within a closed environment such as [flatpak](https://flathub.org/apps/details/org.octave.Octave). In this case, follow the "macOS" section below.
 
 1. Download the latest library repository with the following command: `git clone --recursive https://www.github.com/gem-library/gem`. This creates a folder called `gem`.
 2. Install the *gmp*, *mpfr* and *mpfrc++* libraries with the command
@@ -90,4 +88,4 @@ Tentative roadmap:
 Failsafe mode
 ----------------
 
-Because every system installation is different... When calling the command `make` from within Matlab/Octave, setting the third option `genericBuild` to `1` triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. This compilation procedure is slower, and can produce unexpected results such as ~100Mb output files.
+Because every system installation is different... When calling the command `make` from within Matlab/Octave, setting the third option `genericBuild` to `1` triggers the build with a simple function, which might help to avoid configuration-related troubles in some situations. This compilation procedure is slower, and can produce surprising results such as ~100Mb output files.

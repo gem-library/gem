@@ -7,6 +7,10 @@ position: 0
 
 [![Gitter](https://badges.gitter.im/gem-library/community.svg)](https://gitter.im/gem-library/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/gem-library/gem.svg?branch=master)](https://travis-ci.org/gem-library/gem) [![codecov](https://codecov.io/gh/gem-library/gem/branch/master/graph/badge.svg)](https://codecov.io/gh/gem-library/gem)
 
+## Get it [here](https://github.com/gem-library/gem/releases)!
+
+
+
 ## What is this?
 
 The **Gmp Eigen Matrix Library** is an open source solution for high precision numerical computation in [Matlab](http://www.mathworks.com/products/matlab/) and [GNU Octave](https://www.gnu.org/software/octave/)[^1].
@@ -21,7 +25,7 @@ The library implements two data types:
 
 ## Why the GEM Library?
 
-Few solutions out there allow working seemlessly with high precision numbers and matrices. In particular, two common shortcomings, including for Matlab's [VPA class](https://www.mathworks.com/help/symbolic/vpa.html), are:
+Few solutions out there allow working seemlessly with high precision numbers and matrices. In particular, two common shortcomings, including for Matlab's own [VPA class](https://www.mathworks.com/help/symbolic/vpa.html), are:
 
  - Exagerated slowness
  - No support for sparse matrices
@@ -36,7 +40,7 @@ Related open source libraries include:
 
 ## What does it look like?
 
-- On Matlab/Octave, the command `sin(pi)` returns **1.2246e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns by **4.3348e-51**, a value compatible with the default working precision of 50 digits.
+- On Matlab/Octave, the command `sin(pi)` returns **1.2246e-16** because computations are limited to machine precision. With the **GEM Library**, `sin(gem('pi'))` returns **4.3348e-51**, a value compatible with the default working precision of 50 digits.
 
 - Matrix operations such as eigenvalue decompositions are automatically computed in high precision. For instance, `eig(gem([1 1; 1 -1]))` computes the eigenvalues of a 2x2 integer matrix. The result includes a high precision decimal expansion of `sqrt(2)`.
 
@@ -72,4 +76,4 @@ The **GEM Library** is an open source project. It can be use freely, including f
 
 Background Photo by Andrea Sonda on Unsplash
 
-[^1]: Octave version 4.2.2 is supported. Changes introduced in version 4.4 broke the support for `classdefs` ([status](https://savannah.gnu.org/bugs/?56385) of one important issue). Classdefs in Octave are being [heavily worked](https://wiki.octave.org/Classdef).
+[^1]: Thanks to the Octave team for their effort in significantly improving the support for `classdef`s in [Octave 6](https://www.gnu.org/software/octave/index)!

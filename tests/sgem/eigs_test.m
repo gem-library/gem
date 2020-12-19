@@ -54,7 +54,9 @@ function test_consistency
     end
     
     % null matrix
-    validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {sgem(zeros(3))}, 1e-9);
+    if ~isOctave
+        validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {sgem(zeros(3))}, 1e-9);
+    end
 
     % We also check some low-rank matrices
     vect = gem.rand(5,1)*10-5;
@@ -177,8 +179,8 @@ function test_inputs
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 2), 2);
     vect = gem.rand(4,1);
     shouldProduceAnError(@() eigs(sparse(vect*vect'), [], 1, 'sm'), 2);
-    
-    % no computation over an existing eigenvalue
+
+    % support computation over an existing eigenvalue
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0));
+    eigs(sparse(vect*vect' + (vect+1)*(vect+1)'), [], 3, 0);
 end

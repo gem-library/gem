@@ -143,9 +143,9 @@ function test_inputs
     vect = gem.rand(4,1);
     shouldProduceAnError(@() svds(sparse(vect*vect'), 2), 2);
     
-    % no computation over an existing eigenvalue
+    % computation over an existing eigenvalue is ok
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest'));
+    svds(sparse(vect*vect' + (vect+1)*(vect+1)'), 3, 'smallest');
 
     % don't ask for all values if the matrix is too large
     shouldProduceAnError(@() svds(sparse(gem.rand(30)), 29));

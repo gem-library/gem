@@ -72,7 +72,6 @@ function [U S V] = svds(this, varargin)
         end
         
         % We use svd to compute all singular values
-%        warning('Too many singular values for svds, using svd instead.');
         if nargout >= 2
             [U S V] = svd(this,'econ');
             if isequal(type, 'sm')
@@ -111,6 +110,20 @@ function [U S V] = svds(this, varargin)
         return;
     end
     
+    % Should we invert the dimensions?
+    invertMode = 0;
+    if size(this,1) > size(this,2)
+        invertMode = 1;
+        this = this';
+    end
+    
+    if isequal(type, 'sm')
+        % If we reach here, we're going to look for the smallest eigenvalue
+        % of a positive semi-definite matrix. To avoid trouble with zero
+        % eigenvalues, we look for the eigenvalues closest to -1.
+        type = -1;
+    end
+    
     % We perform the computation
     if nargout <= 1
         % We only compute the eigenvalues of a*a'
@@ -119,7 +132,7 @@ function [U S V] = svds(this, varargin)
         U = sqrt(vals);
         
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[size(U,1):-1:1]};
             U = subsref(U, subU);
@@ -130,8 +143,13 @@ function [U S V] = svds(this, varargin)
         valsU = max(valsU,0); % We round up eventual slightly negative values
         S = sqrt(valsU);
 
+        % Compute the corresponding eigenvectors if in inverted mode
+        if invertMode == 1
+            U = this'*U*diag(1./diag(S));
+        end
+        
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[1:size(U,1)] [size(U,2):-1:1]};
             U = subsref(U, subU);
@@ -146,10 +164,15 @@ function [U S V] = svds(this, varargin)
         S = sqrt(valsU);
         
         % Compute the corresponding eigenvectors
-        V = this'*U*diag(1./diag(S));
+        if invertMode == 1
+            V = U;
+            U = this'*U*diag(1./diag(S));
+        else
+            V = this'*U*diag(1./diag(S));
+        end
 
         % We make sure the order of the singular values is decreasing
-        if isequal(type,'sm')
+        if isequal(type,-1)
             subU.type='()';
             subU.subs={[1:size(U,1)] [size(U,2):-1:1]};
             U = subsref(U, subU);

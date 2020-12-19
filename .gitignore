@@ -15,4 +15,5 @@ octave-workspace
 tmp*
 *.mat
 docs/_site
+*.asv
 

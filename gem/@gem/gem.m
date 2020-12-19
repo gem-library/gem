@@ -11,8 +11,9 @@
 % or by using the global function gem.workingPrecision. The default value
 % is 50 digits.
 
-% For numbers specified as strings, the precision is always set to be at least
-% large enough to translate all significant digits in the provided string.
+% For numbers specified as strings, the precision is always set to be at
+% least large enough to translate all significant digits in the provided
+% string.
 
 % The precision of displayed number can be adjusted through the
 % gem.displayPrecision function.

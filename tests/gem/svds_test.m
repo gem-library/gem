@@ -149,9 +149,9 @@ function test_inputs
     
     % no eigenvectors computed for zero eigenvalues
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() svds(vect*vect', 2), 3);
+    [a b c] = svds(vect*vect', 2);
     
-    % no computation over an existing eigenvalue
+    % computation over an existing eigenvalue is ok
     vect = gem.rand(4,1);
-    shouldProduceAnError(@() svds(vect*vect' + (vect+1)*(vect+1)', 3, 'smallest'));
+    svds(vect*vect' + (vect+1)*(vect+1)', 3, 'smallest');
 end

@@ -10,7 +10,7 @@ This page presents how to get going with the **GEM Library**. The easiest way to
 
 ## Installing a release
 
-The release includes binaries for Matlab on Linux, Windows and MacOS, as well as for Octave 4.2 on Linux. After [**downloading the latest release**](https://github.com/gem-library/gem/releases) of the library, uncompress it in a `desired_folder`. This created the folder `desired_folder/gem`.
+The release includes binaries for Matlab on Linux, Windows and MacOS, as well as for Octave 6 on Linux. After [**downloading the latest release**](https://github.com/gem-library/gem/releases) of the library, uncompress it in a `desired_folder`. This created the folder `desired_folder/gem`.
 
 ### Setting up the path
 
@@ -20,12 +20,12 @@ The only step required to start using the libraries is to include the subfolder 
 addpath('desired_folder/gem/gem')
 ```
 
-You can then follow the [**tutorial**](gettingStarted.html).
+Once this is done, check out the [**tutorial**](gettingStarted.html) to see how to perform your first high precision computation with the **GEM Library**.
 
 
 ## Installing from source
 
-Installing the **GEM library** from source can be useful or for development purpose. For this:
+Alternatively, installing the **GEM Library** from source can be useful for development purpose. For this:
 
 - Clone the library from GitHub using the command:
 
@@ -49,7 +49,7 @@ The proper working of the **GEM Library** can be checked by running the test com
 run_tests
 ```
 
-This runs a check on all features of the library.
+This runs checks on all features of the library.
 
 
 ### Compiling the documentation
@@ -68,4 +68,4 @@ The documentation website can be run on a local machine thanks to Jekyll. For th
 bundle exec jekyll serve
 ```
 
-from within the `docs` subfolder. This command should provide you an IP address on which you can consult the website.
+from within the `docs` subfolder. This command should provide you a local IP address on which you can consult the website.

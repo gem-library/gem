@@ -1,7 +1,7 @@
 function make(parallelization, useSharedGmpAndMpfr, genericBuild)
 % make([parallelization], [useSharedGmpAndMpfr], [genericBuild])
 %
-% Use this file from matlab/octave to compile the C++ part of the GEM library.
+% Use this script from matlab/octave to compile the C++ part of the GEM library.
 %
 % Parameters:
 %   parallelization = 1 (default is 1) to enable openmp
@@ -14,7 +14,7 @@ function make(parallelization, useSharedGmpAndMpfr, genericBuild)
 %   genericBuild = 1 (default is 0) to let matlab/octave choose the build
 %     command. This should be more robust to the variety of systems setups
 %     as matlab/octave is aware of its own installation, but is hard to
-%     test. Try this if the default command doesn't work.
+%     test. You can try this option if the default command doesn't work.
 %
 %
 % Note 1 : The code relies on several external libraries such as eigen,
@@ -50,8 +50,8 @@ function make(parallelization, useSharedGmpAndMpfr, genericBuild)
 %
 % Note 2 : Several of the command below are quite plaftorm/version specific.
 % It is thus likely that they should be adapted to new versions of the
-% operating system or matlab. This is the reason for the 'genericBuild' option,
-% though matlab's default build mechanism does not always work. The following
+% operating system or matlab/octave. This is the reason for the 'genericBuild'
+% option, though the default build mechanism does not always work. The following
 % command is useful to see how matlab plans to perform the computation on a
 % given system:
 %   mex -n -R2017b -largeArrayDims -I../external/eigen/eigen -I../external/eigen/eigen/unsupported -I../external/eigen/spectra/include -I/usr/include -lmpfr -lgmp src/gem_mex.cpp src/gem.cpp src/sgem.cpp src/utils.cpp

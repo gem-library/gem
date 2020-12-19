@@ -4,4 +4,4 @@ description: Gmp Eigen Matrix Library - an Open source high precision matrix lib
 highlighter: rouge
 docs: true
 markdown: kramdown
-gemVersion: 2.0.1-SNATPSHOT
+gemVersion: 2.0.1

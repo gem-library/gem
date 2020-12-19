@@ -58,7 +58,9 @@ function test_consistency
     end
     
     % null matrix
-    validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {gem(zeros(3))}, 1e-9);
+    if ~isOctave
+        validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), {gem(zeros(3))}, 1e-9);
+    end
 
     % We also check some low-rank matrices
     vect = gem.rand(5,1)*10-5;

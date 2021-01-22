@@ -123,6 +123,33 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         return;
     }
 
+		/* New from Matlab array with binary conversion */
+    if (!strcmp("newFromMatlabBinary", cmd)) {
+        // We check that all the necessary arguments are provided
+        if ((nlhs != 1) || (nrhs != 7))
+            mexErrMsgTxt("newFromMatlabBinary: Unexpected arguments.");
+
+        if (!(mxIsDouble(prhs[1])) || !(mxIsDouble(prhs[2])) || !(mxIsDouble(prhs[4])) || !(mxIsDouble(prhs[5])) || !(mxIsDouble(prhs[6])))
+            mexErrMsgTxt("newFromMatlabBinary: Unexpected arguments.");
+
+				if (!(mxIsDouble(prhs[3])))
+						mexErrMsgTxt("newFromMatlabBinary: Data not in double type");
+
+        // We extract the size and required precision
+        IndexType m = mxGetScalar(prhs[4]);
+        IndexType n = mxGetScalar(prhs[5]);
+        int precision = mxGetScalar(prhs[6]);
+
+        // The values have been provided in double format
+
+        // We now forward the matlab pointer to the data to the constructor
+        // of GmpEigenMatrix to let it copy the data into a new object. We then
+        // send back the identifier of the newly created object to matlab.
+        plhs[0] = createMatlabIdFromObj<SparseGmpEigenMatrix>(*(new SparseGmpEigenMatrix(prhs[1], prhs[2], prhs[3], m, n, precision, false)));
+
+        return;
+    }
+
     /* Delete */
     if (!strcmp("delete", cmd)) {
         // Check parameters

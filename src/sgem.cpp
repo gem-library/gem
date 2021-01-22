@@ -175,8 +175,10 @@ SparseGmpEigenMatrix::SparseGmpEigenMatrix(const mxArray* prhs) {
 
 /* Construction from a matlab sparse table. For double element, this
    constructor takes exactly 15 digits from them and sets all other digits
-   to 0. */
-SparseGmpEigenMatrix::SparseGmpEigenMatrix(const mxArray* rows, const mxArray* cols, const mxArray* values, const IndexType& m, const IndexType& n, const int& precision) {
+   to 0, unless decimalConversion is set to false, in which case zeros are
+   added in the binary expansion rather than the decimal expansion of the
+   number. */
+SparseGmpEigenMatrix::SparseGmpEigenMatrix(const mxArray* rows, const mxArray* cols, const mxArray* values, const IndexType& m, const IndexType& n, const int& precision, const bool& decimalConversion) {
 
     // We set the required precision
     mp_prec_t precisionInBits(mpfr::digits2bits(precision));
@@ -205,7 +207,10 @@ SparseGmpEigenMatrix::SparseGmpEigenMatrix(const mxArray* rows, const mxArray* c
     tripletList.reserve(nbElementsR);
     for (IndexType index = 0; index < nbElementsR; ++index) {
         if ((!isComplex) || (pr[index] != 0)){
-            tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(toString15(pr[index]), precisionInBits)));
+            if (decimalConversion)
+                tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(toString15(pr[index]), precisionInBits)));
+            else
+                tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(pr[index], precisionInBits)));
         }
     }
 
@@ -224,7 +229,10 @@ SparseGmpEigenMatrix::SparseGmpEigenMatrix(const mxArray* rows, const mxArray* c
         tripletList.reserve(nbElementsR);
         for (IndexType index = 0; index < nbElementsR; ++index) {
             if (pi[index] != 0)
-                tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(toString15(pi[index]), precisionInBits)));
+                if (decimalConversion)
+                    tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(toString15(pi[index]), precisionInBits)));
+                else
+                    tripletList.push_back(Triplet<mpreal>(prows[index]-1, pcols[index]-1, mpreal(pi[index], precisionInBits)));
         }
         // now into the sparse matrix
         matrixI.setFromTriplets(tripletList.begin(), tripletList.end());

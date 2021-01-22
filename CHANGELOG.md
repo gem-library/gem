@@ -1,4 +1,5 @@
 ##
+- Added gem2 and sgem2 binary conversion tools
 
 ## [2.0.1] - 2020-12-19
 - Compatibility with GNU Octave 6.1.0

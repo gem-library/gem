@@ -85,7 +85,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
-    /* New from Matlab array */
+	/* New from Matlab array */
     if (!strcmp("newFromMatlab", cmd)) {
         // Check parameters
 
@@ -120,6 +120,44 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
         return;
     }
+
+
+	/* New from Matlab array with binary conversion*/
+    if (!strcmp("newFromMatlabBinary", cmd)) {
+        // Check parameters
+
+        /* Check for proper number of input and output arguments */
+        if (nrhs != 3) {
+            mexErrMsgIdAndTxt( "GmpEigenMatrix:invalidNumInputs",
+                    "Two input arguments required.");
+        }
+        if (nlhs != 1){
+            mexErrMsgIdAndTxt( "GmpEigenMatrix:maxlhs",
+                    "Too many output arguments.");
+        }
+
+        /* Check data type of input argument  */
+        if (mxGetNumberOfDimensions(prhs[1]) != 2){
+            mexErrMsgIdAndTxt( "GmpEigenMatrix:inputNot2D",
+                    "First Input argument must be two dimensional\n");
+        }
+
+        if (!(mxIsDouble(prhs[2]))){
+            mexErrMsgIdAndTxt( "GmpEigenMatrix:inputNotDouble",
+                    "Second Input argument must be of type double.");
+        }
+
+        // We extract the required precision
+        int precision = mxGetScalar(prhs[2]);
+
+        // We now forward the matlab pointer to the data to the constructor
+        // of GmpEigenMatrix to let it copy the data into a new object. We then
+        // send back the identifier of the newly created object to matlab.
+        plhs[0] = createMatlabIdFromObj<GmpEigenMatrix>(*(new GmpEigenMatrix(prhs[1], precision, false)));
+
+        return;
+    }
+
 
     /* Delete */
     if (!strcmp("delete", cmd)) {

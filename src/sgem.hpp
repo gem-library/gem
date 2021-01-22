@@ -55,7 +55,7 @@ public:
     /* Construction from a matlab struct containing all the class information. */
     SparseGmpEigenMatrix(const mxArray* prhs);
     /* Construction from a matlab table.*/
-    SparseGmpEigenMatrix(const mxArray* rows, const mxArray* cols, const mxArray* values, const IndexType& m, const IndexType& n, const int& precision);
+    SparseGmpEigenMatrix(const mxArray* rows, const mxArray* cols, const mxArray* values, const IndexType& m, const IndexType& n, const int& precision, const bool& decimalConversion = true);
     /* Construction from a gem table.*/
     SparseGmpEigenMatrix(const mxArray* rows, const mxArray* cols, const GmpEigenMatrix& values, const IndexType& m, const IndexType& n, const int& precision);
 

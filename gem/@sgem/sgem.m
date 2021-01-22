@@ -139,8 +139,10 @@ classdef sgem < handle
                     % first we check that the caller is the current file
                     % (i.e. gem.m)
                     [ST I] = dbstack('-completenames');
-                    if (length(ST) < 2) || (isempty(strfind(ST(2).file,'/@gem/')) && isempty(strfind(ST(2).file,'\@gem\')) && isempty(strfind(ST(2).file,'/@sgem/')) && isempty(strfind(ST(2).file,'\@sgem\')))
-                        error('Only sgem.m is allowed to encapsulate an integer into a new sgem object.');
+                    if (length(ST) < 2) || (isempty(strfind(ST(2).file,'/@gem/')) && isempty(strfind(ST(2).file,'\@gem\')) ...
+                        && isempty(strfind(ST(2).file,'/@sgem/')) && isempty(strfind(ST(2).file,'\@sgem\')) ...
+                        && isempty(strfind(ST(2).file,'gem2.m')) && isempty(strfind(ST(2).file,'sgem2.m')))
+                        error('Only gem.m, sgem.m, gem2.m and sgem2.m are allowed to encapsulate an integer into a new sgem object.');
                     end
 
                     % This creates a matlab object which points to the C++

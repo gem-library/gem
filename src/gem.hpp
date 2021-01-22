@@ -74,7 +74,7 @@ public:
     /* Construction from a matlab struct containing all the class information. */
     GmpEigenMatrix(const mxArray* prhs);
     /* Construction from a matlab table or cell array.*/
-    GmpEigenMatrix(const mxArray* prhs, const int& precision);
+    GmpEigenMatrix(const mxArray* prhs, const int& precision, const bool& decimalConversion = true);
 
     /* Destructor */
     virtual ~GmpEigenMatrix() {};

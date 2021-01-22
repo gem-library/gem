@@ -25,7 +25,7 @@ using namespace Eigen;
 GmpEigenMatrix::GmpEigenMatrix(const SparseGmpEigenMatrix& a) : matrixR(a.matrixR), matrixI(a.matrixI), isComplex(a.isComplex) {}
 
 
-/* Construcion from a matlab struct containing all the class information. */
+/* Construction from a matlab struct containing all the class information. */
 GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs) {
     if ((!mxIsStruct(prhs)) || ((mxGetNumberOfElements(prhs) != 1)))
         mexErrMsgTxt("The argument is not a struct array with one element.");
@@ -131,8 +131,10 @@ GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs) {
 
 /* Construction from a matlab table or cell array. For double element, this
    constructor takes exactly 15 digits from them and sets all other digits
-   to 0. For strings, it takes all the provided digits (up to precision). */
-GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs, const int& precision) {
+   to 0, unless decimalConversion is set to false, in which case zeros are
+   added in the binary expansion rather than the decimal expansion of the
+   number. For strings, it takes all the provided digits (up to precision). */
+GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs, const int& precision, const bool& decimalConversion) {
 
     // We set the required precision
     mp_prec_t precisionInBits(mpfr::digits2bits(precision));
@@ -160,9 +162,15 @@ GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs, const int& precision) {
         for (mwIndex j = 0; j < n; ++j) {
             // We first iterate on the rows
             for (mwIndex i = 0; i < m; ++i) {
-                matrixR(i,j) = mpreal(toString15(pr[i]), precisionInBits);
+                if (decimalConversion)
+                    matrixR(i,j) = mpreal(toString15(pr[i]), precisionInBits);
+                else
+                    matrixR(i,j) = mpreal(pr[i], precisionInBits);
                 if (isComplex) {
-                    matrixI(i,j) = mpreal(toString15(pi[i]), precisionInBits);
+                    if (decimalConversion)
+                        matrixI(i,j) = mpreal(toString15(pi[i]), precisionInBits);
+                    else
+                        matrixI(i,j) = mpreal(pi[i], precisionInBits);
                 }
             }
             pr += m;
@@ -196,7 +204,10 @@ GmpEigenMatrix::GmpEigenMatrix(const mxArray* prhs, const int& precision) {
                     // We check whether the element is a number or a string
                     if (mxIsDouble(cellElementPtr)) {
                         double* pr(mxGetPr(cellElementPtr));
-                        matrixR(i,j) = mpreal(toString15(pr[0]), precisionInBits);
+                        if (decimalConversion)
+                            matrixR(i,j) = mpreal(toString15(pr[0]), precisionInBits);
+                        else
+                            matrixR(i,j) = mpreal(pr[0], precisionInBits);
                     } else if(mxIsChar(cellElementPtr)) {
                         mwSize stringLength = mxGetNumberOfElements(cellElementPtr);
                         if (stringLength == 0)

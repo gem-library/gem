@@ -115,6 +115,7 @@ The following function can be applied to gem/sgem objects directly.
 | numel | ✔ | ✔ |  |
 | num2str | ✔ | ✔ |  through matlab's implementation and sprintf |
 | or | ✔ | ✔ |  |
+| pinv | ✔ | ✗ |  through matlab's implementation |
 | plot | ✔ | ✔ |  |
 | plus | ✔ | ✔ |  |
 | power | ✔ | ✔ |  |

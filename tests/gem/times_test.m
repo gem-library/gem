@@ -30,6 +30,35 @@ function test_consistency
     validateDoubleConsistency2(@(x,y) times(x(1),double(sparse(y))), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) times(double(x(1)),y), y(1,:), y(2,:));
     validateDoubleConsistency2(@(x,y) times(double(sparse(x(1))),y), y(1,:), y(2,:));
+
+    % product with a vector
+    validateDoubleConsistency2(@(x,y) times(x,y(1,:)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,sparse(y(1,:))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,double(y(1,:))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(1,:)))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(x),y(1,:)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(1,:)), y(1,:), y(2,:));
+
+    validateDoubleConsistency2(@(x,y) times(x(1,:),y), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(1,:),sparse(y)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(1,:),double(y)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(1,:),double(sparse(y))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(x(1,:)),y), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(sparse(x(1,:))),y), y(1,:), y(2,:));
+
+    validateDoubleConsistency2(@(x,y) times(x,y(:,1)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,sparse(y(:,1))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,double(y(:,1))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(:,1)))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(x),y(:,1)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(:,1)), y(1,:), y(2,:));
+
+    validateDoubleConsistency2(@(x,y) times(x(:,1),y), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(:,1),sparse(y)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(:,1),double(y)), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(x(:,1),double(sparse(y))), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(x(:,1)),y), y(1,:), y(2,:));
+    validateDoubleConsistency2(@(x,y) times(double(sparse(x(:,1))),y), y(1,:), y(2,:));
 end
 
 function test_empty
@@ -44,5 +73,5 @@ function test_inputs
     shouldProduceAnError(@() times(x,x,x));
     
     % sizes should match
-    shouldProduceAnError(@() times(x, [1 2 3]));
+    shouldProduceAnError(@() times(x, [1 2]));
 end

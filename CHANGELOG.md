@@ -1,15 +1,19 @@
-##
+## [2.0.2] - 2021-07-29
 - Added gem2 and sgem2 binary conversion tools
+- Added support for builtin pinv
+- Improved subsasgn
+- Improved times
+
 
 ## [2.0.1] - 2020-12-19
 - Compatibility with GNU Octave 6.1.0
 - Updated MOxUnit and MOcov submodule
 - Improved subsref
 - Improved null
-- improved svds
-- improved eigs
-- improved mldivide
-- improved mrdivide
+- Improved svds
+- Improved eigs
+- Improved mldivide
+- Improved mrdivide
 
 ## [2.0.0] - 2020-05-08
 - Support for GNU Octave 4.2

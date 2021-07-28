@@ -60,6 +60,31 @@ function test_consistency
         y(1, [1 2 3 4]) = [1 2 3 4]';
         z(1, [1 2 3 4]) = [1 2 3 4]';
         assert(abs(max(max(y-z))) <= 1e-6);
+        
+        yy = y;
+        zz = z;
+        yy(:, 1) = [];
+        zz(:, 1) = [];
+        assert(abs(max(max(yy-zz))) <= 1e-6);
+        
+        yy = y;
+        zz = z;
+        yy(:, 20:end) = [];
+        zz(:, 20:end) = [];
+        assert(abs(max(max(yy-zz))) <= 1e-6);
+        
+        yy = y;
+        zz = z;
+        yy(1, :) = [];
+        zz(1, :) = [];
+        assert(abs(max(max(yy-zz))) <= 1e-6);
+        
+        yy = y;
+        zz = z;
+        yy(20:end, :) = [];
+        zz(20:end, :) = [];
+        assert(abs(max(max(yy-zz))) <= 1e-6);
+        
     end
     
     x = gem([]);
@@ -75,7 +100,6 @@ function test_consistency
     x = x';
     x(5) = 5;
     x(6:7) = [6 7];
-    
     
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
     if ~isOctave

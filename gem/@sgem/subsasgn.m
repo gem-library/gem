@@ -43,7 +43,8 @@ end
 
 
 %% If needed, we prepare a copy of the object, only this object will be modified
-if (length(indices) == 1) && (isempty(indices{1}))
+if ((length(indices) == 1) && (isempty(indices{1}))) || ...
+        ((length(indices) == 2) && (isempty(indices{1}) || isempty(indices{2})))
     % There is nothing to assign. But we check that the rhs does not
     % contain more than 1 element
     if numel(values) > 1
@@ -51,9 +52,27 @@ if (length(indices) == 1) && (isempty(indices{1}))
     end
     result = this;
     return;
-else
-    result = copy(this);
+elseif (length(indices) == 2) && (numel(values) == 0)
+    % We are deleting elements
+    
+    % Sanity check
+    if isempty(indices{1}) || isempty(indices{2}) || (min(indices{1}) < 1) || (min(indices{2}) < 1) || (max(indices{1}) > s(1)) || (max(indices{2}) > s(2))
+        error('Indices out of bound in sgem::subsasgn')
+    end
+    
+    if (length(indices{1}) < s(1)) && (length(indices{2}) < s(2))
+        error('Null assignments are only possible for full lines or columns');
+    elseif (length(indices{1}) < s(1))
+        % We are deleting lines
+        subs.subs{1} = setdiff(1:s(1), indices{1});
+    else
+        % We are deleting columns
+        subs.subs{2} = setdiff(1:s(2), indices{2});
+    end
+    result = subsref(this, subs);    
+    return;
 end
+    result = copy(this);
 
 
 %% Let's make some more checks

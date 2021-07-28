@@ -19,8 +19,35 @@ function result = times(this, varargin)
     size1 = size(this);
     size2 = size(varargin{1});
 
-    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1) && (prod(size1)+prod(size2) > 0)
-        error('Incompatible size for element-wise matrix multiplication');
+    if (~isequal(size1, size2)) && (prod(size1) ~= 1) && (prod(size2) ~= 1)
+        if (size1(1) == size2(1)) && ((size1(2) == 1) || (size2(2) == 1))
+            % Product of a matrix with a vertical vector, we expand the
+            % vector to a matrix
+            if size1(2) == 1
+                % v.*M
+                result = (this*ones(1, size2(2))).*varargin{1};
+                return;
+            else
+                % M.*v
+                result = this.*(varargin{1}*ones(1, size1(2)));
+                return;
+            end
+        elseif (size1(2) == size2(2)) && ((size1(1) == 1) || (size2(1) == 1))
+            % Product of a matrix with a horizontal vector, we expand the
+            % vector to a matrix
+            if size1(1) == 1
+                % v.*M
+                result = (ones(size2(1), 1)*this).*varargin{1};
+                return;
+            else
+                % M.*v
+                result = this.*(ones(size1(1), 1)*varargin{1});
+                return;
+            end
+        end
+        if prod(size1)+prod(size2) > 0
+            error('Incompatible size for element-wise matrix multiplication');
+        end
     end
 
     % Now we also check the type of both objects

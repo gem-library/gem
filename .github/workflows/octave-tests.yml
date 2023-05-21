@@ -24,6 +24,6 @@ jobs:
         run: echo "::set-output name=sha::$(git rev-parse HEAD)"
       - name: Calling docker launch action
         id: dock
-        uses: replab/replab/.github/actions/octave-tests@develop
+        uses: gem-library/gem/.github/actions/octave-tests@develop
         with:
           commit: ${{ steps.vars.outputs.sha }}

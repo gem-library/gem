@@ -22,6 +22,25 @@ The following steps work equally well for Matlab and Octave, except if you are u
 4. Type `make`. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message '**Compilation successful**'. Otherwise, a message should inform you about what is missing.
 5. Add the gem subfolder to your Matlab/Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
+### Note on the compiler version
+
+Matlab uses its own version of `libstdc++` at runtime, which is typically behind the version provided by the latest [`g++`](https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html). Ubuntu is generarally more up to date, and may thus compile binaries that Matlab is unable to run. A simple way to fix this situation, when it happens, consists in installing an older version of GCC on ubuntu with the following commands (the version of `libstdc++` shipped with latest Matlab is compatible with GCC 8):
+```
+sudo apt install gcc-8 g++-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/g++-8 8
+```
+In order to still be able to use the native compiler version, the last two lines should also be executed with the latest version, e.g. GCC 9 if on Ubuntu 20.04:
+```
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/g++-8 8
+```
+It is then possible to change between GCC versions (setting it to an older version to compile binaries that Matlab can run, then restoring the native version) by running the following commands:
+```
+sudo update-alternatives --config gcc
+sudo update-alternatives --config g++
+```
+
 
 Steps to compile the GEM Library on *Windows* (64 bits) :
 ---------------------------------------------------------

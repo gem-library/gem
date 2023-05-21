@@ -146,9 +146,9 @@ if useSharedGmpAndMpfr == 1
     if genericBuild == 1
         % We just do a generic build
         cd src
-        resultCode(1) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        resultCode(2) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        resultCode(3) = unix(['mv *.', mexext, ' ../gem']);
+        eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp COPTIMFLAGS="', flags, '" gem_mex.cpp gem.cpp sgem.cpp utils.cpp'])
+        eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp COPTIMFLAGS="', flags, '" sgem_mex.cpp gem.cpp sgem.cpp utils.cpp'])
+        resultCode(1) = unix(['mv *.', mexext, ' ../gem']);
         cd ..
     else
         if isOctave
@@ -167,6 +167,9 @@ if useSharedGmpAndMpfr == 1
             resultCode(5) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG src/sgem_mex.cpp -o src/sgem_mex.o']);
             resultCode(6) = unix(['g++ -Wl,--no-undefined  -shared -Wl,--version-script,"', matlabroot, '/extern/lib/', lower(computer), '/mexFunction.map" src/gem_mex.o src/gem.o src/sgem.o src/utils.o   -lmpfr  -lgmp   -Wl,-rpath-link,', matlabroot, '/bin/', lower(computer), ' -L"', matlabroot, '/bin/', lower(computer), '" -lmx -lmex -lmat -lm -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o gem/gem_mex.', mexext]);
             resultCode(7) = unix(['g++ -Wl,--no-undefined  -shared -Wl,--version-script,"', matlabroot, '/extern/lib/', lower(computer), '/mexFunction.map" src/sgem_mex.o src/sgem.o src/gem.o src/utils.o   -lmpfr  -lgmp   -Wl,-rpath-link,', matlabroot, '/bin/', lower(computer), ' -L"', matlabroot, '/bin/', lower(computer), '" -lmx -lmex -lmat -lm -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o gem/sgem_mex.', mexext]);
+% An attempt (but it doesn't help):
+%            resultCode(6) = unix(['g++ -Wl,--no-undefined  -shared -Wl,--version-script,"', matlabroot, '/extern/lib/', lower(computer), '/mexFunction.map" src/gem_mex.o src/gem.o src/sgem.o src/utils.o   -lmpfr  -lgmp   -Wl,-rpath-link,', matlabroot, '/bin/', lower(computer), ' -L"', matlabroot, '/bin/', lower(computer), '" -Wl,-rpath-link,', matlabroot, '/sys/os/', lower(computer), ' -L"', matlabroot, '/sys/os/', lower(computer), '" -lmx -lmex -lmat -lm -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o gem/gem_mex.', mexext]);
+%            resultCode(7) = unix(['g++ -Wl,--no-undefined  -shared -Wl,--version-script,"', matlabroot, '/extern/lib/', lower(computer), '/mexFunction.map" src/sgem_mex.o src/sgem.o src/gem.o src/utils.o   -lmpfr  -lgmp   -Wl,-rpath-link,', matlabroot, '/bin/', lower(computer), ' -L"', matlabroot, '/bin/', lower(computer), '" -Wl,-rpath-link,', matlabroot, '/sys/os/', lower(computer), ' -L"', matlabroot, '/sys/os/', lower(computer), '" -lmx -lmex -lmat -lm -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o gem/sgem_mex.', mexext]);
         end
     end
 else
@@ -214,6 +217,7 @@ else
             error('Please download msys (e.g. from https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/MSYS-20111123.zip/download) and follow the instructions in docs/compilationInstructions.md before launching this file.');
         end
         cd(gmpFolder);
+        unix('make clean');
         unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries');
         unix('make');
         unix('make check');
@@ -222,6 +226,7 @@ else
     end
     if exist('staticLibraries/lib/libmpfr.a') ~= 2
         cd(mpfrFolder);
+        unix('make clean');
         unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries');
         unix('make');
         unix('make check');

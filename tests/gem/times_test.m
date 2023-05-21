@@ -7,6 +7,9 @@ function test_suite = times_test()
 end
 
 function test_consistency
+    % Octave has trouble with some product extensions for sparse object
+    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+
     % element-wise multiplication between two matrices
     y = generateMatrices(2, 5, {'F', 'FR', 'FI'}, 2);
     validateDoubleConsistency2(@(x,y) times(x,y), y(1,:), y(2,:));
@@ -33,32 +36,56 @@ function test_consistency
 
     % product with a vector
     validateDoubleConsistency2(@(x,y) times(x,y(1,:)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x,sparse(y(1,:))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x,sparse(y(1,:))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(x,double(y(1,:))), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(1,:)))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(1,:)))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(double(x),y(1,:)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(1,:)), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(1,:)), y(1,:), y(2,:));
+    end
 
     validateDoubleConsistency2(@(x,y) times(x(1,:),y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x(1,:),sparse(y)), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x(1,:),sparse(y)), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(x(1,:),double(y)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x(1,:),double(sparse(y))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x(1,:),double(sparse(y))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(double(x(1,:)),y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(double(sparse(x(1,:))),y), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(double(sparse(x(1,:))),y), y(1,:), y(2,:));
+    end
 
     validateDoubleConsistency2(@(x,y) times(x,y(:,1)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x,sparse(y(:,1))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x,sparse(y(:,1))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(x,double(y(:,1))), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(:,1)))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x,double(sparse(y(:,1)))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(double(x),y(:,1)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(:,1)), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(double(sparse(x)),y(:,1)), y(1,:), y(2,:));
+    end
 
     validateDoubleConsistency2(@(x,y) times(x(:,1),y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x(:,1),sparse(y)), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x(:,1),sparse(y)), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(x(:,1),double(y)), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(x(:,1),double(sparse(y))), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(x(:,1),double(sparse(y))), y(1,:), y(2,:));
+    end
     validateDoubleConsistency2(@(x,y) times(double(x(:,1)),y), y(1,:), y(2,:));
-    validateDoubleConsistency2(@(x,y) times(double(sparse(x(:,1))),y), y(1,:), y(2,:));
+    if ~isOctave
+        validateDoubleConsistency2(@(x,y) times(double(sparse(x(:,1))),y), y(1,:), y(2,:));
+    end
 end
 
 function test_empty

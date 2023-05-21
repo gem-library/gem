@@ -6,7 +6,7 @@ FROM       gnuoctave/octave:6.4.0
 
 USER root
 # Install base packages
-RUN apt-get update && apt-get install -y -q python3-pip pandoc unzip curl && apt-get install liboctave-dev && apt-get install libmpfrc++-dev
+RUN apt-get update && apt-get install -y -q python3-pip pandoc unzip curl && apt-get install -y liboctave-dev && apt-get install -y -q libmpfrc++-dev
 
 RUN mkdir /workspace
 

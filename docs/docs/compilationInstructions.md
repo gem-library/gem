@@ -32,8 +32,8 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/g++-8 8
 ```
 In order to still be able to use the native compiler version, the last two lines should also be executed with the latest version, e.g. GCC 9 if on Ubuntu 20.04:
 ```
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 8
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/g++-8 8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/g++-9 9
 ```
 It is then possible to change between GCC versions (setting it to an older version to compile binaries that Matlab can run, then restoring the native version) by running the following commands:
 ```

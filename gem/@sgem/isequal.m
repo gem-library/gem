@@ -34,6 +34,12 @@ function result = isequal(varargin)
         return;
     end
 
+    % Next, we check whether the number of nonzero elements is identical
+    if ~isequal(nnz(varargin{1}), nnz(varargin{2}))
+        result = false;
+        return;
+    end
+
 % We allow sparse object to be equal to full ones (so no check of sparsity)
 %     if ~issparse(varargin{1}) || ~issparse(varargin{2})
 %         result = false;
@@ -45,6 +51,14 @@ function result = isequal(varargin)
         varargin{1} = sgem(varargin{1});
     elseif ~isequal(class(varargin{2}), 'sgem')
         varargin{2} = sgem(varargin{2});
+    end
+
+    % We perform again some basic checks (rounding off may modify the answer)
+    if ~isequal(size(varargin{1}), size(varargin{2})) || ...
+            (isreal(varargin{1}) + isreal(varargin{2}) == 1) || ...
+            ~isequal(nnz(varargin{1}), nnz(varargin{2}))
+        result = false;
+        return;
     end
 
     % Now we check whether the precision of both matrices match

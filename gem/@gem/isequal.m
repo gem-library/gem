@@ -47,6 +47,13 @@ function result = isequal(varargin)
         varargin{2} = gem(varargin{2});
     end
 
+    % We perform again some basic checks (rounding off may modify the answer)
+    if ~isequal(size(varargin{1}), size(varargin{2})) || ...
+            (isreal(varargin{1}) + isreal(varargin{2}) == 1)
+        result = false;
+        return;
+    end
+    
     % Now we check whether the precision of both matrices match
     if ~isequal(precision(varargin{1}), precision(varargin{2}))
         result = false;

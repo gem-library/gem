@@ -10,3 +10,12 @@
 [submodule "MOcov"]
 	path = external/MOcov
 	url = https://github.com/MOcov/MOcov
+[submodule "external/mpfr"]
+	path = external/mpfr
+	url = https://gitlab.inria.fr/mpfr/mpfr.git
+[submodule "external/gmp"]
+	path = external/gmp
+	url = https://github.com/alisw/GMP
+[submodule "external/mpfrc++"]
+	path = external/mpfrc++
+	url = https://github.com/advanpix/mpreal

@@ -3,9 +3,6 @@
 *.dll
 .syncthing*
 *~
-external/*gmp-*
-external/*mpfr-*
-external/*mpfrc++*
 external/*boost_*
 coverage.*
 coverage_html

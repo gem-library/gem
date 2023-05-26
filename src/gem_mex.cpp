@@ -212,7 +212,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* outputMatrix = (int*)mxGetData(plhs[0]);
 
         // And stock it at the right place
@@ -328,7 +328,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* outputMatrix = (int*)mxGetData(plhs[0]);
 
         // Call the method
@@ -975,7 +975,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT64_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* output = (int*)mxGetData(plhs[0]);
 
         // We return the answer to matlab
@@ -1125,7 +1125,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* outputMatrix = (int*)mxGetData(plhs[0]);
 
         // Check whether the matrix is symmetric
@@ -1150,7 +1150,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             // We allocate space for the result
             plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
 
-            // We check where the output data should be places
+            // We check where the output data should be placed
             int* outputMatrix = (int*)mxGetData(plhs[0]);
 
             // Check whether the matrix is symmetric
@@ -1791,7 +1791,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* outputMatrix = (int*)mxGetData(plhs[0]);
 
         // Check whether values match
@@ -1816,7 +1816,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
         // We allocate space for the result
         plhs[0] = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
 
-        // We check where the output data should be places
+        // We check where the output data should be placed
         int* outputMatrix = (int*)mxGetData(plhs[0]);
 
         // Check whether values match

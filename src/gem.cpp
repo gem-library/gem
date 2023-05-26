@@ -2033,7 +2033,7 @@ SparseGmpEigenMatrix GmpEigenMatrix::times_fs(const SparseGmpEigenMatrix& b) con
     // We may have set some coefficients to zero...
     result.matrixR.prune(0, 0);
     result.matrixR.makeCompressed();
-    if ((isComplex) && (b.isComplex)) {
+    if ((isComplex) || (b.isComplex)) {
         result.matrixI.prune(0, 0);
         result.matrixI.makeCompressed();
     }
@@ -2130,7 +2130,7 @@ SparseGmpEigenMatrix& GmpEigenMatrix::times_fs_new(const SparseGmpEigenMatrix& b
     // We may have set some coefficients to zero...
     result.matrixR.prune(0, 0);
     result.matrixR.makeCompressed();
-    if ((isComplex) && (b.isComplex)) {
+    if ((isComplex) || (b.isComplex)) {
         result.matrixI.prune(0, 0);
         result.matrixI.makeCompressed();
     }

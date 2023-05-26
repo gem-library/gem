@@ -2034,7 +2034,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2058,7 +2058,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2287,7 +2287,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times(const SparseGmpEigenMatrix& b) 
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2322,7 +2322,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2346,7 +2346,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2575,7 +2575,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_new(const SparseGmpEigenMatrix
         // We may have set some coefficients to zero...
         result.matrixR.prune(0, 0);
         result.matrixR.makeCompressed();
-        if ((isComplex) && (b.isComplex)) {
+        if ((isComplex) || (b.isComplex)) {
             result.matrixI.prune(0, 0);
             result.matrixI.makeCompressed();
         }
@@ -2673,7 +2673,7 @@ SparseGmpEigenMatrix SparseGmpEigenMatrix::times_sf(const GmpEigenMatrix& b) con
     // We may have set some coefficients to zero...
     result.matrixR.prune(0, 0);
     result.matrixR.makeCompressed();
-    if ((isComplex) && (b.isComplex)) {
+    if ((isComplex) || (b.isComplex)) {
         result.matrixI.prune(0, 0);
         result.matrixI.makeCompressed();
     }
@@ -2769,7 +2769,7 @@ SparseGmpEigenMatrix& SparseGmpEigenMatrix::times_sf_new(const GmpEigenMatrix& b
     // We may have set some coefficients to zero...
     result.matrixR.prune(0, 0);
     result.matrixR.makeCompressed();
-    if ((isComplex) && (b.isComplex)) {
+    if ((isComplex) || (b.isComplex)) {
         result.matrixI.prune(0, 0);
         result.matrixI.makeCompressed();
     }
@@ -6830,6 +6830,10 @@ SparseMatrix <bool> SparseGmpEigenMatrix::isinf() const
 bool SparseGmpEigenMatrix::identicalValues(const SparseGmpEigenMatrix& b) const
 {
     if (isComplex) {
+		// Just for security, we double check that b is indeed also complex...
+		if (~b.isComplex)
+			return false;
+		
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {
             SparseMatrix<mpreal>::InnerIterator itR(matrixR,k);
             SparseMatrix<mpreal>::InnerIterator itI(matrixI,k);

@@ -148,7 +148,7 @@ if useSharedGmpAndMpfr == 1
         cd src
         resultCode(1) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
         resultCode(2) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        resultCode(3) = unix(['mv *.', mexext, ' ../gem']);
+        resultCode(3) = eval(['movefile *.', mexext, ' ../gem']);
         cd ..
     else
         if isOctave
@@ -247,7 +247,7 @@ else
         eval(['mex -v CXXFLAGS=''$CXXFLAGS -pthread -fopenmp'' CXXOPTIMFLAGS=''-O3 $CXXOPTIMFLAGS -O3'' LDFLAGS=''$LDFLAGS -fopenmp'' -R2017b -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I', mpfrcppFolder, ' -I../external/staticLibraries/include -L../external/staticLibraries/lib -lmpfr -lgmp sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
         resultCode(1) = exist(['./gem_mex.', mexext]) ~= 3;
         resultCode(2) = exist(['./sgem_mex.', mexext]) ~= 3;
-        resultCode(3) = unix(['mv *.', mexext, ' ../gem']);
+        resultCode(3) = eval(['movefile *.', mexext, ' ../gem']);
     else
         if isunix && (~ismac)
             if isOctave

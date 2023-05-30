@@ -16,10 +16,10 @@ function test_consistency
 
         validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
         validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 2)), x, 1e-9);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]))), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'lm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'sm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([1, size(x)]), 2)), x, 1e-9);
         
         % For coverage monitoring purpose (this is tested by matlab)
         eigs(x{1}, [], 14);

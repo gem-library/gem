@@ -21,7 +21,7 @@ jobs:
           submodules: recursive
       - name: Set variable
         id: vars
-        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
       - name: Calling docker launch action
         id: dock
         uses: gem-library/gem/.github/actions/octave-tests@develop

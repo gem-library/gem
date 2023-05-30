@@ -4271,16 +4271,16 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
             switch (type) {
                 case 1: {
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::SymEigsSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseSymMatProd<mpreal> > eigs(&op, nbEigenvalues, ncv);
+                    Spectra::SymEigsSolver< Spectra::DenseSymMatProd<mpreal> > eigs(op, nbEigenvalues, ncv);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::LARGEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::LargestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4300,16 +4300,16 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
                     Spectra::DenseSymShiftSolve<mpreal> op(matrixR);
 
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::SymEigsShiftSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseSymShiftSolve<mpreal> > eigs(&op, nbEigenvalues, ncv, sigma.matrixR(0,0));
+                    Spectra::SymEigsShiftSolver< Spectra::DenseSymShiftSolve<mpreal> > eigs(op, nbEigenvalues, ncv, sigma.matrixR(0,0));
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::SMALLEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::SmallestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4384,16 +4384,16 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
                     Spectra::DenseGenMatProd<mpreal> op(matrixR);
 
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::GenEigsSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseGenMatProd<mpreal> > eigs(&op, nbEigenvalues, ncv);
+                    Spectra::GenEigsSolver< Spectra::DenseGenMatProd<mpreal> > eigs(op, nbEigenvalues, ncv);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::LARGEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::LargestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4419,16 +4419,16 @@ GmpEigenMatrix GmpEigenMatrix::eigs(const long int& nbEigenvalues, GmpEigenMatri
                     mpreal sigmaI(0);
                     if (sigma.isComplex)
                         sigmaI = sigma.matrixI(0,0);
-                    Spectra::GenEigsComplexShiftSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseGenComplexShiftSolve<mpreal> > eigs(&op, nbEigenvalues, ncv, sigma.matrixR(0,0), sigmaI);
+                    Spectra::GenEigsComplexShiftSolver< Spectra::DenseGenComplexShiftSolve<mpreal> > eigs(op, nbEigenvalues, ncv, sigma.matrixR(0,0), sigmaI);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::SMALLEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::SmallestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4497,16 +4497,16 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
             switch (type) {
                 case 1: {
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::SymEigsSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseSymMatProd<mpreal> > eigs(&op, nbEigenvalues, ncv);
+                    Spectra::SymEigsSolver< Spectra::DenseSymMatProd<mpreal> > eigs(op, nbEigenvalues, ncv);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::LARGEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::LargestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4526,16 +4526,16 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
                     Spectra::DenseSymShiftSolve<mpreal> op(matrixR);
 
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::SymEigsShiftSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseSymShiftSolve<mpreal> > eigs(&op, nbEigenvalues, ncv, sigma.matrixR(0,0));
+                    Spectra::SymEigsShiftSolver< Spectra::DenseSymShiftSolve<mpreal> > eigs(op, nbEigenvalues, ncv, sigma.matrixR(0,0));
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::SMALLEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::SmallestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4610,16 +4610,16 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
                     Spectra::DenseGenMatProd<mpreal> op(matrixR);
 
                     // Construct eigen solver object, requesting desired eigenvalues
-                    Spectra::GenEigsSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseGenMatProd<mpreal> > eigs(&op, nbEigenvalues, ncv);
+                    Spectra::GenEigsSolver< Spectra::DenseGenMatProd<mpreal> > eigs(op, nbEigenvalues, ncv);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::LARGEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::LargestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results
@@ -4645,16 +4645,16 @@ GmpEigenMatrix& GmpEigenMatrix::eigs_new(const long int& nbEigenvalues, GmpEigen
                     mpreal sigmaI(0);
                     if (sigma.isComplex)
                         sigmaI = sigma.matrixI(0,0);
-                    Spectra::GenEigsComplexShiftSolver< mpreal, Spectra::LARGEST_MAGN, Spectra::DenseGenComplexShiftSolve<mpreal> > eigs(&op, nbEigenvalues, ncv, sigma.matrixR(0,0), sigmaI);
+                    Spectra::GenEigsComplexShiftSolver< Spectra::DenseGenComplexShiftSolve<mpreal> > eigs(op, nbEigenvalues, ncv, sigma.matrixR(0,0), sigmaI);
 
                     // Initialize and compute
                     eigs.init();
                     int maxIter(1000);
                     mpreal tolerance(pow(10,-mpfr::bits2digits(mpfr::mpreal::get_default_prec())));
-                    int nconv = eigs.compute(maxIter, tolerance, Spectra::SMALLEST_MAGN);
+                    int nconv = eigs.compute(Spectra::SortRule::LargestMagn, maxIter, tolerance, Spectra::SortRule::SmallestMagn);
 
                     // Check for error
-                    if(eigs.info() != Spectra::SUCCESSFUL)
+                    if(eigs.info() != Spectra::CompInfo::Successful)
                         mexErrMsgTxt("Eigenvalue decomposition failed.");
 
                     // Retrieve results

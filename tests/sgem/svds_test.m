@@ -16,7 +16,7 @@ function test_consistency
 
         validateDoubleConsistency(@(x) svds(x), x, 1e-9, 1);
         validateDoubleConsistency(@(x) svds(x, gem(1)), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) svds(x, min(2,size(x,1))), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) svds(x, min([2, size(x)])), x, 1e-9, 1);
 
         % Octave has its own option naming convention
         assert( sum(abs(svds(x{1}, 2, 'largest') - svds(double(x{1}), 2, 'L'))) < 1e-9);

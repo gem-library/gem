@@ -16,10 +16,10 @@ function test_consistency
 
         validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
         validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x, 1e-9, 1);
-        validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 2)), x, 1e-9);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]))), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'lm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'sm')), x, 1e-9, 1);
+        validateDoubleConsistency(@(x) abs(eigs(x, [], min([1, size(x)]), 2)), x, 1e-9);
         
         % For coverage monitoring purpose (this is tested by matlab)
         eigs(x{1}, [], 15, 'sm');
@@ -37,13 +37,13 @@ function test_consistency
                 validateDoubleConsistency(@(x) sort(abs(eigs(x))), x, 1e-9, 1);
                 validateDoubleConsistency(@(x) abs(eigs(x, [], 1)), x, 1e-9, 1);
 
-                validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)))), x, 1e-9, 1);
-                validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'lm')), x, 1e-9, 1);
+                validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]))), x, 1e-9, 1);
+                validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'lm')), x, 1e-9, 1);
 
 %                 % Currently there is a but in spectra which doesn't allow us to test for smallest eigenvalues...
 %                 for i = 1:length(x)
 %                     if rank(x{i}) == size(x{i},1)
-%                         validateDoubleConsistency(@(x) abs(eigs(x, [], min(2,size(x,1)), 'sm')), x(i), 1e-9);
+%                         validateDoubleConsistency(@(x) abs(eigs(x, [], min([2, size(x)]), 'sm')), x(i), 1e-9);
 %                     end
 %                 end
 %                 validateDoubleConsistency(@(x) abs(eigs(x, [], min(1,size(x,1)), 1)), x, 1e-9);

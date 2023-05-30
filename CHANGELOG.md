@@ -1,11 +1,14 @@
-##
+## [2.0.3] - 2023-05-30
+- All external code as git submodules
+- Build process for recent versions of Windows
+- Moved automatic test from travis to Github action
+- Minor stability enhancements
 
 ## [2.0.2] - 2021-07-29
 - Added gem2 and sgem2 binary conversion tools
 - Added support for builtin pinv
 - Improved subsasgn
 - Improved times
-
 
 ## [2.0.1] - 2020-12-19
 - Compatibility with GNU Octave 6.1.0

@@ -6831,7 +6831,7 @@ bool SparseGmpEigenMatrix::identicalValues(const SparseGmpEigenMatrix& b) const
 {
     if (isComplex) {
 		// Just for security, we double check that b is indeed also complex...
-		if (~b.isComplex)
+		if (!b.isComplex)
 			return false;
 		
         for (IndexType k = 0; k < matrixR.outerSize(); ++k) {

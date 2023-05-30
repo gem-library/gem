@@ -5,7 +5,7 @@ section: "Home"
 position: 0
 ---
 
-[![Gitter](https://badges.gitter.im/gem-library/community.svg)](https://gitter.im/gem-library/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/gem-library/gem.svg?branch=master)](https://travis-ci.org/gem-library/gem) [![codecov](https://codecov.io/gh/gem-library/gem/branch/master/graph/badge.svg)](https://codecov.io/gh/gem-library/gem)
+[![Gitter](https://badges.gitter.im/gem-library/community.svg)](https://gitter.im/gem-library/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build status](https://github.com/gem-library/gem/actions/workflows/octave-tests.yml/badge.svg?branch=master)](https://github.com/gem-library/gem/actions/workflows/octave-tests.yml?query=branch%3Amaster) [![codecov](https://codecov.io/gh/gem-library/gem/branch/master/graph/badge.svg)](https://codecov.io/gh/gem-library/gem)
 
 ## -> Get it: [**here**](https://github.com/gem-library/gem/releases)!
 

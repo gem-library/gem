@@ -18,8 +18,8 @@ function make(parallelization, useSharedGmpAndMpfr, genericBuild)
 %
 %
 % Note 1 : The code relies on several external libraries such as eigen,
-% spectra, gmp, mpfr and mpfrc++. The Eigen and Spectra libraries are
-% included as git submodules. They should be downloaded with the command
+% spectra, gmp, mpfr and mpfrc++, which are included as git submodules.
+% They should be downloaded with the command
 %
 %     git submodule update --init
 %
@@ -33,19 +33,10 @@ function make(parallelization, useSharedGmpAndMpfr, genericBuild)
 % Otherwise, if these last libraries are not installed on your system, it is 
 % possible to perform a compilation with gmp and mpfr source codes directly
 % instead of relying on precompiled gmp and mpfr libraries (this should be
-% the way to go non-linux systems). In this case, proceed as follow :
-%
-% - Download the gmp source code should from https://gmplib.org/#DOWNLOAD
-%   and unpack it into the 'external' folder (this creates the folder external/gmp*)
-%
-% - Download the mpfr source code from http://www.mpfr.org/mpfr-current/#download
-%   and unpack it into the 'external' folder (this creates the folder external/mpfr*)
-%
-% - Download the mpfrc++ source from http://www.holoborodko.com/pavel/mpfr/
-%   and place it into the 'external' folder (this creates the folder external/mpfrc++*)
-%
-% - Call this script from matlab with the option 'useSharedGmpAndMpfr' set
-%   to 0
+% the way to go non-linux systems). On windows, these should be compiled on
+% their own. On the other platforms, they can be built by the present
+% script from matlab. For this, call this script from matlab with the
+% option 'useSharedGmpAndMpfr' set to 0.
 %
 %
 % Note 2 : Several of the command below are quite plaftorm/version specific.
@@ -73,7 +64,9 @@ if nargin < 3
     genericBuild = 0;
 end
 
-warning('You are trying to compile the GEM library, but binaries may be available for your platform on https://www.github.com/gem-library/gem/releases');
+if (~ispc)
+    warning('You are trying to compile the GEM library, but binaries may be available for your platform on https://www.github.com/gem-library/gem/releases');
+end
 
 
 %% We perform some checks
@@ -146,9 +139,11 @@ if useSharedGmpAndMpfr == 1
     if genericBuild == 1
         % We just do a generic build
         cd src
-        resultCode(1) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        resultCode(2) = eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        resultCode(3) = eval(['movefile *.', mexext, ' ../gem']);
+        eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        eval(['mex -I../', eigenFolder, ' -I../', eigenFolder, '/unsupported -I../', spectraFolder, '/include -lmpfr -lgmp ', flags, ' sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        resultCode(1) = exist(['./gem_mex.', mexext]) ~= 3;
+        resultCode(2) = exist(['./sgem_mex.', mexext]) ~= 3;
+        eval(['movefile *.', mexext, ' ../gem']);
         cd ..
     else
         if isOctave
@@ -171,13 +166,9 @@ if useSharedGmpAndMpfr == 1
     end
 else
     % Here we compile a version of the library which does not rely on the
-    % gmp and mpfr shared libraries. It requires additional source code :
-    % - download the gmp source code from https://gmplib.org/#DOWNLOAD
-    %   and unpack it into the 'external' folder (this creates the folder external/gmp*)
-    % - download the mpfr source code from http://www.mpfr.org/mpfr-current/#download
-    %   and unpack it into the 'external' folder (this creates the folder external/mpfr*)
-    % - download the mpfrc++ source code from http://www.holoborodko.com/pavel/mpfr/
-    %   and unpack it into the 'external' folder (this creates the folder external/mpfrc++*)
+    % gmp and mpfr shared libraries. Rather, it uses the source code of
+    % these libraries directly, or a precompiled version (in the case of
+    % windows).
 
     % We check that the gmp, mpfr and mpfrc++ sources are available
     gmpFolder = '';
@@ -195,13 +186,13 @@ else
         end
     end
     if isempty(gmpFolder)
-        error('The gmp source code was not found. Please download it from https://gmplib.org and place it into the gem/external folder');
+        error('The gmp source code was not found.');
     end
     if isempty(mpfrFolder)
-        error('The mpfr source code was not found. Please download it from http://www.mpfr.org and place it into the gem/external folder');
+        error('The mpfr source code was not found.');
     end
     if isempty(mpfrcppFolder) || ~isequal(exist(['external/', mpfrcppFolder, '/mpreal.h']), 2)
-        error('The mpfrc++ source code was not found. Please download it from http://www.holoborodko.com/pavel/mpfr and place it into the gem/external folder');
+        error('The mpfrc++ source code was not found.');
     end
     
     % We compile the libraries if needed
@@ -209,24 +200,31 @@ else
     if exist('staticLibraries') ~= 7
         unix('mkdir staticLibraries');
     end
-    if exist('staticLibraries/lib/libgmp.a') ~= 2
-        if ispc
-            error('Please download msys (e.g. from https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/MSYS-20111123.zip/download) and follow the instructions in docs/compilationInstructions.md before launching this file.');
+    if (ispc) && (exist('staticLibraries/windows') == 7)
+        % We just copy the pre-compiled libraries for windows
+        disp('Copying pre-compiled GMP and MPFR libraries from the ''external/staticLibraries/windows'' subfolder.')
+        copyfile external/staticLibraries/windows/* external/staticLibraries/
+    else
+        if exist('staticLibraries/lib/libgmp.a') ~= 2
+            if ispc
+                error('Please download msys (e.g. from https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/MSYS-20111123.zip/download) and follow the instructions in docs/compilationInstructions.md before launching this file.');
+            end
+            cd(gmpFolder);
+            unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries');
+            unix('make');
+            unix('make check');
+            unix('make install');
+            cd ..
         end
-        cd(gmpFolder);
-        unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries');
-        unix('make');
-        unix('make check');
-        unix('make install');
-        cd ..
-    end
-    if exist('staticLibraries/lib/libmpfr.a') ~= 2
-        cd(mpfrFolder);
-        unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries');
-        unix('make');
-        unix('make check');
-        unix('make install');
-        cd ..
+        if exist('staticLibraries/lib/libmpfr.a') ~= 2
+            cd(mpfrFolder);
+            unix('./autogen.sh')
+            unix('./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries');
+            unix('make');
+            unix('make check');
+            unix('make install');
+            cd ..
+        end
     end
     cd ..
 
@@ -236,18 +234,22 @@ else
     % We adjust all paths
     eigenFolder = ['../', eigenFolder];
     spectraFolder = ['../', spectraFolder];
-    %gmpFolder = ['../external/', gmpFolder];
-    %mpfrFolder = ['../external/', mpfrFolder];
     mpfrcppFolder = ['../external/', mpfrcppFolder];
     
     if (genericBuild == 1) || (ismac && isOctave) || (ispc)
         % We just do a generic build, wither because it was asked for, or
         % because this is the best we can do on these systems.
-        eval(['mex -v CXXFLAGS=''$CXXFLAGS -pthread -fopenmp'' CXXOPTIMFLAGS=''-O3 $CXXOPTIMFLAGS -O3'' LDFLAGS=''$LDFLAGS -fopenmp'' -R2017b -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I', mpfrcppFolder, ' -I../external/staticLibraries/include -L../external/staticLibraries/lib -lmpfr -lgmp gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
-        eval(['mex -v CXXFLAGS=''$CXXFLAGS -pthread -fopenmp'' CXXOPTIMFLAGS=''-O3 $CXXOPTIMFLAGS -O3'' LDFLAGS=''$LDFLAGS -fopenmp'' -R2017b -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I', mpfrcppFolder, ' -I../external/staticLibraries/include -L../external/staticLibraries/lib -lmpfr -lgmp sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        if ~isempty(parallelizationFlag)
+            parallelizationFlag = ['CXXFLAGS=''$CXXFLAGS ', parallelizationFlag, ''''];
+        end
+        if ~isempty(optimizationFlag)
+            optimizationFlag = ['CXXOPTIMFLAGS=''', optimizationFlag, ' $CXXOPTIMFLAGS ', optimizationFlag, ''''];
+        end
+        eval(['mex -v ', parallelizationFlag, ' ', optimizationFlag, ' LDFLAGS=''$LDFLAGS -fopenmp'' -R2017b -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I', mpfrcppFolder, ' -I../external/staticLibraries/include -L../external/staticLibraries/lib -lmpfr -lgmp gem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
+        eval(['mex -v ', parallelizationFlag, ' ', optimizationFlag, ' LDFLAGS=''$LDFLAGS -fopenmp'' -R2017b -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', spectraFolder, '/include -I', mpfrcppFolder, ' -I../external/staticLibraries/include -L../external/staticLibraries/lib -lmpfr -lgmp sgem_mex.cpp gem.cpp sgem.cpp utils.cpp']);
         resultCode(1) = exist(['./gem_mex.', mexext]) ~= 3;
         resultCode(2) = exist(['./sgem_mex.', mexext]) ~= 3;
-        resultCode(3) = eval(['movefile *.', mexext, ' ../gem']);
+        eval(['movefile *.', mexext, ' ../gem']);
     else
         if isunix && (~ismac)
             if isOctave
@@ -256,8 +258,8 @@ else
                 resultCode(3) = unix(['g++ -c -Wdate-time  -I"', matlabroot, '/include/octave-', version, '/octave" -I/usr/include/hdf5/serial -I/usr/include/mpi -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include -fstack-protector-strong -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG gem_mex.cpp -o gem_mex.o']);
                 resultCode(4) = unix(['g++ -c -Wdate-time  -I"', matlabroot, '/include/octave-', version, '/octave" -I/usr/include/hdf5/serial -I/usr/include/mpi -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include -fstack-protector-strong -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG sgem.cpp -o sgem.o']);
                 resultCode(5) = unix(['g++ -c -Wdate-time  -I"', matlabroot, '/include/octave-', version, '/octave" -I/usr/include/hdf5/serial -I/usr/include/mpi -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include -fstack-protector-strong -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG sgem_mex.cpp -o sgem_mex.o']);
-                resultCode(6) = unix(['g++ -Wl,--no-undefined -fstack-protector-strong -Wl,-z,relro -shared gem_mex.o gem.o sgem.o utils.o ../external/staticLibraries/lib/libmpfr.a ../external/staticLibraries/lib/libgmp.a -L', matlabroot, '/lib/octave/', version, ' -L/usr/lib/x86_64-linux-gnu -loctinterp -loctave -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o ../gem/gem_mex.', mexext]);
-                resultCode(7) = unix(['g++ -Wl,--no-undefined -fstack-protector-strong -Wl,-z,relro -shared sgem_mex.o sgem.o gem.o utils.o ../external/staticLibraries/lib/libmpfr.a ../external/staticLibraries/lib/libgmp.a -L', matlabroot, '/lib/octave/', version, ' -L/usr/lib/x86_64-linux-gnu -loctinterp -loctave -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o ../gem/sgem_mex.', mexext]);
+                resultCode(6) = unix(['g++ -Wl,--no-undefined -fstack-protector-strong -Wl,-z,relro -shared gem_mex.o gem.o sgem.o utils.o ../external/staticLibraries/lib/libmpfr.a ../external/staticLibraries/lib/libgmp.a -L', matlabroot, '/lib/x86_64-linux-gnu/octave/', version, ' -loctinterp -loctave -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o ../gem/gem_mex.', mexext]);
+                resultCode(7) = unix(['g++ -Wl,--no-undefined -fstack-protector-strong -Wl,-z,relro -shared sgem_mex.o sgem.o gem.o utils.o ../external/staticLibraries/lib/libmpfr.a ../external/staticLibraries/lib/libgmp.a -L', matlabroot, '/lib/x86_64-linux-gnu/octave/', version, ' -loctinterp -loctave -lstdc++ ', flags, ' -DEIGEN_NO_DEBUG -o ../gem/sgem_mex.', mexext]);
             else
                 resultCode(1) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG utils.cpp -o utils.o']);
                 resultCode(2) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', flags, ' -DEIGEN_NO_DEBUG -DNDEBUG gem.cpp -o gem.o']);
@@ -270,10 +272,7 @@ else
         elseif ismac
             % Note that Octave on OSX returns true for both ismac and
             % isunix... still, if we are here we must be called from matlab
-            % For mac it seems we can just use gcc almost the same way...
-            resultCode(1) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG utils.cpp -o utils.o']);
-            resultCode(2) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG gem.cpp -o gem.o']);
-            resultCode(3) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG gem_mex.cpp -o gem_mex.o']);
+            % For mac it seems we can just use gcc almost the same way...er, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG gem_mex.cpp -o gem_mex.o']);
             resultCode(4) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG sgem.cpp -o sgem.o']);
             resultCode(5) = unix(['g++ -c -D_GNU_SOURCE -DMATLAB_MEX_FILE -DMEX_DOUBLE_HANDLE  -I', eigenFolder, ' -I', eigenFolder, '/unsupported -I', mpfrcppFolder, ' -I../external/staticLibraries/include -I', spectraFolder, '/include -I/usr/include  -I"', matlabroot, '/extern/include" -I"', matlabroot, '/simulink/include" -ansi -fexceptions -fPIC -fno-omit-frame-pointer -Wno-deprecated -std=c++11 ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -DNDEBUG sgem_mex.cpp -o sgem_mex.o']);
             resultCode(6) = unix(['g++ -Wl,-undefined,error  -shared gem_mex.o gem.o sgem.o utils.o  ../external/staticLibraries/lib/libmpfr.a ../external/staticLibraries/lib/libgmp.a  -L"', matlabroot, '/bin/', lower(computer), '" -lmx -lmex -lmat -lm -lstdc++ ', parallelizationFlag, ' ', optimizationFlag, ' -DEIGEN_NO_DEBUG -o ../gem/gem_mex.', mexext]);

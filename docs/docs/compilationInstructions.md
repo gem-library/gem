@@ -47,27 +47,22 @@ Steps to compile the GEM Library on *Windows* (64 bits) :
 
 The following was only tested on Matlab.
 
-1. Download the latest library repository either with git (see the first Ubuntu instruction above) of from the [**release page**](https://github.com/gem-library/gem/releases).
-2. Install *msys* on your system from [http://mingw.org/wiki/msys](http://mingw.org/wiki/msys)
-3. Launch the *MinGW Installation Manager* and install packages `mingw-developer-toolkit` and `msys-base` 
-4. Download *GMP* from [https://gmplib.org/#DOWNLOAD](https://gmplib.org/#DOWNLOAD) and place it into gem's 'external' folder
-5. Download *MPFR* from [http://www.mpfr.org/mpfr-current/#download](http://www.mpfr.org/mpfr-current/#download) and place it into gem's 'external' folder
-6. Download *MPFR-C++* from [http://www.holoborodko.com/pavel/mpfr/](http://www.holoborodko.com/pavel/mpfr/
-) and place it into gem's 'external' folder
-7. Create the folder 'external/staticLibraries'
-8. From within msys (launch C:\MinGW\msys\1.0\msys.bat), go into the external/gmp folder (the `C:` drive is located in `/c/`) and run the following commands:
-    - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries``
+
+1. In Matlab's Add-Ons, install the **MinGW** compiler (called "MATLAB Support for MinGW-w64 C/C++ Compiler")
+2. Install MSYS version 1 (can be downloaded from [here](https://sourceforge.net/projects/mingw/files/MSYS/Base/msys-core/msys-1.0.11/MSYS-1.0.11.exe/download)). When asked whether you already have a C++ compiler, answer yes and provide the directory matlab's MinGW compiler (e.g. 'c:/ProgramData/MATLAB/SupportPackages/R2023a/3P.instrset/mingw_w64.instrset').
+3. Launch the MSYS terminal and go to a local folder (likely located in `/c/Users/...`)
+4. Download the latest library repository with the following command: `git clone --recursive https://www.github.com/gem-library/gem`. This creates a folder called `gem`.
+5. Move to the `gem/external/gmp` subfolder and compile the *GMP* library with the following commands:
+    - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries/windows``
     - `make && make check && make install`
-9. From within msys, go into the external/mpfr folder and run the following commands:
+6. Move to the `gem/external/mpfr` subfolder and compile the *MPFR* library with the following commands:
     - ``./autogen.sh``
-    - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries --with-gmp=`pwd`/../staticLibraries``
+    - ``./configure --disable-shared --enable-static CFLAGS=-fPIC --with-pic --prefix=`pwd`/../staticLibraries/windows --with-gmp=`pwd`/../staticLibraries/windows``
     - `make && make check && make install`
-10. Install the *TDM64-GCC* compiler from [http://tdm-gcc.tdragon.net/download](http://tdm-gcc.tdragon.net/download), making sure you include the component `Components/gcc/openmp` in the TDM-GCC Setup. Configure it for Matlab by typing `setenv('MW_MINGW64_LOC','C:\TDM-GCC-64')` and `mex -setup cpp` in Matlab (see [**here**](https://fr.mathworks.com/help/matlab/matlab_external/compiling-c-mex-files-with-mingw.html) for more details).
-11. Download the latest *Eigen* source code on [eigen.tuxfamily.org](http://eigen.tuxfamily.org) and place it into gem's 'external' folder.
-12. Download the latest version of *Spectra* on [http://yixuan.cos.name/spectra/download.html](http://yixuan.cos.name/spectra/download.html) and place it into gem's 'external' folder.
-13. In Matlab, go the the gem folder and type `make(1,0)` to compile the library.
-14. Note: the objects compiled in this way may require the `libgomp` library, located in `C:\TDM-GCC-64\bin\libgomp_64-1.dll`. To make your compilation portable, copy this file into the gem subfolder.
-15. Add the gem subfolder to your Matlab/Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
+7. Launch matlab and verify that it is configured to use the MinGW compiler with the command `mex -setup cpp`
+6. Move to the gem folder and type `make(1,0)` to compile the library.
+7. Add the gem subfolder to your Matlab/Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
+
 
 
 Steps to compile the GEM Library on *macOS* (tested on high sierra 10.13.2) :
@@ -77,18 +72,15 @@ Steps to compile the GEM Library on *macOS* (tested on high sierra 10.13.2) :
 These instructions were tested for a version of Octave installed as an [App Bundle](https://octave-app.org/Download.html).
 
 1. Download the latest library repository with the following command: `git clone --recursive https://www.github.com/gem-library/gem`. This creates a folder called `gem`.
-2. Download *GMP* from [https://gmplib.org/#DOWNLOAD](https://gmplib.org/#DOWNLOAD) and place it into gem's 'external' folder
-3. Download *MPFR* from [http://www.mpfr.org/mpfr-current/#download](http://www.mpfr.org/mpfr-current/#download) and place it into gem's 'external' folder
-4. Download *MPFR-C++* from [http://www.holoborodko.com/pavel/mpfr/](http://www.holoborodko.com/pavel/mpfr/
-) and place it into gem's 'external' folder
-5. Start Octave and go to the gem folder.
-6. Type `make(1,0)`. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message '**Compilation successful**'. Otherwise, a message should inform you about what is missing.
-7. Add the gem subfolder to your Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
+2. Start Octave and go to the gem folder.
+3. Type `make(1,0)`. This will launch the compilation of the library. If everything goes fine, the program will conclude with the message '**Compilation successful**'. Otherwise, a message should inform you about what is missing.
+4. Add the gem subfolder to your Octave path as described [**here**](installation.html). You can now perform your favorite computation in high precision!
 
 
 ### Instructions for Matlab
 
 Tentative roadmap:
+
 1. Install *Xcode* and the *Xcode command line tools*.
 2. Install [Homebrew](https://brew.sh/)
 3. Add the Homebrew path in priority by adding the line `export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"` in `~/.bashrc`

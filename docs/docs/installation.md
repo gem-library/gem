@@ -12,6 +12,17 @@ This page presents how to get going with the **GEM Library**. The easiest way to
 
 The release includes binaries for Matlab on Linux, Windows and MacOS, as well as for Octave 6 on Linux. After [**downloading the latest release**](https://github.com/gem-library/gem/releases) of the library, uncompress it in a `desired_folder`. This created the folder `desired_folder/gem`.
 
+### Windows
+
+Due to a [forward-compatibility](https://learn.microsoft.com/en-us/cpp/porting/overview-of-potential-upgrade-issues-visual-cpp?view=msvc-170) of the C++ standard and C runtime libraries being still in their infancy on the Windows platform, the pre-compiled binaries provided here may not work out of the box on newer Windows systems. If this is the case, a system-specific configuration step may be required to run the latest version of the library on Windows (at least until the situation with standard libraries stabilises and [new compiler versions](https://www.mathworks.com/support/requirements/supported-compilers.html) are supported by matlab).
+
+For this, follow the following steps after downloading the latest release:
+
+1. Install Matlab's **MinGW** add-on (called "MATLAB Support for MinGW-w64 C/C++ Compiler")
+2. Go to the downloaded `desired_folder` folder and type `make(1,0)` to prepare the library
+3. If everything goes through, you should be ready to keep with the instructions below
+
+
 ### Setting up the path
 
 The only step required to start using the libraries is to include the subfolder `desired_folder/gem/gem` to the Matlab/Octave path. This is achieved by running the command

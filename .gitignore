@@ -4,6 +4,7 @@
 .syncthing*
 *~
 external/*boost_*
+external/gmp/*
 coverage.*
 coverage_html
 testresults.xml
